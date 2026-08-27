@@ -3,6 +3,7 @@ import { servicesByCategory } from "@/lib/services";
 import { ReaderControls } from "@/components/ReaderControls";
 import { Emblem } from "@/components/Emblem";
 import { MainNav } from "@/components/MainNav";
+import { SearchBox } from "@/components/SearchBox";
 
 const DEMO_UAN = "990012345678";
 const HELPLINE = "1800 000 000";
@@ -75,8 +76,9 @@ export function SiteHeader() {
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3.5 flex items-center justify-between gap-6">
           <Wordmark />
 
-          <div className="flex items-center gap-5 shrink-0">
-            <div className="hidden lg:block text-right">
+          <div className="flex items-center gap-4 sm:gap-5 shrink-0">
+            <SearchBox className="hidden md:block w-52 lg:w-64" />
+            <div className="hidden xl:block text-right">
               <p className="eyebrow mb-0.5">Helpline</p>
               <p className="num text-sm">{HELPLINE}</p>
             </div>
@@ -86,6 +88,13 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
+
+      {/* Below the fold of the masthead on small screens, because a
+          52px input cannot share a row with a wordmark and a button
+          without one of the three becoming unusable. */}
+      <div className="md:hidden border-b border-rule bg-paper-raised px-5 pb-3.5">
+        <SearchBox />
+      </div>
 
       <MainNav />
     </>

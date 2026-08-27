@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 
 const NAV = [
   { href: "/why", label: "Why was it rejected?" },
+  { href: "/still-waiting", label: "Still waiting" },
   { href: "/services", label: "All services A–Z" },
   { href: "/help", label: "Help & contact" },
   { href: "/glossary", label: "Plain language" },
