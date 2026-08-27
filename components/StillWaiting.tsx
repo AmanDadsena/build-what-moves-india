@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { assessWait, COMMITMENT_DAYS } from "@/lib/waiting";
-import { Tag } from "@/components/Provenance";
 import { ReadAloud } from "@/components/ReadAloud";
 import { Disclose } from "@/components/Motion";
+import { PageHero } from "@/components/PageHero";
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-IN", {
@@ -42,21 +42,15 @@ export function StillWaiting() {
 
   return (
     <>
-      <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14">
-          <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-            <p className="eyebrow section-mark mb-0">Still waiting</p>
-            <Tag kind="statutory" />
-          </div>
-          <h1 className="display-1 measure mb-4">
-            Your claim has not been rejected. It has just not moved.
-          </h1>
-          <p className="lede measure mb-8">
-            Every piece of guidance you can find answers the other question —
-            what to do once you have been refused. This one is for waiting,
-            which is where most people actually are.
-          </p>
+      <PageHero
+        eyebrow="Still waiting"
+        provenance="statutory"
+        title="Your claim has not been rejected. It has just not moved."
+        lede="Every piece of guidance you can find answers the other question — what to do once you have been refused. This one is for waiting, which is where most people actually are."
+      />
 
+      <section className="border-b border-rule bg-paper-raised">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-7">
           <div className="max-w-sm">
             <label htmlFor="filed" className="eyebrow block mb-2">
               The date you filed

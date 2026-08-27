@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
-import { Tag } from "@/components/Provenance";
 import { ReadAloud } from "@/components/ReadAloud";
 import { Disclose } from "@/components/Motion";
 import { ENTITLEMENTS, NEEDED, STALLS } from "@/lib/survivors";
+import { PageHero } from "@/components/PageHero";
 
 const DEMO_UAN = "990012345678";
 const STORAGE = "rk-survivor-checklist";
@@ -66,29 +66,18 @@ export function AfterADeath() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">
-                If the member has died
-              </p>
-              <Tag kind="verified" />
-            </div>
-            <h1 className="display-1 measure mb-5">
-              Three things are owed. Most families claim one.
-            </h1>
-            <p className="lede measure mb-6">
-              The provident fund balance, a monthly pension, and an insurance
-              payment are three separate entitlements with three separate
-              forms. Being paid the first one looks, from outside, exactly like
-              the matter being finished.
-            </p>
+        <PageHero
+          eyebrow="If the member has died"
+          provenance="verified"
+          title="Three things are owed. Most families claim one."
+          lede="The provident fund balance, a monthly pension, and an insurance payment are three separate entitlements with three separate forms. Being paid the first one looks, from outside, exactly like the matter being finished."
+          actions={
             <ReadAloud
               size="md"
               en="Three things are owed, and most families claim one. The provident fund balance, a monthly pension, and an insurance payment are three separate entitlements with three separate forms. Being paid the first one looks, from outside, exactly like the matter being finished."
             />
-          </div>
-        </section>
+          }
+        />
 
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-14">
           {/* The three */}

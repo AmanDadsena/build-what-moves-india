@@ -2,7 +2,7 @@ import Link from "next/link";
 import { REJECTIONS } from "@/lib/rejections";
 import type { Actor, RejectionReason } from "@/lib/types";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
-import { Tag } from "@/components/Provenance";
+import { PageHero } from "@/components/PageHero";
 
 export const metadata = {
   title: "Every reason a provident fund claim is rejected",
@@ -56,33 +56,22 @@ export default function WhyIndex() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">
-                Why was my claim rejected
-              </p>
-              <Tag kind="verified" />
-            </div>
-            <h1 className="display-1 measure mb-4">
-              Fifteen sentences, and what each of them is actually telling you.
-            </h1>
-            <p className="lede measure mb-7">
-              About 174 lakh provident fund claims were rejected in a single
-              year, and almost every one of them ended with a line of text that
-              named no field, no desk and no next step. Find yours below. You do
-              not need to sign in to anything.
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <Link href="/login/" className="btn btn-primary">
+        <PageHero
+          eyebrow="Why was my claim rejected"
+          provenance="verified"
+          title="Fifteen sentences, and what each of them is actually telling you."
+          lede="About 174 lakh provident fund claims were rejected in a single year, and almost every one ended with a line of text that named no field, no desk and no next step. Find yours below. You do not need to sign in to anything."
+          actions={
+            <>
+              <Link href="/login/" className="btn btn-gold">
                 Paste the exact words you were shown
               </Link>
               <Link href="/glossary/" className="btn btn-secondary">
                 What the words mean
               </Link>
-            </div>
-          </div>
-        </section>
+            </>
+          }
+        />
 
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-14">
           {GROUPS.map(({ key, label, note }) => {

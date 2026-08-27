@@ -86,8 +86,9 @@ export function CasePlan({
   const toggle = useCallback((id: string) => {
     setProgress((prev) => {
       if (prev[id]) {
-        const { [id]: _removed, ...rest } = prev;
-        return rest;
+        return Object.fromEntries(
+          Object.entries(prev).filter(([key]) => key !== id),
+        );
       }
       return { ...prev, [id]: new Date().toISOString() };
     });

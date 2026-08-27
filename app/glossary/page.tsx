@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { GLOSSARY, CATEGORIES, searchTerms, type Term } from "@/lib/glossary";
-import { Tag } from "@/components/Provenance";
 import { ReadAloud } from "@/components/ReadAloud";
+import { PageHero } from "@/components/PageHero";
 
 const DEMO_UAN = "990012345678";
 
@@ -53,19 +53,17 @@ export default function Glossary() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
+        <PageHero
+          eyebrow="Plain language"
+          provenance="verified"
+          title="The words this system uses, and what they cost you."
+          lede="Every entry says what the word means and why it matters to you. The second part is the one official glossaries leave out."
+        />
+
+        {/* Controls get their own light band. A search field on navy
+            needs its own contrast handling and gains nothing from it. */}
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">Plain language</p>
-              <Tag kind="verified" />
-            </div>
-            <h1 className="display-1 measure mb-4">
-              The words this system uses, and what they cost you.
-            </h1>
-            <p className="lede measure mb-8">
-              Every entry says what the word means and why it matters to you.
-              The second part is the one official glossaries leave out.
-            </p>
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-7">
 
             <div className="max-w-xl mb-5">
               <label htmlFor="gl" className="sr-only">

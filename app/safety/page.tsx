@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
-import { Tag } from "@/components/Provenance";
 import { SIGNALS, NEVER, assess } from "@/lib/safety";
 import { ReadAloud } from "@/components/ReadAloud";
+import { PageHero } from "@/components/PageHero";
 
 const DEMO_UAN = "990012345678";
 
@@ -59,24 +59,12 @@ export default function Safety() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">Staying safe</p>
-              <Tag kind="verified" />
-            </div>
-            <h1 className="display-1 measure mb-4">
-              Somebody has contacted you about your claim. Should you believe
-              them?
-            </h1>
-            <p className="lede measure">
-              A member whose claim has been stuck for months is the easiest
-              person in the country to defraud, because everything the fraud
-              says is exactly what their own experience has taught them to
-              expect. Seven questions, answerable from memory.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          eyebrow="Staying safe"
+          provenance="verified"
+          title="Somebody has contacted you about your claim. Should you believe them?"
+          lede="A member whose claim has been stuck for months is the easiest person in the country to defraud, because everything the fraud says is exactly what their own experience has taught them to expect. Seven questions, answerable from memory."
+        />
 
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start">
           {/* The questions */}

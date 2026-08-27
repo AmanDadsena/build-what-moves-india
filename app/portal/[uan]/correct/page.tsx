@@ -12,12 +12,6 @@ export function generateStaticParams() {
   return MEMBERS.map((m) => ({ uan: m.uan }));
 }
 
-const FIELD_LABEL: Record<string, string> = {
-  name: "Name",
-  fatherName: "Father's or husband's name",
-  dateOfBirth: "Date of birth",
-  gender: "Gender",
-};
 
 /* Only these can be corrected by joint declaration. Bank details and
    Aadhaar are changed elsewhere, and saying so here saves a member

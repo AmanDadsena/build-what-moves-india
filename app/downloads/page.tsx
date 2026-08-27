@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
-import { Tag } from "@/components/Provenance";
 import { Illustration } from "@/components/Illustration";
-import { SERVICE_ICONS, IconFile, IconWithdraw, IconPension, IconTransfer, IconNominee, IconCorrect, IconRecords, IconCertificate } from "@/components/Icons";
+import { IconFile, IconWithdraw, IconPension, IconTransfer, IconNominee, IconCorrect, IconRecords, IconCertificate } from "@/components/Icons";
+import { PageHero } from "@/components/PageHero";
 
 export const metadata = {
   title: "Forms & downloads",
@@ -150,23 +150,20 @@ export default function Downloads() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-10 stagger">
-          <section className="grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-                <p className="eyebrow">Forms &amp; downloads</p>
-                <Tag kind="verified" />
-              </div>
-              <h1 className="display-1 measure mb-4">
-                Which form you need, in words rather than numbers.
-              </h1>
-              <p className="lede measure">
-                Nine forms cover almost everything. Each one here says what it is
-                for, who has to sign it, and where it goes.
-              </p>
+        <PageHero
+          eyebrow="Forms & downloads"
+          provenance="verified"
+          title="Which form you need, in words rather than numbers."
+          lede="Nine forms cover almost everything. Each one here says what it is for, who has to sign it, and where it goes."
+          aside={
+            <div className="rounded-lg bg-paper p-5 border border-paper/20">
+              <Illustration src="/img/forms.webp" priority />
             </div>
-            <Illustration src="/img/forms.webp" priority className="hidden lg:block" />
-          </section>
+          }
+        />
+
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-10 stagger">
+
 
           <section>
             <ul className="grid gap-4 lg:grid-cols-2">

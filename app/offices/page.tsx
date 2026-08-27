@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { OFFICES, AT_THE_OFFICE, searchOffices } from "@/lib/offices";
-import { Tag } from "@/components/Provenance";
 import { IconCertificate, IconRecords, IconGrievance } from "@/components/Icons";
+import { PageHero } from "@/components/PageHero";
 
 const DEMO_UAN = "990012345678";
 
@@ -26,23 +26,12 @@ export default function Offices() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">Offices</p>
-              <Tag kind="mock" />
-            </div>
-            <h1 className="display-1 measure mb-4">
-              Before you travel, check the counter can actually help.
-            </h1>
-            <p className="lede measure">
-              An office holds particular establishment codes and does a
-              particular set of things. Arriving with the wrong paper at the
-              wrong counter costs a day&rsquo;s wages and changes nothing.
-            </p>
-          </div>
-        </section>
-
+        <PageHero
+          eyebrow="Offices"
+          provenance="mock"
+          title="Before you travel, check the counter can actually help."
+          lede="An office holds particular establishment codes and does a particular set of things. Arriving with the wrong paper at the wrong counter costs a day's wages and changes nothing."
+        />
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
           {/* What a counter can and cannot do — the part that matters */}
           <section>

@@ -6,6 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { directory, groupByLetter, matches } from "@/lib/directory";
 import { SERVICE_ICONS, IconAsk } from "@/components/Icons";
 import { SERVICES } from "@/lib/services";
+import { PageHero } from "@/components/PageHero";
 
 const DEMO_UAN = "990012345678";
 
@@ -82,17 +83,14 @@ export default function ServicesAZ() {
 
       <main id="main" className="flex-1">
         {/* ---- Head ---- */}
+        <PageHero
+          eyebrow="All services, A to Z"
+          title="Every service, under the word you would look for."
+          lede={'Type what you call it. "Passbook", "PF nikalna", "Form 19" and "adhaar" all find the right page.'}
+        />
+
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
-            <p className="eyebrow section-mark mb-3">All services, A to Z</p>
-            <h1 className="display-1 measure mb-4">
-              Every service, under the word you would look for.
-            </h1>
-            <p className="lede measure mb-8">
-              Type what you call it. &ldquo;Passbook&rdquo;, &ldquo;PF
-              nikalna&rdquo;, &ldquo;Form 19&rdquo; and &ldquo;adhaar&rdquo; all
-              find the right page.
-            </p>
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8 sm:py-10">
 
             {/* Search */}
             <div className="relative max-w-xl">

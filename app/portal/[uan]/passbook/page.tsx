@@ -50,7 +50,7 @@ export default async function Passbook({ params }: PageProps<"/portal/[uan]">) {
           {member.passbook.length} months on record
         </h2>
         <p className="lede measure">
-          Your 12%, your employer's 12%, and how much of theirs goes to pension
+          Your 12%, your employer&rsquo;s 12%, and how much of theirs goes to
           instead of to your fund.
         </p>
       </section>

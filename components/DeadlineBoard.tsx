@@ -64,19 +64,24 @@ export function DeadlineBoard({
       rejection.escalation.includes(s.id)
   );
 
-  let cursor = 0;
-  const deadlines: Deadline[] = relevant.map((step) => {
-    cursor += step.clock.days;
-    return {
+  /* Each rung's clock only starts when the one before it has run out,
+     so the offsets are cumulative. Accumulated through reduce rather
+     than by mutating a binding inside map: the compiler treats a
+     variable reassigned during render as unsafe, and it is right to —
+     a map callback is not guaranteed to run once, in order. */
+  const deadlines: Deadline[] = relevant.reduce<Deadline[]>((acc, step) => {
+    const offset = (acc[acc.length - 1]?.offset ?? 0) + step.clock.days;
+    acc.push({
       id: step.id,
       label: step.channel,
-      due: addDays(filed, cursor),
+      due: addDays(filed, offset),
       kind: step.clock.kind,
       consequence: step.clock.consequence,
       authority: step.clock.authority,
-      offset: cursor,
-    };
-  });
+      offset,
+    });
+    return acc;
+  }, []);
 
   const rtiReply = CLOCKS["rti-reply"];
 

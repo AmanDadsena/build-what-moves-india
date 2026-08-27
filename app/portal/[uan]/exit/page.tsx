@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MEMBERS, getMember } from "@/lib/members";
 import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
+import { ExitEligibility } from "@/components/ExitEligibility";
 
 export const dynamicParams = false;
 
@@ -32,7 +33,10 @@ export default async function MarkExit({
      so the useful thing is not the button — it is the date. */
   const lastContribution = new Date(ly, lm - 1, 1);
   const eligibleFrom = new Date(ly, lm + 1, 1);
-  const eligibleNow = Date.now() >= eligibleFrom.getTime();
+  /* Deliberately no `Date.now()` here. This page is exported to static
+     HTML, so "now" during render is the moment the site was built —
+     freezing a member out of a button they became entitled to weeks
+     ago. The comparison happens in the browser instead. */
 
   return (
     <div className="space-y-9 stagger">
@@ -63,29 +67,11 @@ export default async function MarkExit({
         <Cell
           label="You may self-record from"
           value={fmt(eligibleFrom)}
-          good={eligibleNow && !member.dateOfExit}
         />
       </section>
 
       {!member.dateOfExit && (
         <>
-          <section
-            className={`border px-5 py-5 ${
-              eligibleNow
-                ? "border-verify/50 bg-verify-wash"
-                : "border-pending/50 bg-pending-wash"
-            }`}
-          >
-            <p className="eyebrow mb-2">
-              {eligibleNow ? "You are eligible today" : "Not yet eligible"}
-            </p>
-            <p className="leading-relaxed max-w-2xl">
-              {eligibleNow
-                ? `Two months have passed since ${fmt(lastContribution)}. You can record your exit yourself, without waiting for your employer to do anything.`
-                : `You become eligible on ${fmt(eligibleFrom)}. Until then only your employer can record it, so write to them in the meantime.`}
-            </p>
-          </section>
-
           <section>
             <p className="eyebrow mb-4">Record your exit</p>
             <div className="border border-rule-heavy bg-paper-raised p-5 space-y-5">
@@ -115,15 +101,12 @@ export default async function MarkExit({
                 </p>
               </Field>
 
-              <button
-                disabled={!eligibleNow}
-                className="btn btn-primary"
-              >
-                Record exit
-              </button>
-              <p className="text-sm text-ink-faint leading-relaxed">
-                Simulated. Nothing is submitted to any government system.
-              </p>
+              <ExitEligibility
+                eligibleFromIso={eligibleFrom.toISOString()}
+                lastContributionLabel={fmt(lastContribution)}
+                eligibleFromLabel={fmt(eligibleFrom)}
+                grievanceHref={`/portal/${member.uan}/grievance`}
+              />
             </div>
           </section>
 

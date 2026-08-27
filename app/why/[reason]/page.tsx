@@ -14,8 +14,6 @@ export function generateStaticParams() {
   return REJECTIONS.map((r) => ({ reason: r.id }));
 }
 
-const DEMO_UAN = "990012345678";
-
 /* One public page per rejection reason.
  *
  * Everything else in this product needs a member to be inside it. This

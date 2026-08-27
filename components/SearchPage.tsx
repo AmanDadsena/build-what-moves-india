@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { search, COMMON, KIND_LABEL, type ResultKind } from "@/lib/search";
-import { Tag } from "@/components/Provenance";
+import { PageHero } from "@/components/PageHero";
 
 /* One box, everything behind it.
  *
@@ -76,21 +76,15 @@ export function SearchPage() {
 
   return (
     <>
-      <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14">
-          <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-            <p className="eyebrow section-mark mb-0">Search</p>
-            <Tag kind="verified" />
-          </div>
-          <h1 className="display-1 measure mb-4">
-            Ask in your own words. You do not have to know which section it
-            belongs to.
-          </h1>
-          <p className="lede measure mb-7">
-            Every rejection reason, plain-language term, service, letter and
-            office, in one place. Nothing you type here leaves your device.
-          </p>
+      <PageHero
+        eyebrow="Search"
+        provenance="verified"
+        title="Ask in your own words. You do not have to know which section it belongs to."
+        lede="Every rejection reason, plain-language term, service, letter and office, in one place. Nothing you type here leaves your device."
+      />
 
+      <section className="border-b border-rule bg-paper-raised">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-7">
           <label htmlFor="q" className="sr-only">
             Search this site
           </label>

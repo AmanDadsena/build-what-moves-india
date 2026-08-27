@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { Disclose } from "@/components/Motion";
-import { Tag } from "@/components/Provenance";
 import { Illustration } from "@/components/Illustration";
 import { IconAsk, IconGrievance, IconCertificate, IconRecords } from "@/components/Icons";
+import { PageHero } from "@/components/PageHero";
 
 export const metadata = {
   title: "Help & contact",
@@ -110,23 +110,19 @@ export default function Help() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
-          <section className="grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-                <p className="eyebrow">Help &amp; contact</p>
-                <Tag kind="verified" />
-              </div>
-              <h1 className="display-1 measure mb-4">
-                Reaching a person is the easy part. Knowing what to say is not.
-              </h1>
-              <p className="lede measure">
-                Four ways to raise this, what each one can actually do, and what
-                to have in your hand first.
-              </p>
+        <PageHero
+          eyebrow="Help & contact"
+          provenance="verified"
+          title="Reaching a person is the easy part. Knowing what to say is not."
+          lede="Four ways to raise this, what each one can actually do, and what to have in your hand first."
+          aside={
+            <div className="rounded-lg bg-paper p-5 border border-paper/20">
+              <Illustration src="/img/help.webp" priority />
             </div>
-            <Illustration src="/img/help.webp" priority className="hidden lg:block" />
-          </section>
+          }
+        />
+
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
 
           {/* Channels */}
           <section>

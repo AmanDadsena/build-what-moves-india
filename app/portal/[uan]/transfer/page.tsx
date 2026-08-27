@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MEMBERS, getMember } from "@/lib/members";
 import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
+import { SimulatedAction } from "@/components/SimulatedAction";
 
 export const dynamicParams = false;
 
@@ -116,12 +117,12 @@ export default async function Transfer({
                 account. Where your e-KYC is fully verified this no longer needs
                 your old employer to attest it.
               </p>
-              <button className="btn btn-primary">
-                Request transfer
-              </button>
-              <p className="text-sm text-ink-faint leading-relaxed mt-3">
-                Simulated. No government system is contacted.
-              </p>
+              <SimulatedAction
+                label="Request transfer"
+                what="A real Form 13 moves the earlier balance and, more importantly, its qualifying service into this account. Where your e-KYC is fully verified it no longer needs your old employer to attest it."
+                href={`/portal/${member.uan}/pension`}
+                hrefLabel="What the service is worth to your pension"
+              />
             </div>
           </section>
 

@@ -168,7 +168,7 @@ employer's EPFO login. A copy signed only by you will not be processed.`,
     standing:
       "No enforceable deadline. A grievance can be closed with a reply that resolves nothing, and closure counts as disposal. File it anyway — the reference number is used by every step after this one.",
     format: "form",
-    build: (m, claim, r) => `GRIEVANCE TEXT — paste into the description field on EPFiGMS
+    build: (m, claim) => `GRIEVANCE TEXT — paste into the description field on EPFiGMS
 
 Grievance category : PF claim / Settlement
 UAN                : ${m.uan}
@@ -217,7 +217,7 @@ Date: ${today()}`,
     standing:
       "Administrative target of about 21 days, with no penalty for breach. Attach your EPFiGMS reference so it cannot be treated as a fresh first complaint and routed back down.",
     format: "form",
-    build: (m, claim, r) => `GRIEVANCE TEXT — CPGRAMS
+    build: (m, claim) => `GRIEVANCE TEXT — CPGRAMS
 
 Ministry / Department : Ministry of Labour and Employment
 Subordinate office    : Employees' Provident Fund Organisation

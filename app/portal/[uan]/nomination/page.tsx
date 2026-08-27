@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MEMBERS, getMember, corpus } from "@/lib/members";
 import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
+import { SimulatedAction } from "@/components/SimulatedAction";
 
 export const dynamicParams = false;
 
@@ -120,13 +121,12 @@ export default async function Nomination({
           </div>
 
           <div className="border-t border-rule pt-5">
-            <button className="btn btn-primary">
-              Save nomination
-            </button>
-            <p className="text-sm text-ink-faint leading-relaxed mt-3">
-              Simulated, and deliberately so — a real nomination is signed with
-              Aadhaar authentication, which this prototype must not touch.
-            </p>
+            <SimulatedAction
+              label="Save nomination"
+              what="A real nomination is signed with an Aadhaar OTP and takes effect immediately, replacing whatever was on file before. It is the ten minutes that decides whether your family is paid or sent to a court."
+              href="/after-a-death/"
+              hrefLabel="What your family would otherwise face"
+            />
           </div>
         </div>
       </section>

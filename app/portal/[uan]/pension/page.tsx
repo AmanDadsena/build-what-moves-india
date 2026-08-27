@@ -32,7 +32,6 @@ export default async function Pension({
   const remainder = months % 12;
   const qualified = months >= QUALIFYING_MONTHS;
   const shortBy = Math.max(0, QUALIFYING_MONTHS - months);
-  const progress = Math.min(100, (months / QUALIFYING_MONTHS) * 100);
 
   return (
     <div className="space-y-9 stagger">
