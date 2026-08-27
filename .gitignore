@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+
+# generated illustration sources — outputs live in public/img
+/assets-src
+
+# local agent tooling, not part of the product
+/.claude
+/.mcp.json

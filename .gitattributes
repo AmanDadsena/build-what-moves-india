@@ -1,0 +1,9 @@
+# Normalise line endings in the repository so a checkout on another
+# machine does not arrive as one enormous whitespace diff.
+* text=auto eol=lf
+
+# Binary, never touched.
+*.png binary
+*.webp binary
+*.ico binary
+*.woff2 binary
