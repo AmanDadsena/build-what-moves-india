@@ -81,9 +81,14 @@ that page. There is no real authentication: the form is decorative and nothing
 you type is transmitted or stored.
 
 ```bash
-npm test          # 54 tests, no framework — node --test on type-stripped TS
+npm test          # 80 tests, no framework — node --test on type-stripped TS
 npm run build     # static export to out/
+npm run audit     # resolve every link and asset in out/ against what was built
 ```
+
+The audit exists because a static export fails quietly: nothing errors
+when a page links to a route that no longer exists, so the dead href is
+simply written to disk and stays there until somebody clicks it.
 
 ## How it is built
 
