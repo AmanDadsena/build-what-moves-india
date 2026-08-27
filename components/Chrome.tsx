@@ -105,7 +105,7 @@ export function SiteFooter() {
   const groups = servicesByCategory();
 
   return (
-    <footer className="band-night mt-auto">
+    <footer className="band-night band-gradient mt-auto">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_2fr]">
           <div>

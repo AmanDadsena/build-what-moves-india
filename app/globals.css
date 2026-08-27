@@ -471,6 +471,75 @@ html[data-contrast="high"] :focus-visible {
     }
   }
 
+  /* --- Bento -------------------------------------------------------
+     The card language: a tall tile you tap, with the icon held in a
+     tinted chip rather than floating loose, and a mark in the corner
+     that moves when the tile is hovered.
+
+     The chip is the part that does the work. An icon sitting directly
+     on the card competes with the heading beside it; the same icon in
+     a filled square reads as a label on a drawer, which is what these
+     are. */
+  .icon-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-noting-wash);
+    color: var(--color-noting);
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .icon-chip-sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-xs);
+  }
+  .bento:hover .icon-chip {
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bento:hover .icon-chip {
+      transform: none;
+    }
+  }
+
+  /* The arrow that leans out on hover. Two pixels, and it is the whole
+     difference between a card that looks clickable and one that does
+     not. */
+  .bento-arrow {
+    transition: transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .bento:hover .bento-arrow {
+    transform: translateX(4px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bento:hover .bento-arrow {
+      transform: none;
+    }
+  }
+
+  /* --- Gradient band -------------------------------------------------
+     Navy to a lighter navy across the diagonal. Flat navy over a large
+     area reads as a void; two stops give it a surface. Kept to the
+     same two tokens the band already uses, so high-contrast mode
+     flattens it back without a special case. */
+  .band-gradient {
+    background-image: linear-gradient(
+      135deg,
+      var(--color-night) 0%,
+      var(--color-night-soft) 100%
+    );
+  }
+  html[data-contrast="high"] .band-gradient,
+  html[data-plain="on"] .band-gradient {
+    background-image: none !important;
+  }
+
   /* --- Ticker --------------------------------------------------------
      The scrolling strip every government portal carries. Three things
      make this one behave where those do not.
@@ -703,6 +772,25 @@ html[data-contrast="high"] :focus-visible {
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-night);
     border-color: var(--color-night);
+  }
+
+  /* Gold, for the one call to action sitting on a navy ground. Light
+     gold with navy text rather than dark gold with white: 9.8:1
+     against the band instead of 6.0:1, and it reads as a seal rather
+     than as a warning. */
+  .btn-gold {
+    background-color: var(--color-ochre);
+    color: var(--color-night);
+    border-color: var(--color-ochre);
+    font-weight: 700;
+  }
+  .btn-gold:hover:not(:disabled) {
+    background-color: var(--color-buff);
+    border-color: var(--color-buff);
+  }
+  .band-night .btn-gold,
+  .band-night .btn-gold:hover:not(:disabled) {
+    color: var(--color-night);
   }
 
   /* Secondary — everything else that is still a real action. */

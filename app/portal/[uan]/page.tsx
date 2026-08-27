@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MEMBERS, getMember, corpus } from "@/lib/members";
 import { getRejection } from "@/lib/rejections";
 import { Tag } from "@/components/Provenance";
+import { BentoTile } from "@/components/Bento";
 import {
   IconPassbook,
   IconWithdraw,
@@ -164,19 +165,13 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
         <p className="eyebrow section-mark mb-4">Go straight to</p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {shortcuts.map(({ href, label, hi, Icon }) => (
-            <li key={href}>
-              <Link
+            <li key={href} className="contents">
+              <BentoTile
                 href={`/portal/${member.uan}${href}`}
-                className="lift-hover group flex h-full flex-col border border-rule bg-paper-raised rounded-lg p-5 hover:border-noting"
-              >
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-paper-inset text-noting transition-colors mb-3.5 group-hover:bg-noting-wash">
-                  <Icon size={22} />
-                </span>
-                <span className="title">{label}</span>
-                <span className="font-deva text-sm text-ink-faint mt-0.5">
-                  {hi}
-                </span>
-              </Link>
+                title={label}
+                titleHi={hi}
+                Icon={Icon}
+              />
             </li>
           ))}
         </ul>

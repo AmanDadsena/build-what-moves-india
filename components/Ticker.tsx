@@ -25,7 +25,7 @@ export function Ticker() {
   return (
     <section
       aria-label="Rejection remarks members are shown"
-      className="border-b border-rule bg-night text-paper overflow-hidden"
+      className="band-gradient border-b border-rule bg-night text-paper overflow-hidden"
     >
       <div className="flex items-stretch">
         <p className="shrink-0 self-center pl-5 sm:pl-8 pr-4 py-3 text-[11px] font-bold uppercase tracking-[0.08em] text-ochre whitespace-nowrap">

@@ -13,6 +13,7 @@ import {
 } from "@/components/Icons";
 import { servicesByCategory } from "@/lib/services";
 import { Ticker } from "@/components/Ticker";
+import { BentoTile, StatCard } from "@/components/Bento";
 
 const DEMO_UAN = "990012345678";
 
@@ -26,12 +27,12 @@ const DEMO_UAN = "990012345678";
    a carousel, and each service says what we changed about it. */
 
 const TASKS = [
-  { href: "/passbook", label: "Check your balance", labelHi: "बैलेंस देखें", Icon: IconPassbook },
-  { href: "/file", label: "Withdraw your PF", labelHi: "पीएफ निकालें", Icon: IconWithdraw },
-  { href: "/claims", label: "Why was my claim rejected", labelHi: "दावा क्यों अस्वीकृत", Icon: IconRejected },
-  { href: "/nomination", label: "Name a nominee", labelHi: "नामांकन करें", Icon: IconNominee },
-  { href: "/transfer", label: "Transfer an old account", labelHi: "पुराना खाता जोड़ें", Icon: IconTransfer },
-  { href: "/pension", label: "Check pension service", labelHi: "पेंशन सेवा देखें", Icon: IconPension },
+  { href: "/passbook", label: "Check your balance", labelHi: "बैलेंस देखें", blurb: "Every month of contributions, and the month they stopped.", Icon: IconPassbook, tone: "noting" as const },
+  { href: "/file", label: "Withdraw your PF", labelHi: "पीएफ निकालें", blurb: "Checked against every field that could get you rejected, before you send it.", Icon: IconWithdraw, tone: "verify" as const },
+  { href: "/claims", label: "Why was my claim rejected", labelHi: "दावा क्यों अस्वीकृत", blurb: "The remark decoded, and the escalation drafted for you.", Icon: IconRejected, tone: "stamp" as const },
+  { href: "/nomination", label: "Name a nominee", labelHi: "नामांकन करें", blurb: "Ten minutes now, or months in a court for your family later.", Icon: IconNominee, tone: "pending" as const },
+  { href: "/transfer", label: "Transfer an old account", labelHi: "पुराना खाता जोड़ें", blurb: "What a split account costs you in pension, not just in balance.", Icon: IconTransfer, tone: "noting" as const },
+  { href: "/pension", label: "Check pension service", labelHi: "पेंशन सेवा देखें", blurb: "Your qualifying service in years and months, and what is still needed.", Icon: IconPension, tone: "verify" as const },
 ];
 
 export default function Home() {
@@ -42,58 +43,72 @@ export default function Home() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        {/* ================= HERO ================= */}
-        <section className="border-b border-rule bg-paper-raised overflow-hidden">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-12 pb-12 sm:pt-20 sm:pb-20">
-            <div className="grid lg:grid-cols-[1fr_1.12fr] gap-10 lg:gap-14 items-center">
-              <div>
-                <p className="eyebrow mb-4">
-                  Employees&rsquo; Provident Fund &middot; member services
-                </p>
+        {/* ================= HERO =================
+            A card rather than a full-bleed band: the gradient reads as
+            an object sitting on the page, which is what the rest of
+            the site is made of, and it keeps the masthead's white
+            uninterrupted above it. */}
+        <section className="border-b border-rule bg-paper">
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8 sm:py-12">
+            <div className="band-night band-gradient rounded-xl overflow-hidden card-lift">
+              <div className="grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-12 items-center p-7 sm:p-10 lg:p-12">
+                <div>
+                  <p className="inline-block rounded-full bg-paper/15 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-night-faint mb-6">
+                    Employees&rsquo; Provident Fund &middot; member services
+                  </p>
 
-                <h1 className="display-1 mb-5">
-                  Your provident fund. And, for once, a straight answer about
-                  it.
-                </h1>
+                  <h1 className="display-1 mb-5 text-paper">
+                    Your provident fund. And, for once, a straight answer about
+                    it.
+                  </h1>
 
-                <p className="lede measure mb-8">
-                  Check your balance, file a claim, name a nominee. And when a
-                  claim is rejected, find out what actually went wrong — in
-                  words that tell you what to fix.
-                </p>
+                  <p className="lede measure mb-8 text-night-faint">
+                    Check your balance, file a claim, name a nominee. And when
+                    a claim is rejected, find out what actually went wrong — in
+                    words that tell you what to fix.
+                  </p>
 
-                <div className="flex flex-wrap gap-3 mb-8">
-                  <Link href="/login" className="btn btn-primary btn-lg">
-                    Sign in to your account
-                  </Link>
-                  <Link href="/services" className="btn btn-secondary btn-lg">
-                    Browse all services
-                  </Link>
+                  <div className="flex flex-wrap gap-3 mb-8">
+                    <Link href="/login" className="btn btn-gold btn-lg">
+                      Sign in to your account
+                    </Link>
+                    <Link href="/why" className="btn btn-secondary btn-lg">
+                      Why was my claim rejected?
+                    </Link>
+                  </div>
+
+                  {/* Three promises a member can check for themselves in
+                      the first ten seconds — worth more here than another
+                      paragraph of description. */}
+                  <ul className="flex flex-wrap gap-x-6 gap-y-2.5">
+                    {[
+                      ["Works on any phone", "var(--color-ochre)"],
+                      ["Hindi and English", "var(--color-night-faint)"],
+                      ["Nothing to install", "var(--color-paper)"],
+                    ].map(([text, colour]) => (
+                      <li
+                        key={text}
+                        className="flex items-center gap-2 text-sm text-paper/85"
+                      >
+                        <span
+                          aria-hidden
+                          className="h-2 w-2 rounded-full shrink-0"
+                          style={{ backgroundColor: colour }}
+                        />
+                        {text}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                {/* Three promises a member can check for themselves in
-                    the first ten seconds — worth more here than another
-                    paragraph of description. */}
-                <ul className="flex flex-wrap gap-x-6 gap-y-2.5">
-                  {[
-                    ["Works on any phone", "var(--color-verify)"],
-                    ["Hindi and English", "var(--color-noting)"],
-                    ["Nothing to install", "var(--color-ochre-deep)"],
-                  ].map(([text, colour]) => (
-                    <li key={text} className="flex items-center gap-2 text-sm text-ink-soft">
-                      <span
-                        aria-hidden
-                        className="h-2 w-2 rounded-full shrink-0"
-                        style={{ backgroundColor: colour }}
-                      />
-                      {text}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="lg:-mr-6">
-                <HeroArt className="w-full h-auto max-w-[42rem] mx-auto" />
+                {/* The illustration keeps its own light ground. It is
+                    drawn entirely from the surface tokens, so dropping it
+                    straight onto navy would wash half of it out — a panel
+                    gives it the environment it was built for and reads as
+                    a document laid on the desk. */}
+                <div className="hidden lg:block rounded-lg bg-paper p-6 border border-paper/20">
+                  <HeroArt className="w-full h-auto" />
+                </div>
               </div>
             </div>
           </div>
@@ -101,13 +116,25 @@ export default function Home() {
 
         {/* ================= SCALE ================= */}
         <section className="border-b border-rule bg-paper">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8">
-            <div className="flex flex-wrap items-baseline gap-x-10 gap-y-4">
-              <p className="eyebrow">EPFO &middot; 2024&ndash;25</p>
-              <Figure value="796 lakh" label="claims filed" />
-              <Figure value="174 lakh" label="rejected" accent />
-              <Figure value="21.9%" label="about one in five" />
-              <Figure value="one line" label="of explanation each" />
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
+            <p className="eyebrow section-mark mb-5">
+              EPFO &middot; 2024&ndash;25
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <StatCard value="796 lakh" label="Claims filed" />
+              <StatCard
+                value="174 lakh"
+                label="Rejected"
+                tone="stamp"
+                note="A little over one in five of everything filed."
+              />
+              <StatCard value="21.9%" label="Of every claim made" tone="pending" />
+              <StatCard
+                value="one line"
+                label="Of explanation each"
+                tone="verify"
+                note="Naming no field, no desk and no next step."
+              />
             </div>
           </div>
         </section>
@@ -127,23 +154,17 @@ export default function Home() {
                 {/* All visible at once. The original rotates nine of
                     these through a carousel, which hides eight and
                     moves the one you were reading. */}
-                <ul className="grid sm:grid-cols-2 gap-px bg-rule border border-rule rounded-lg overflow-hidden">
-                  {TASKS.map(({ href, label, labelHi, Icon }) => (
-                    <li key={href} className="bg-paper">
-                      <Link
+                <ul className="grid sm:grid-cols-2 gap-4">
+                  {TASKS.map(({ href, label, labelHi, blurb, Icon, tone }) => (
+                    <li key={href} className="contents">
+                      <BentoTile
                         href={`/portal/${DEMO_UAN}${href}`}
-                        className="press flex items-start gap-3.5 px-5 py-4 hover:bg-paper-raised h-full group"
-                      >
-                        <span className="text-noting mt-0.5 shrink-0 transition-transform group-hover:-translate-y-0.5">
-                          <Icon size={22} />
-                        </span>
-                        <span className="min-w-0">
-                          <span className="block title">{label}</span>
-                          <span className="block font-deva text-sm text-ink-faint mt-0.5">
-                            {labelHi}
-                          </span>
-                        </span>
-                      </Link>
+                        title={label}
+                        titleHi={labelHi}
+                        blurb={blurb}
+                        Icon={Icon}
+                        tone={tone}
+                      />
                     </li>
                   ))}
                 </ul>
@@ -307,29 +328,6 @@ export default function Home() {
 
 /* ------------------------------------------------------------------ */
 
-function Figure({
-  value,
-  label,
-  accent,
-}: {
-  value: string;
-  label: string;
-  accent?: boolean;
-}) {
-  return (
-    <p className="flex items-baseline gap-2">
-      <span
-        className={`text-xl sm:text-2xl font-semibold tracking-[-0.02em] ${
-          accent ? "text-stamp" : "text-ink"
-        }`}
-        data-numeric
-      >
-        {value}
-      </span>
-      <span className="text-sm text-ink-soft">{label}</span>
-    </p>
-  );
-}
 
 function Notice({
   tag,
