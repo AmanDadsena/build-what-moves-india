@@ -47,7 +47,7 @@ export function SignInCard({ compact = false }: { compact?: boolean }) {
     "w-full border border-rule-heavy bg-paper px-4 py-3 text-base rounded-md outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60";
 
   return (
-    <div className="bg-paper-raised border border-rule-heavy rounded-xl overflow-hidden card-lift">
+    <div className="gold-top bg-paper-raised border border-rule-heavy rounded-xl overflow-hidden card-lift">
       {/* An accent rule, so the card reads as the page's one entry
           point rather than another bordered box. */}
       <div className="h-1.5 bg-noting" />

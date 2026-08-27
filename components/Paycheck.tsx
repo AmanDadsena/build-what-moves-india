@@ -147,7 +147,7 @@ export function Paycheck({ member }: { member: Member }) {
       <section>
         <p className="eyebrow mb-4">The month, rupee by rupee</p>
 
-        <div className="border border-rule bg-paper-raised rounded-xl p-5 sm:p-7 card-lift space-y-7">
+        <div className="corner-glow border border-rule bg-paper-raised rounded-xl p-5 sm:p-7 card-lift space-y-7">
           <Flow
             title="Taken from your pay"
             total={s.employee}

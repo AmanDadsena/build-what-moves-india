@@ -81,7 +81,7 @@ export default async function Summary({
       {/* The sheet itself */}
       <div
         data-print
-        className="border border-rule-heavy bg-paper-raised rounded-xl overflow-hidden card-lift"
+        className="gold-top border border-rule-heavy bg-paper-raised rounded-xl overflow-hidden card-lift"
       >
         <div className="print-head">
           <p style={{ fontWeight: 700, fontSize: "12pt" }}>

@@ -4,65 +4,85 @@
    REJECT KYUN — design tokens
    Direction: "The file they won't show you."
    Materials borrowed from the real artefact: an EPFO case file.
-   Ledger-grey stationery, buff file cover, fountain-pen ink,
-   dry crimson office stamp, violet noting ink.
+   Cool ledger stationery, navy departmental ink, a gold rule along
+   the head of the page, and a dry crimson office stamp.
    ============================================================ */
 
 /* ============================================================
-   Tokens, carried over from the CarryO design system so the two
-   products read as one hand: its canvas and surface, its indigo
-   accent, its warn and danger ramps, its generous radii and its
-   Inter type scale with tracking that tightens as size grows.
+   Tokens.
 
-   The semantic names are unchanged from this build — paper, ink,
-   stamp, noting — so the mapping happens here once and no component
-   needs touching. What each name *means* is the same; only the value
-   moved.
+   Navy and gold on a cool near-white — the register Indian public
+   administration has used on paper for a century, and the one a
+   member recognises as official before they have read a word. It
+   replaces an indigo-and-warm-paper scheme that was handsome and
+   read as a startup.
+
+   Nothing is borrowed but the register. No emblem, no crest, no
+   tricolour: this build is not an EPFO product and must not dress as
+   one. Colour is the only part of that vocabulary anybody is free to
+   use, and it is doing real work here — navy for authority, gold for
+   the accents that mark something official, crimson kept for the one
+   thing that must always alarm.
+
+   The semantic names are unchanged — paper, ink, stamp, noting — so
+   the mapping happens here once and no component needs touching.
+   What each name *means* is the same; only the value moved.
+
+   Every pair below was checked against WCAG AA before it shipped;
+   the weakest is verify on its own wash at 4.59:1.
    ============================================================ */
 
 @theme {
-  /* canvas / surface / surface2 */
-  --color-paper:        #f2f5f3;
+  /* canvas / surface / surface2 — cool, so navy sits on it without
+     the muddiness a warm ground gives blue. */
+  --color-paper:        #f6f7fa;
   --color-paper-raised: #ffffff;
-  --color-paper-inset:  #e8ecea;
+  --color-paper-inset:  #eceef4;
 
   /* text / muted */
-  --color-ink:       #0a0d0c;
-  --color-ink-soft:  #5f6b66;
-  --color-ink-faint: #8b948f;
+  --color-ink:       #101625;
+  --color-ink-soft:  #4a5163;
+  /* 5.17:1 on white. The obvious grey for this role was 3.8:1, which
+     is the usual way small print quietly fails the people who need it
+     most. */
+  --color-ink-faint: #666d80;
 
   /* line — ink at low alpha, so rules sit on any surface */
-  --color-rule:       #0a0d0c17;
-  --color-rule-heavy: #0a0d0c33;
+  --color-rule:       #10162514;
+  --color-rule-heavy: #10162530;
 
-  --color-buff:      #d8cfae;
+  --color-buff:      #e0d7bb;
   --color-buff-deep: #a8996f;
 
   /* danger — rejection, and statutory deadlines that bite */
-  --color-stamp:      #c9382c;
-  --color-stamp-wash: #ffedeb;
+  --color-stamp:      #ba1a1a;
+  --color-stamp-wash: #ffe9e6;
 
-  /* the accent. Indigo: same role CarryO gives it, carrying white ink
-     on a fill and doing duty as the "revealed" colour here. */
-  --color-noting:      #4f46e5;
-  --color-noting-wash: #eeeffc;
+  /* the accent. Navy: carries white on a fill, and does duty as the
+     "revealed" colour on links, active nav and primary buttons. */
+  --color-noting:      #003366;
+  --color-noting-wash: #e4ecf7;
 
   /* settled, verified, resolved */
   --color-verify:      #0f766e;
   --color-verify-wash: #d9f0ec;
 
-  /* warn — pending, soft clocks */
-  --color-pending:      #8a5a00;
-  --color-pending-wash: #fff4e0;
+  /* warn — pending, soft clocks. Gold, and the same value the accent
+     rules use, so a pending state and an official mark are visibly
+     the same family. */
+  --color-pending:      #775a19;
+  --color-pending-wash: #fdf0d8;
 
-  /* hero / footer band — CarryO's indigo 800 → 950 */
-  --color-night:       #1e1b4b;
-  --color-night-soft:  #3730a3;
-  --color-night-rule:  #ffffff29;
-  --color-night-faint: #b9b6e2;
+  /* hero / footer band */
+  --color-night:       #001e40;
+  --color-night-soft:  #003366;
+  --color-night-rule:  #ffffff26;
+  /* Pale blue rather than a tinted white: 9.8:1 on the band, and it
+     keeps the band from reading as flat black. */
+  --color-night-faint: #a7c8ff;
 
-  --color-ochre:      #ffb020;
-  --color-ochre-deep: #8a5a00;
+  --color-ochre:      #e9c176;
+  --color-ochre-deep: #775a19;
 
   --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
@@ -178,6 +198,13 @@ html[data-plain="on"] .notesheet {
    because reading is hard, a picture stuck at its original contrast
    is a liability rather than a help — so it leaves, and the text it
    was decorating is unaffected. */
+/* Decoration off in plain mode, along with the surfaces above. The
+   gold rule stays: it marks what a card is, which is information. */
+html[data-plain="on"] .corner-glow::after,
+html[data-contrast="high"] .corner-glow::after {
+  display: none !important;
+}
+
 html[data-plain="on"] .illus,
 html[data-contrast="high"] .illus {
   display: none !important;
@@ -199,8 +226,8 @@ html[data-contrast="high"] {
 
   --color-stamp: #8c0d0a;
   --color-stamp-wash: #ffe9e6;
-  --color-noting: #2c1d63;
-  --color-noting-wash: #ece8fb;
+  --color-noting: #00234a;
+  --color-noting-wash: #dbe7f6;
   --color-verify: #0f4f45;
   --color-verify-wash: #dff0eb;
   --color-pending: #5c4207;
@@ -350,8 +377,8 @@ html[data-contrast="high"] :focus-visible {
      layers: a hairline to separate, and a wide soft one to seat it. */
   .card-lift {
     box-shadow:
-      0 1px 2px rgb(10 13 12 / 0.035),
-      0 10px 30px -12px rgb(10 13 12 / 0.045);
+      0 1px 2px rgb(0 30 64 / 0.05),
+      0 10px 30px -12px rgb(0 30 64 / 0.07);
   }
 
   /* Interactive cards rise a little on hover. Two pixels is enough to
@@ -369,8 +396,8 @@ html[data-contrast="high"] :focus-visible {
   .lift-hover:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow:
-      0 2px 6px rgb(10 13 12 / 0.045),
-      0 18px 40px -16px rgb(10 13 12 / 0.09);
+      0 2px 6px rgb(0 30 64 / 0.07),
+      0 18px 40px -16px rgb(0 30 64 / 0.12);
   }
   .lift-hover:active {
     transform: translateY(-1px) scale(1.005);
@@ -380,6 +407,134 @@ html[data-contrast="high"] :focus-visible {
     .lift-hover:hover,
     .lift-hover:active {
       transform: none;
+    }
+  }
+
+  /* --- Official marks ------------------------------------------------
+     A gold hairline along the top of a card. Indian government
+     stationery has used a rule in this position for as long as it has
+     been printed, and it is the cheapest way to make a card read as a
+     record rather than as a tile in an app.
+
+     Drawn as a pseudo-element rather than a border-top so it inherits
+     the card's radius and composes with whatever border the card
+     already has, instead of fighting it. */
+  .gold-top {
+    position: relative;
+  }
+  .gold-top::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--color-ochre-deep) 0%,
+      var(--color-ochre) 55%,
+      var(--color-ochre-deep) 100%
+    );
+    border-radius: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    pointer-events: none;
+  }
+
+  /* A soft field in the top corner of a card. Purely decorative, and
+     the only decoration here that is: it gives a figure somewhere to
+     sit without a border around it. */
+  .corner-glow {
+    position: relative;
+    overflow: hidden;
+  }
+  .corner-glow::after {
+    content: "";
+    position: absolute;
+    top: -3.5rem;
+    right: -3.5rem;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle at 32% 68%,
+      var(--color-noting-wash),
+      transparent 70%
+    );
+    pointer-events: none;
+    transition: transform 400ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .corner-glow:hover::after {
+    transform: scale(1.14);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .corner-glow:hover::after {
+      transform: none;
+    }
+  }
+
+  /* --- Ticker --------------------------------------------------------
+     The scrolling strip every government portal carries. Three things
+     make this one behave where those do not.
+
+     It loops seamlessly: the content is duplicated and the track
+     travels exactly half its own width, so there is never the long
+     dead gap you get from sliding one copy off one edge and back in
+     from the other.
+
+     It stops when anybody looks at it — on hover, and on focus, so a
+     keyboard user can read an item without chasing it.
+
+     And under reduced motion it does not animate at all. It becomes a
+     strip you scroll yourself, because indefinite movement beside text
+     is a genuine problem for readers with vestibular disorders, not a
+     preference. */
+  .ticker {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 3rem,
+      #000 calc(100% - 3rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 3rem,
+      #000 calc(100% - 3rem),
+      transparent
+    );
+  }
+  .ticker-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 3rem;
+    white-space: nowrap;
+    padding-left: 3rem;
+    animation: ticker 44s linear infinite;
+    will-change: transform;
+  }
+  .ticker:hover .ticker-track,
+  .ticker:focus-within .ticker-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes ticker {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .ticker-track {
+      animation: none;
     }
   }
 
@@ -535,14 +690,19 @@ html[data-contrast="high"] :focus-visible {
   }
 
   /* Primary — the one action this screen wants. At most one per view. */
+  /* Navy rather than ink. Under the old indigo palette a near-black
+     button turning indigo on hover was a visible reveal; under this
+     one ink and the accent are both dark blues, and the hover
+     disappeared. So the button carries the accent itself and deepens
+     on hover, which is legible at a glance and at 12.6:1. */
   .btn-primary {
-    background-color: var(--color-ink);
+    background-color: var(--color-noting);
     color: var(--color-paper);
-    border-color: var(--color-ink);
+    border-color: var(--color-noting);
   }
   .btn-primary:hover:not(:disabled) {
-    background-color: var(--color-noting);
-    border-color: var(--color-noting);
+    background-color: var(--color-night);
+    border-color: var(--color-night);
   }
 
   /* Secondary — everything else that is still a real action. */
@@ -763,7 +923,7 @@ html[data-contrast="high"] :focus-visible {
 
 /* The assistant launcher and its panel. */
 .assistant-launcher {
-  box-shadow: 0 8px 24px -8px rgb(79 70 229 / 0.55);
+  box-shadow: 0 8px 24px -8px rgb(0 51 102 / 0.45);
   transition:
     transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1),
     box-shadow 250ms cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -771,7 +931,7 @@ html[data-contrast="high"] :focus-visible {
 }
 .assistant-launcher:hover {
   transform: translateY(-3px);
-  box-shadow: 0 14px 32px -10px rgb(79 70 229 / 0.65);
+  box-shadow: 0 14px 32px -10px rgb(0 51 102 / 0.58);
 }
 .assistant-launcher:active { transform: translateY(-1px); }
 

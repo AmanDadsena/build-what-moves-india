@@ -12,6 +12,7 @@ import {
   IconPension,
 } from "@/components/Icons";
 import { servicesByCategory } from "@/lib/services";
+import { Ticker } from "@/components/Ticker";
 
 const DEMO_UAN = "990012345678";
 
@@ -110,6 +111,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <Ticker />
 
         {/* ================= TASKS + SIGN IN ================= */}
         <section className="border-b border-rule">

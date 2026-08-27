@@ -22,7 +22,7 @@ export function UtilityBar() {
   return (
     <div className="band-night">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 py-1.5 flex items-center justify-between gap-4">
-        <p className="text-[11px] sm:text-xs text-paper/55 leading-snug">
+        <p className="text-[11px] sm:text-xs text-paper/65 leading-snug">
           An independent prototype. Not an official EPFO service.
         </p>
         <ReaderControls onDark />
@@ -115,7 +115,7 @@ export function SiteFooter() {
                 <p className="font-semibold tracking-[-0.02em]">
                   EPF Member Portal
                 </p>
-                <p className="font-deva text-xs text-paper/50 mt-0.5">
+                <p className="font-deva text-xs text-paper/65 mt-0.5">
                   सदस्य पोर्टल
                 </p>
               </div>
@@ -127,11 +127,11 @@ export function SiteFooter() {
             </p>
             <dl className="text-sm space-y-1.5">
               <div className="flex gap-2">
-                <dt className="text-paper/45">Helpline</dt>
+                <dt className="text-paper/65">Helpline</dt>
                 <dd className="num text-paper/80">{HELPLINE}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="text-paper/45">Hours</dt>
+                <dt className="text-paper/65">Hours</dt>
                 <dd className="text-paper/80">Mon–Fri, 9:30–18:00 IST</dd>
               </div>
             </dl>
@@ -161,14 +161,14 @@ export function SiteFooter() {
         <div className="border-t border-night-rule mt-12 pt-8 grid gap-6 lg:grid-cols-[1.1fr_2fr]">
           <div>
             <p className="eyebrow mb-3">Where the facts come from</p>
-            <ul className="text-sm text-paper/55 space-y-1.5 leading-relaxed">
+            <ul className="text-sm text-paper/65 space-y-1.5 leading-relaxed">
               <li>EPFO annual report 2024&ndash;25, via Business Today</li>
               <li>Right to Information Act 2005, sections 6, 7, 19 and 20</li>
               <li>EPFO documented claim and correction procedure</li>
             </ul>
           </div>
 
-          <p className="text-sm text-paper/50 leading-relaxed max-w-3xl">
+          <p className="text-sm text-paper/65 leading-relaxed max-w-3xl">
             This is an independent hackathon prototype and a redesign concept.
             It is not an EPFO product, is not affiliated with or endorsed by the
             Employees&rsquo; Provident Fund Organisation or any government body,

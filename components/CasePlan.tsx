@@ -124,7 +124,7 @@ export function CasePlan({
       </section>
 
       {/* Where you are */}
-      <section className="border border-rule-heavy bg-paper-raised rounded-xl overflow-hidden card-lift">
+      <section className="gold-top border border-rule-heavy bg-paper-raised rounded-xl overflow-hidden card-lift">
         <div className="px-5 py-4 sm:px-6 border-b border-rule bg-paper flex items-center justify-between gap-4 flex-wrap">
           <div>
             <p className="eyebrow mb-1">Progress</p>
