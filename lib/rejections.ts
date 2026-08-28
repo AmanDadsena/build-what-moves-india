@@ -223,6 +223,24 @@ export const REJECTIONS: RejectionReason[] = [
         where: "Employer HR → EPFO Regional Office",
         days: 5,
       },
+      {
+        actor: "employer",
+        instruction:
+          "Employer digitally signs the Joint Declaration and forwards it to the Regional Office. A member cannot file one alone — the form carries two signatures by design, so that neither party can alter a record on its own.",
+        instructionHi:
+          "नियोक्ता संयुक्त घोषणा पर डिजिटल हस्ताक्षर करके उसे क्षेत्रीय कार्यालय भेजता है। सदस्य अकेले यह फ़ॉर्म दाखिल नहीं कर सकता — इस पर दो हस्ताक्षर ज़रूरी हैं।",
+        where: "Employer EPFO login",
+        days: 7,
+      },
+      {
+        actor: "epfo",
+        instruction:
+          "Regional Office approves the correction. Only once the corrected date shows on the member portal should the claim be refiled — refiling before that fails against the old record.",
+        instructionHi:
+          "क्षेत्रीय कार्यालय सुधार स्वीकृत करता है। सुधरी हुई तारीख़ पोर्टल पर दिखने के बाद ही दावा दोबारा दाखिल करें।",
+        where: "EPFO Regional Office",
+        days: 15,
+      },
     ],
     escalation: ["epfigms", "cpgrams", "rti"],
     documents: ["joint-declaration", "employer-email", "epfigms", "rti-notesheet"],

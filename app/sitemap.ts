@@ -48,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/still-waiting", 1],
     ["/find-your-uan", 1],
     ["/check-your-payslip", 1],
+    ["/for-employers", 0.9],
     ["/search", 0.4],
     ["/services", 0.8],
     ["/glossary", 0.8],

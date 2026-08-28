@@ -21,7 +21,7 @@
  */
 
 import sharp from "sharp";
-import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -48,17 +48,11 @@ const JOBS = [
     out: [{ to: path.join(IMG, "og.png"), w: 1200, h: 630, fit: "cover", png: true }],
   },
 
-  // App icon. Next reads app/icon.png and app/apple-icon.png as file
-  // conventions and writes the <link> tags itself, so these two paths
-  // are load-bearing names, not decoration.
-  {
-    src: "icon.png",
-    out: [
-      { to: path.join(APP, "icon.png"), w: 512, h: 512, fit: "cover", png: true },
-      { to: path.join(APP, "apple-icon.png"), w: 180, h: 180, fit: "cover", png: true },
-      { to: path.join(IMG, "mark.png"), w: 256, h: 256, fit: "cover", png: true },
-    ],
-  },
+  /* The app icons are not built here any more. They come from
+     assets-src/mark.svg through scripts/build-icons.mjs, so one vector
+     drives the tab icon, the home-screen icon and the masthead — and
+     nothing can drift. Leaving the old raster job in would have
+     silently overwritten them on the next run. */
 
   // In-page illustrations. 7:5 originals, kept at their own ratio.
   ...["help", "forms", "compliance", "deduction", "deadlines", "advances"].map(
@@ -76,45 +70,6 @@ const JOBS = [
 ];
 
 const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
-
-/* Writes a real .ico wrapping a PNG.
- *
- * Since Vista an ICO entry may hold PNG bytes directly rather than the
- * old bitmap structure, so the whole format is a 6-byte header, one
- * 16-byte directory entry, and the PNG. It is worth the twenty lines:
- * app/favicon.ico takes precedence over app/icon.png in every browser,
- * so leaving the framework's default there would keep the default mark
- * in the tab no matter what else we generate. */
-async function writeIco(src, to, size) {
-  /* RGBA, not palette. Next decodes app/favicon.ico with Rust's image
-     crate to derive the <link> tags, and that decoder rejects an
-     indexed PNG inside an ICO container outright — the build fails
-     with "The PNG is not in RGBA format!" rather than degrading. */
-  const png = await sharp(src)
-    .resize(size, size, { fit: "cover" })
-    .ensureAlpha()
-    .png({ compressionLevel: 9, palette: false })
-    .toBuffer();
-
-  const header = Buffer.alloc(6);
-  header.writeUInt16LE(0, 0); // reserved
-  header.writeUInt16LE(1, 2); // type: icon
-  header.writeUInt16LE(1, 4); // one image
-
-  const entry = Buffer.alloc(16);
-  entry.writeUInt8(size === 256 ? 0 : size, 0); // width, 0 means 256
-  entry.writeUInt8(size === 256 ? 0 : size, 1); // height
-  entry.writeUInt8(0, 2); // palette size, 0 for truecolour
-  entry.writeUInt8(0, 3); // reserved
-  entry.writeUInt16LE(1, 4); // colour planes
-  entry.writeUInt16LE(32, 6); // bits per pixel
-  entry.writeUInt32LE(png.length, 8);
-  entry.writeUInt32LE(22, 12); // offset: 6 header + 16 entry
-
-  const ico = Buffer.concat([header, entry, png]);
-  await writeFile(to, ico);
-  return ico.length;
-}
 
 async function main() {
   if (!existsSync(RAW)) {
@@ -167,13 +122,6 @@ async function main() {
     }
   }
 
-  const icoBytes = await writeIco(
-    path.join(SRC, "icon.png"),
-    path.join(APP, "favicon.ico"),
-    48,
-  );
-  after += icoBytes;
-  rows.push(["icon.png", "app/favicon.ico", `48×48  ${kb(icoBytes)}`]);
 
   const w0 = Math.max(...rows.map((r) => r[0].length));
   const w1 = Math.max(...rows.map((r) => r[1].length));
