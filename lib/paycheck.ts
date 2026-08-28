@@ -188,3 +188,76 @@ export function monthLabel(ym: string) {
     year: "numeric",
   });
 }
+
+/* ============================================================
+   Diagnosing a payslip against the rules.
+
+   A member can read the two figures on their own payslip — the wage
+   the provident fund was worked out on, and the amount deducted — and
+   almost nobody can tell whether they agree. There are three answers,
+   and the middle one is the one nobody knows exists.
+
+   Contributions may lawfully be restricted to the ₹15,000 ceiling
+   instead of computed on actual wages. An employer who does that is
+   within the scheme, and the member's deduction stops at ₹1,800 a
+   month however much they earn. It is not a mistake and there is no
+   grievance to raise about it — but it is a decision made about their
+   retirement that they were never told about, and the difference
+   compounds for thirty years.
+
+   Telling somebody "this is wrong" when it is merely restricted would
+   send them to argue with a payroll department over nothing. Telling
+   them "this is fine" when it is short by a thousand rupees a month
+   leaves real money uncollected. So the three cases are separated.
+   ============================================================ */
+
+export type Verdict = "matches-wages" | "restricted-to-ceiling" | "neither";
+
+export interface PayslipCheck {
+  wages: number;
+  deducted: number;
+  verdict: Verdict;
+  /** What the deduction would be on full wages. */
+  onFullWages: number;
+  /** What it would be if restricted to the ceiling. */
+  onCeiling: number;
+  /** Monthly difference between the two, where the wage is above the
+   *  ceiling. Zero otherwise. */
+  monthlyGap: number;
+  /** Signed difference from whichever rule the figure is closest to. */
+  offBy: number;
+}
+
+/** A rupee or two either way is rounding, not a discrepancy. */
+const TOLERANCE = 2;
+
+export function checkPayslip(wages: number, deducted: number): PayslipCheck {
+  const onFullWages = Math.round(wages * EMPLOYEE_RATE);
+  const onCeiling = Math.round(
+    Math.min(wages, EPS_WAGE_CEILING) * EMPLOYEE_RATE,
+  );
+
+  const fromFull = deducted - onFullWages;
+  const fromCeiling = deducted - onCeiling;
+
+  let verdict: Verdict = "neither";
+  let offBy = Math.abs(fromFull) <= Math.abs(fromCeiling) ? fromFull : fromCeiling;
+
+  if (Math.abs(fromFull) <= TOLERANCE) {
+    verdict = "matches-wages";
+    offBy = 0;
+  } else if (Math.abs(fromCeiling) <= TOLERANCE) {
+    verdict = "restricted-to-ceiling";
+    offBy = 0;
+  }
+
+  return {
+    wages,
+    deducted,
+    verdict,
+    onFullWages,
+    onCeiling,
+    monthlyGap: Math.max(0, onFullWages - onCeiling),
+    offBy,
+  };
+}

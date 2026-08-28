@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   split,
   checkMonth,
+  checkPayslip,
   ceilingStory,
   EPS_WAGE_CEILING,
 } from "./paycheck.ts";
@@ -145,4 +146,66 @@ test("a member who never crossed the ceiling is told nothing alarming", () => {
   assert.equal(story.crossedAt, undefined);
   assert.equal(story.monthsAbove, 0);
   assert.equal(story.totalCost, 0);
+});
+
+/* The three-way payslip verdict.
+
+   Getting this wrong in either direction has a cost. Calling a lawful
+   ceiling restriction "wrong" sends somebody to argue with payroll
+   over nothing; calling a genuine shortfall "fine" leaves real money
+   uncollected. So each branch is pinned. */
+
+test("a deduction computed on full wages is recognised as such", () => {
+  const c = checkPayslip(30_000, 3_600); // 12% of 30,000
+  assert.equal(c.verdict, "matches-wages");
+  assert.equal(c.offBy, 0);
+  assert.equal(c.onFullWages, 3_600);
+  assert.equal(c.onCeiling, 1_800);
+  assert.equal(c.monthlyGap, 1_800);
+});
+
+test("a deduction stopped at the ceiling is lawful, not an error", () => {
+  const c = checkPayslip(30_000, 1_800); // 12% of 15,000
+  assert.equal(c.verdict, "restricted-to-ceiling");
+  assert.equal(c.offBy, 0, "a restriction is not a discrepancy");
+  assert.equal(c.monthlyGap, 1_800);
+});
+
+test("below the ceiling the two rules collapse into one", () => {
+  const c = checkPayslip(12_000, 1_440);
+  assert.equal(c.onFullWages, c.onCeiling);
+  assert.equal(c.verdict, "matches-wages");
+  assert.equal(c.monthlyGap, 0, "there is no gap to lose below the ceiling");
+});
+
+test("a figure matching neither rule is reported, with the shortfall", () => {
+  const c = checkPayslip(30_000, 2_500);
+  assert.equal(c.verdict, "neither");
+  // Closer to the ceiling figure than to full wages, so measured from that.
+  assert.equal(c.offBy, 2_500 - 1_800);
+});
+
+test("the shortfall is signed, so over and under are distinguishable", () => {
+  assert.ok(checkPayslip(20_000, 2_000).offBy > 0, "more than the rule gives");
+  assert.ok(checkPayslip(20_000, 1_000).offBy < 0, "less than the rule gives");
+});
+
+test("a rupee of rounding is not a discrepancy", () => {
+  for (const d of [3_599, 3_600, 3_601]) {
+    assert.equal(checkPayslip(30_000, d).verdict, "matches-wages", `at ${d}`);
+  }
+});
+
+test("the ceiling gap is never negative", () => {
+  for (const wage of [5_000, 15_000, 15_001, 90_000]) {
+    assert.ok(checkPayslip(wage, 0).monthlyGap >= 0, `at ₹${wage}`);
+  }
+});
+
+test("the diagnosis agrees with the split it is derived from", () => {
+  for (const wage of [9_000, 15_000, 24_000, 75_000]) {
+    const s = split(wage);
+    assert.equal(checkPayslip(wage, s.employee).verdict, "matches-wages");
+    assert.equal(checkPayslip(wage, s.employee).onFullWages, s.employee);
+  }
 });

@@ -30,7 +30,7 @@
  * Bump VERSION to evict everything on the next activation.
  */
 
-const VERSION = "2026-08-27a";
+const VERSION = "2026-08-28a";
 const SHELL = `shell-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 const OFFLINE_URL = "/offline/";
@@ -49,6 +49,30 @@ self.addEventListener("install", (event) => {
   );
 });
 
+/* The pages worth having before they are asked for.
+ *
+ * Caching only what has been visited makes the installed app useless
+ * on the first day it is needed: somebody adds it to their home
+ * screen at the office where there is signal, then opens it at home
+ * where there is not, and gets the offline page for everything.
+ *
+ * So a short list is warmed in the background after activation. It is
+ * deliberately short — every one of these is a page somebody might
+ * need with no connection, and nothing else is here, because
+ * downloading the whole site over a metered 3G line to be helpful
+ * would be its own kind of rude.
+ *
+ * It runs without blocking activation and failures are ignored: a
+ * warm cache is a bonus, never a dependency. */
+const WARM = [
+  "/why/",
+  "/find-your-uan/",
+  "/still-waiting/",
+  "/safety/",
+  "/glossary/",
+  "/help/",
+];
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
@@ -59,6 +83,17 @@ self.addEventListener("activate", (event) => {
           .map((k) => caches.delete(k)),
       );
       await self.clients.claim();
+
+      const cache = await caches.open(RUNTIME);
+      await Promise.allSettled(
+        WARM.map(async (url) => {
+          // Skip anything already held, so a repeat activation costs
+          // nothing on somebody's data.
+          if (await cache.match(url)) return;
+          const response = await fetch(url, { credentials: "same-origin" });
+          if (response.ok) await cache.put(url, response);
+        }),
+      );
     })(),
   );
 });
