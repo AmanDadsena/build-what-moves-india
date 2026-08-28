@@ -7,6 +7,7 @@ import { ReadAloud } from "@/components/ReadAloud";
 import { Disclose } from "@/components/Motion";
 import { ENTITLEMENTS, NEEDED, STALLS } from "@/lib/survivors";
 import { PageHero } from "@/components/PageHero";
+import { CaseBackup } from "@/components/CaseBackup";
 
 const DEMO_UAN = "990012345678";
 const STORAGE = "rk-survivor-checklist";
@@ -219,10 +220,13 @@ export function AfterADeath() {
                 />
               </div>
 
-              <p className="text-xs text-ink-faint leading-relaxed">
+              <p className="text-xs text-ink-faint leading-relaxed mb-4">
                 Ticks are kept on this device only. Nothing is sent anywhere and
                 there is no account here.
               </p>
+              <div className="pt-4 border-t border-rule">
+                <CaseBackup />
+              </div>
             </div>
           </section>
 

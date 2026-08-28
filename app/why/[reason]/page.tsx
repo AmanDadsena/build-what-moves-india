@@ -8,6 +8,7 @@ import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
 import { ReadAloud } from "@/components/ReadAloud";
 import { ShareLink } from "@/components/ShareLink";
+import { PrintButton } from "@/components/PrintButton";
 
 export const dynamicParams = false;
 
@@ -128,7 +129,7 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
 
       <main id="main" className="flex-1">
         <div className="shell-reading py-10 sm:py-14 space-y-12 stagger">
-          <nav aria-label="Breadcrumb" className="text-sm">
+          <nav aria-label="Breadcrumb" className="text-sm no-print">
             <Link
               href="/why/"
               className="press inline-flex items-center gap-2 text-ink-soft hover:text-ink"
@@ -136,6 +137,21 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
               <span aria-hidden>&larr;</span> Every reason a claim is rejected
             </Link>
           </nav>
+
+          {/* Everything down to the mechanism prints. A member takes
+              this to an employer or a counter, and what is useful on
+              paper is the remark, what it means, whose job it is and
+              the steps — not the navigation around them. */}
+          <div data-print className="space-y-12">
+            <div className="print-head">
+              <p style={{ fontWeight: 700, fontSize: "12pt" }}>
+                {r.title}
+              </p>
+              <p style={{ fontSize: "9.5pt" }}>
+                Rejection remark explained &middot; prepared for a provident
+                fund member
+              </p>
+            </div>
 
           <section>
             <div className="flex items-center gap-2.5 mb-4 flex-wrap">
@@ -171,6 +187,7 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
                 title={r.title}
                 text={`What "${r.verbatim[0]}" actually means, and what to do about it.`}
               />
+              <PrintButton label="Print this" />
             </div>
           </section>
 
@@ -241,6 +258,15 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
               {r.mechanism}
             </p>
           </section>
+
+            <div className="print-foot">
+              <p>
+                Produced by an independent prototype of a provident fund
+                member portal. Not an official EPFO document and not legal
+                advice.
+              </p>
+            </div>
+          </div>
 
           {drafts.length > 0 && (
             <section className="border border-rule-heavy bg-paper-raised rounded-xl p-6 card-lift">

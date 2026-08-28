@@ -1190,10 +1190,15 @@ html[data-contrast="high"] :focus-visible {
    that keyframe is invisible. A few seconds in, the entrance stops
    mattering and being readable is all that matters, so the animation
    is dropped entirely and every element falls back to its natural,
-   visible style. */
-html[data-entrance="done"] .stagger > * {
-  animation: none !important;
-}
+   visible style.
+
+   The rule that does this is injected by an inline script in the
+   layout after three seconds, as a <style id="entrance-done">, rather
+   than living here behind an attribute. React 19 diffs attributes on
+   the document element it did not render itself and warns that the
+   mismatch will not be patched up — and that script races hydration
+   by design, so on a slow connection it always wins. A style element
+   is invisible to that diff and does the same job. */
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {

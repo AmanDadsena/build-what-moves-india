@@ -142,7 +142,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              'setTimeout(function(){document.documentElement.setAttribute("data-entrance","done")},3000)',
+              /* Injects a stylesheet rather than setting an attribute on
+                 <html>. React 19 diffs attributes on the document
+                 element it did not render and warns that the mismatch
+                 "won't be patched up" — and this script races
+                 hydration by design, so it will always be there first
+                 on a slow connection. A style element sidesteps the
+                 diff entirely and does exactly the same job. */
+              'setTimeout(function(){var s=document.createElement("style");s.id="entrance-done";s.textContent=".stagger > *{animation:none!important;opacity:1!important;transform:none!important}";document.head.appendChild(s)},3000)',
           }}
         />
       </head>

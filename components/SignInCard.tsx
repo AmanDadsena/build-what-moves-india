@@ -55,7 +55,7 @@ export function SignInCard({ compact = false }: { compact?: boolean }) {
 
       <div className="px-5 pt-5 pb-4 sm:px-6 border-b border-rule">
         <div className="flex items-center gap-3">
-          <Emblem size={34} className="text-noting shrink-0" />
+          <Emblem size={34} className="text-noting shrink-0" accent />
           <div className="min-w-0">
             <p className="title">Member sign in</p>
             <p className="font-deva text-sm text-ink-faint">सदस्य लॉगिन</p>

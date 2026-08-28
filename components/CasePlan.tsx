@@ -12,6 +12,7 @@ import {
 } from "@/lib/plan";
 import { Tag } from "@/components/Provenance";
 import { ReadAloud } from "@/components/ReadAloud";
+import { CaseBackup } from "@/components/CaseBackup";
 
 /* The plan a member actually works through, over months.
  *
@@ -285,12 +286,18 @@ export function CasePlan({
           browsing data clears the ticks. The calendar file is the copy that
           survives that, which is the main reason it exists.
         </p>
-        <Link
-          href={`/portal/${member.uan}/summary`}
-          className="btn btn-secondary btn-sm"
-        >
-          Print the case summary instead
-        </Link>
+        <div className="flex gap-2 flex-wrap">
+          <Link
+            href={`/portal/${member.uan}/summary`}
+            className="btn btn-secondary btn-sm"
+          >
+            Print the case summary instead
+          </Link>
+        </div>
+
+        <div className="mt-6 pt-5 border-t border-noting/20">
+          <CaseBackup />
+        </div>
       </section>
     </div>
   );

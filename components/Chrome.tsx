@@ -114,7 +114,7 @@ export function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_2fr]">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <Emblem size={38} className="text-paper/80" />
+              <Emblem size={38} className="text-paper/80" accent />
               <div>
                 <p className="font-semibold tracking-[-0.02em]">
                   EPF Member Portal
