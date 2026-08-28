@@ -6,6 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { SignInCard } from "@/components/SignInCard";
 import { MEMBERS } from "@/lib/members";
 import { matchRemark } from "@/lib/match";
+import { VoiceInput } from "@/components/VoiceInput";
 
 /* Two doors, because members arrive in two states: some can sign in
    and want their own file, and some only have the sentence the portal
@@ -28,7 +29,7 @@ export default function Login() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
+        <div className="shell py-10 sm:py-14">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             <div>
               <p className="eyebrow mb-3">Sign in</p>
@@ -65,6 +66,17 @@ export default function Login() {
                   placeholder="Claim rejected: Demographic discrepancy in EPFO portal"
                   className="machine w-full resize-none bg-transparent px-4 py-3 text-base outline-none placeholder:text-ink-faint/60"
                 />
+                {/* Reading a remark aloud off a phone screen is easier
+                    than transcribing it, and the words in these are
+                    exactly the ones hardest to spell from memory. */}
+                <div className="px-4 pb-4">
+                  <VoiceInput
+                    label="Read the remark out instead of typing it"
+                    onResult={(text) =>
+                      setRemark((prev) => (prev ? `${prev} ${text}` : text))
+                    }
+                  />
+                </div>
               </div>
 
               {showResults && (

@@ -127,7 +127,7 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
+        <div className="shell-reading py-10 sm:py-14 space-y-12 stagger">
           <nav aria-label="Breadcrumb" className="text-sm">
             <Link
               href="/why/"

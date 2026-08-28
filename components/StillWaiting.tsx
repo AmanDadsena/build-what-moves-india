@@ -50,7 +50,7 @@ export function StillWaiting() {
       />
 
       <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-7">
+        <div className="shell-reading py-7">
           <div className="max-w-sm">
             <label htmlFor="filed" className="eyebrow block mb-2">
               The date you filed
@@ -71,7 +71,7 @@ export function StillWaiting() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14 space-y-12">
+      <div className="shell-reading py-10 sm:py-14 space-y-12">
         {!result && (
           <section className="border border-rule bg-paper-raised rounded-xl px-6 py-8">
             <p className="display-3 mb-3">

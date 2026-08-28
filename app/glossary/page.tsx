@@ -6,6 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { GLOSSARY, CATEGORIES, searchTerms, type Term } from "@/lib/glossary";
 import { ReadAloud } from "@/components/ReadAloud";
 import { PageHero } from "@/components/PageHero";
+import { VoiceInput } from "@/components/VoiceInput";
 
 const DEMO_UAN = "990012345678";
 
@@ -63,20 +64,27 @@ export default function Glossary() {
         {/* Controls get their own light band. A search field on navy
             needs its own contrast handling and gains nothing from it. */}
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-7">
+          <div className="shell py-7">
 
             <div className="max-w-xl mb-5">
               <label htmlFor="gl" className="sr-only">
                 Search the glossary
               </label>
-              <input
-                id="gl"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="ECR, deficiency, ten years, tax…"
-                autoComplete="off"
-                className="w-full border border-rule-heavy bg-paper rounded-md px-4 py-3.5 text-base sm:text-lg outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
-              />
+              <div className="flex items-start gap-2">
+                <input
+                  id="gl"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="ECR, deficiency, ten years, tax…"
+                  autoComplete="off"
+                  className="flex-1 min-w-0 border border-rule-heavy bg-paper rounded-md px-4 py-3.5 text-base sm:text-lg outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
+                />
+                <VoiceInput
+                  className="shrink-0"
+                  label="Say the word you are looking for"
+                  onResult={(text) => setQuery(text)}
+                />
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -101,7 +109,7 @@ export default function Glossary() {
           </div>
         </section>
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-8">
+        <div className="shell py-10 sm:py-14 space-y-8">
           {results.length === 0 ? (
             <div
               role="status"
@@ -120,7 +128,7 @@ export default function Glossary() {
               </Link>
             </div>
           ) : (
-            <ul className="grid gap-4 sm:grid-cols-2">
+            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {results.map((t) => (
                 <Entry key={t.term} term={t} />
               ))}

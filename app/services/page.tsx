@@ -90,7 +90,7 @@ export default function ServicesAZ() {
         />
 
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8 sm:py-10">
+          <div className="shell py-8 sm:py-10">
 
             {/* Search */}
             <div className="relative max-w-xl">
@@ -157,7 +157,7 @@ export default function ServicesAZ() {
         </section>
 
         {/* ---- Results ---- */}
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12">
+        <div className="shell py-10 sm:py-14 space-y-12">
           {filtered.length === 0 ? (
             <section
               role="status"
@@ -192,7 +192,7 @@ export default function ServicesAZ() {
                   </span>
                 </div>
 
-                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                   {entries.map((e) => {
                     const style =
                       CATEGORY_STYLE[categoryOf(e.path)] ?? FALLBACK;

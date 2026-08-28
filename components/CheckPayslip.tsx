@@ -78,7 +78,7 @@ export function CheckPayslip() {
       />
 
       <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-8">
+        <div className="shell-reading py-8">
           <div className="grid gap-5 sm:grid-cols-2 max-w-2xl">
             <div>
               <label htmlFor="wages" className="eyebrow block mb-2">
@@ -118,7 +118,7 @@ export function CheckPayslip() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14 space-y-10">
+      <div className="shell-reading py-10 sm:py-14 space-y-10">
         {!result && (
           <section className="border border-rule bg-paper-raised rounded-xl px-6 py-8">
             <p className="display-3 mb-3">There are three possible answers</p>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NavProgress } from "@/components/NavProgress";
 
 /* The main navigation, with the current section marked.
 
@@ -30,7 +31,7 @@ export function MainNav() {
       aria-label="Main"
       className="border-b border-rule bg-paper sticky top-0 z-40"
     >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <div className="shell">
         <ul className="flex gap-1 overflow-x-auto">
           {NAV.map((item) => {
             const active =
@@ -48,6 +49,7 @@ export function MainNav() {
                   data-active={active ? "true" : "false"}
                 >
                   {item.label}
+                  <NavProgress />
                 </Link>
               </li>
             );

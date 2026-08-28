@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ViewTransition } from "react";
 import {
   Manrope,
   Public_Sans,
@@ -145,7 +146,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col bg-paper text-ink">
-        {children}
+        {/* Route changes crossfade rather than cutting to white. Next
+            treats navigations as React transitions, so this activates
+            on its own; browsers without the View Transitions API just
+            navigate as before. */}
+        <ViewTransition>{children}</ViewTransition>
         <Assistant />
         <OfflineReady />
       </body>

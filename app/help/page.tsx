@@ -122,12 +122,12 @@ export default function Help() {
           }
         />
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
+        <div className="shell py-10 sm:py-14 space-y-12 stagger">
 
           {/* Channels */}
           <section>
             <p className="eyebrow mb-4">Where to take it</p>
-            <ul className="grid gap-4 sm:grid-cols-2">
+            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {CHANNELS.map((c) => (
                 <li key={c.name}>
                   <div

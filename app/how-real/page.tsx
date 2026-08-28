@@ -17,7 +17,7 @@ export default function HowReal() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 py-10 sm:py-14">
+        <div className="shell-reading py-10 sm:py-14">
           <p className="eyebrow mb-3">Disclosure</p>
           <h1 className="display-1 mb-5">
             What is real here, and what is not

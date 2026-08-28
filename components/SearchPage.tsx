@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { search, COMMON, KIND_LABEL, type ResultKind } from "@/lib/search";
 import { PageHero } from "@/components/PageHero";
+import { VoiceInput } from "@/components/VoiceInput";
 
 /* One box, everything behind it.
  *
@@ -84,21 +85,28 @@ export function SearchPage() {
       />
 
       <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-7">
+        <div className="shell-reading py-7">
           <label htmlFor="q" className="sr-only">
             Search this site
           </label>
-          <input
-            id="q"
-            ref={inputRef}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="money not received, name not matching, someone asked me to pay…"
-            autoComplete="off"
-            autoFocus
-            enterKeyHint="search"
-            className="w-full border-2 border-rule-heavy bg-paper rounded-lg px-4 py-4 text-base sm:text-lg outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
-          />
+          <div className="flex items-start gap-2">
+            <input
+              id="q"
+              ref={inputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="money not received, name not matching, someone asked me to pay…"
+              autoComplete="off"
+              autoFocus
+              enterKeyHint="search"
+              className="flex-1 min-w-0 border-2 border-rule-heavy bg-paper rounded-lg px-4 py-4 text-base sm:text-lg outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
+            />
+            <VoiceInput
+              className="shrink-0 pt-1.5"
+              label="Say what you are looking for"
+              onResult={(text) => setQuery(text)}
+            />
+          </div>
 
           {!typed && (
             <div className="mt-6">
@@ -123,7 +131,7 @@ export function SearchPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14">
+      <div className="shell-reading py-10 sm:py-14">
         {typed && (
           <p role="status" className="eyebrow mb-5">
             {results.length === 0

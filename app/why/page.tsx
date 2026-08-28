@@ -73,7 +73,7 @@ export default function WhyIndex() {
           }
         />
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-14">
+        <div className="shell py-10 sm:py-14 space-y-14">
           {GROUPS.map(({ key, label, note }) => {
             const items = REJECTIONS.filter((r) => r.prevalence === key);
             if (items.length === 0) return null;
@@ -90,7 +90,7 @@ export default function WhyIndex() {
                   </p>
                 </div>
 
-                <ul className="grid gap-4 lg:grid-cols-2">
+                <ul className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
                   {items.map((r) => (
                     <li key={r.id}>
                       <Link

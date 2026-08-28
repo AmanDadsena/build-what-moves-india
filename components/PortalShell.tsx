@@ -46,7 +46,7 @@ export function PortalShell({
 
       {/* Identity bar */}
       <header className="border-b border-rule bg-paper sticky top-0 z-40">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 h-14 flex items-center justify-between gap-4">
+        <div className="shell h-14 flex items-center justify-between gap-4">
           <Wordmark small />
           <Link
             href="/login"
@@ -59,7 +59,7 @@ export function PortalShell({
 
       {/* Member summary */}
       <div className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-5">
+        <div className="shell py-5">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="min-w-0">
               <p className="eyebrow mb-1.5">
@@ -115,7 +115,7 @@ export function PortalShell({
       </nav>
 
       {/* Body */}
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 w-full flex-1">
+      <div className="shell w-full flex-1">
         <div className="lg:grid lg:grid-cols-[13.5rem_1fr] lg:gap-10">
           {/* Desktop rail */}
           <nav
@@ -164,7 +164,7 @@ export function PortalShell({
       </div>
 
       <footer className="border-t border-rule bg-paper-inset/40">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-6 text-sm text-ink-faint leading-relaxed">
+        <div className="shell py-6 text-sm text-ink-faint leading-relaxed">
           <p className="max-w-3xl">
             An independent hackathon prototype, not affiliated with or endorsed
             by the Employees&rsquo; Provident Fund Organisation. No live

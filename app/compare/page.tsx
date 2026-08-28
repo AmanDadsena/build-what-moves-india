@@ -22,7 +22,7 @@ export default function Compare() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8 py-10 sm:py-14">
+        <div className="shell-reading py-10 sm:py-14">
           <p className="eyebrow mb-3">The same moment, twice</p>
           <h1 className="display-1 mb-4">
             ₹1,87,430 is not coming. Here is how you find out.

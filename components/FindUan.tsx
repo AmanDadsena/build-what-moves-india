@@ -40,7 +40,7 @@ export function FindUan() {
 
       {/* The question that shortens the list */}
       <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-4xl px-5 sm:px-8 py-8">
+        <div className="shell-reading py-8">
           <p className="eyebrow section-mark mb-2">One question first</p>
           <p className="title measure mb-1">
             Do you still have the mobile number that was registered when the
@@ -78,7 +78,7 @@ export function FindUan() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-5 sm:px-8 py-10 sm:py-14 space-y-10">
+      <div className="shell-reading py-10 sm:py-14 space-y-10">
         <section
           role="status"
           className={`border-2 rounded-xl p-6 ${

@@ -162,11 +162,11 @@ export default function Downloads() {
           }
         />
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-10 stagger">
+        <div className="shell py-10 sm:py-14 space-y-10 stagger">
 
 
           <section>
-            <ul className="grid gap-4 lg:grid-cols-2">
+            <ul className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
               {FORMS.map((f) => {
                 const Icon = FORM_ICONS[f.code] ?? IconFile;
                 return (

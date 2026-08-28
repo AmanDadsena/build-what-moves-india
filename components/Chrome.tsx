@@ -21,7 +21,7 @@ const HELPLINE = "1800 000 000";
 export function UtilityBar() {
   return (
     <div className="band-night">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-1.5 flex items-center justify-between gap-4">
+      <div className="shell py-1.5 flex items-center justify-between gap-4">
         <p className="text-[11px] sm:text-xs text-paper/65 leading-snug">
           An independent prototype. Not an official EPFO service.
         </p>
@@ -73,7 +73,7 @@ export function SiteHeader() {
       <UtilityBar />
 
       <header className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3.5 flex items-center justify-between gap-6">
+        <div className="shell py-3.5 flex items-center justify-between gap-6">
           <Wordmark />
 
           <div className="flex items-center gap-4 sm:gap-5 shrink-0">
@@ -106,7 +106,7 @@ export function SiteFooter() {
 
   return (
     <footer className="band-night band-gradient mt-auto">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
+      <div className="shell py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_2fr]">
           <div>
             <div className="flex items-center gap-3 mb-4">

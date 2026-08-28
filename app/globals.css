@@ -471,6 +471,114 @@ html[data-contrast="high"] :focus-visible {
     }
   }
 
+  /* --- Navigation feedback -------------------------------------------
+     A hairline that grows under a nav item while its page is still
+     being fetched. It eases toward 80% and stops: a bar that reaches
+     the end before the page arrives is a lie, and one that reaches it
+     too early is why people distrust progress bars.
+
+     Nothing appears at all on a fast connection, which is the point —
+     it exists for the ones this build is actually for. */
+  .nav-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: var(--color-ochre);
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-progress[data-pending="true"] {
+    opacity: 1;
+    animation: nav-progress 2.4s cubic-bezier(0.15, 0.85, 0.3, 1) forwards;
+  }
+  @keyframes nav-progress {
+    from { width: 0; }
+    to   { width: 80%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-progress[data-pending="true"] {
+      animation: none;
+      width: 80%;
+    }
+  }
+
+  /* --- Route transitions ----------------------------------------------
+     A crossfade between pages, through React's ViewTransition. The
+     browser holds the old frame, paints the new one, and blends —
+     which removes the white flash between routes without any of the
+     mount/unmount choreography an animation library would need.
+
+     Kept short. 180ms reads as a page settling; anything longer
+     starts to feel like waiting, and on a site where somebody is
+     chasing their own money that is the wrong impression to give.
+
+     Browsers without the API simply navigate, as they always did. */
+  ::view-transition-old(root) {
+    animation: 140ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 180ms cubic-bezier(0, 0, 0.2, 1) both fade-in-up;
+  }
+  @keyframes fade-out {
+    to { opacity: 0; }
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+  }
+
+  /* --- Shell ---------------------------------------------------------
+     How much of the window the page actually uses.
+
+     Two widths, because two different things are being laid out.
+
+     .shell is for grids, dashboards and card indexes, and it is
+     deliberately wide — on a 1920 screen a 1152px column leaves a
+     third of the display empty while the cards inside it are cramped
+     into two columns. Those pages should fill the window.
+
+     .shell-reading is for pages that are mostly sentences. It is
+     wider than it was but nowhere near .shell, because line length is
+     not a matter of taste: past about eighty characters the eye loses
+     its place returning to the next line, and this is a site read by
+     people who are already finding reading hard. Prose inside it is
+     capped again by .measure at 62ch.
+
+     Widening everything to the window would have made the grids
+     better and the reading worse. */
+  .shell {
+    width: 100%;
+    max-width: 110rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  .shell-reading {
+    width: 100%;
+    max-width: 66rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .shell,
+    .shell-reading {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 3rem;
+    }
+  }
+
   /* --- Bento -------------------------------------------------------
      The card language: a tall tile you tap, with the icon held in a
      tinted chip rather than floating loose, and a mark in the corner

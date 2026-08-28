@@ -30,7 +30,7 @@ export default function Offline() {
       <SiteHeader />
 
       <main id="main" className="flex-1">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 py-14 sm:py-20">
+        <div className="shell-reading py-14 sm:py-20">
           <p className="eyebrow section-mark mb-4">No connection</p>
           <h1 className="display-1 measure mb-4">
             You are offline, and this page was never loaded.

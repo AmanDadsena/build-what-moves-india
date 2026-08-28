@@ -6,6 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { OFFICES, AT_THE_OFFICE, searchOffices } from "@/lib/offices";
 import { IconCertificate, IconRecords, IconGrievance } from "@/components/Icons";
 import { PageHero } from "@/components/PageHero";
+import { VoiceInput } from "@/components/VoiceInput";
 
 const DEMO_UAN = "990012345678";
 
@@ -32,7 +33,7 @@ export default function Offices() {
           title="Before you travel, check the counter can actually help."
           lede="An office holds particular establishment codes and does a particular set of things. Arriving with the wrong paper at the wrong counter costs a day's wages and changes nothing."
         />
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-12 stagger">
+        <div className="shell py-10 sm:py-14 space-y-12 stagger">
           {/* What a counter can and cannot do — the part that matters */}
           <section>
             <p className="eyebrow section-mark mb-4">
@@ -68,14 +69,21 @@ export default function Offices() {
               <label htmlFor="office-q" className="sr-only">
                 Search by city, state or establishment code
               </label>
-              <input
-                id="office-q"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="City, state, or the first letters of your establishment code"
-                autoComplete="off"
-                className="w-full border border-rule-heavy bg-paper rounded-md px-4 py-3.5 text-base outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
-              />
+              <div className="flex items-start gap-2">
+                <input
+                  id="office-q"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="City, state, or the first letters of your establishment code"
+                  autoComplete="off"
+                  className="flex-1 min-w-0 border border-rule-heavy bg-paper rounded-md px-4 py-3.5 text-base outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/60"
+                />
+                <VoiceInput
+                  className="shrink-0"
+                  label="Say your city or establishment code"
+                  onResult={(text) => setQuery(text)}
+                />
+              </div>
             </div>
 
             {results.length === 0 ? (
@@ -90,7 +98,7 @@ export default function Offices() {
                 </p>
               </div>
             ) : (
-              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {results.map((o) => (
                   <li key={o.id}>
                     <div className="lift-hover h-full border border-rule bg-paper-raised rounded-lg p-5 hover:border-noting">

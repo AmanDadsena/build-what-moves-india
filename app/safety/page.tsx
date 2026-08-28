@@ -66,7 +66,7 @@ export default function Safety() {
           lede="A member whose claim has been stuck for months is the easiest person in the country to defraud, because everything the fraud says is exactly what their own experience has taught them to expect. Seven questions, answerable from memory."
         />
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+        <div className="shell py-10 sm:py-14 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start">
           {/* The questions */}
           <div>
             <p className="eyebrow mb-4">What happened</p>

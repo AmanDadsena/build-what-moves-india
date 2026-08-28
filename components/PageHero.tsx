@@ -40,7 +40,7 @@ export function PageHero({
   if (tone === "plain") {
     return (
       <section className="border-b border-rule bg-paper-raised">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
+        <div className="shell py-10 sm:py-14">
           <div className="flex items-center gap-2.5 mb-4 flex-wrap">
             <p className="eyebrow section-mark mb-0">{eyebrow}</p>
             {provenance && <Tag kind={provenance} />}
@@ -60,7 +60,7 @@ export function PageHero({
 
   return (
     <section className="border-b border-rule bg-paper">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8 sm:py-10">
+      <div className="shell py-8 sm:py-10">
         <div className="band-night band-gradient rounded-xl overflow-hidden card-lift">
           <div
             className={`p-7 sm:p-10 ${aside ? "grid lg:grid-cols-[1.35fr_1fr] gap-8 lg:gap-12 lg:items-center" : ""}`}

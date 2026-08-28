@@ -49,7 +49,7 @@ export default function Home() {
             the site is made of, and it keeps the masthead's white
             uninterrupted above it. */}
         <section className="border-b border-rule bg-paper">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-8 sm:py-12">
+          <div className="shell py-8 sm:py-12">
             <div className="band-night band-gradient rounded-xl overflow-hidden card-lift">
               <div className="grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-12 items-center p-7 sm:p-10 lg:p-12">
                 <div>
@@ -116,7 +116,7 @@ export default function Home() {
 
         {/* ================= SCALE ================= */}
         <section className="border-b border-rule bg-paper">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14">
+          <div className="shell py-10 sm:py-14">
             <p className="eyebrow section-mark mb-5">
               EPFO &middot; 2024&ndash;25
             </p>
@@ -143,8 +143,8 @@ export default function Home() {
 
         {/* ================= TASKS + SIGN IN ================= */}
         <section className="border-b border-rule">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
-            <div className="grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-14 items-start">
+          <div className="shell py-12 sm:py-16">
+            <div className="grid lg:grid-cols-[1.4fr_1fr] 2xl:grid-cols-[2.2fr_1fr] gap-10 lg:gap-14 items-start">
               <div>
                 <p className="eyebrow section-mark mb-2">Common tasks</p>
                 <h2 className="display-2 measure mb-6">
@@ -154,7 +154,7 @@ export default function Home() {
                 {/* All visible at once. The original rotates nine of
                     these through a carousel, which hides eight and
                     moves the one you were reading. */}
-                <ul className="grid sm:grid-cols-2 gap-4">
+                <ul className="grid sm:grid-cols-2 2xl:grid-cols-3 gap-4">
                   {TASKS.map(({ href, label, labelHi, blurb, Icon, tone }) => (
                     <li key={href} className="contents">
                       <BentoTile
@@ -179,7 +179,7 @@ export default function Home() {
 
         {/* ================= THE DECODER ================= */}
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
+          <div className="shell py-12 sm:py-16">
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
               <div>
                 <p className="eyebrow section-mark mb-3">
@@ -234,7 +234,7 @@ export default function Home() {
 
         {/* ================= SERVICES ================= */}
         <section id="services" className="border-b border-rule scroll-mt-24">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
+          <div className="shell py-12 sm:py-16">
             <div className="flex items-end justify-between gap-6 flex-wrap mb-8">
               <div>
                 <p className="eyebrow section-mark mb-2">Services</p>
@@ -288,7 +288,7 @@ export default function Home() {
 
         {/* ================= NOTICES ================= */}
         <section className="border-b border-rule bg-paper-raised">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
+          <div className="shell py-12 sm:py-16">
             <p className="eyebrow section-mark mb-2">Worth knowing</p>
             <h2 className="display-2 measure mb-8">
               Things that affect your money which nobody tells you.

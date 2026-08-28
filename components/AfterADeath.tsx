@@ -79,7 +79,7 @@ export function AfterADeath() {
           }
         />
 
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 space-y-14">
+        <div className="shell py-10 sm:py-14 space-y-14">
           {/* The three */}
           <section>
             <p className="eyebrow section-mark mb-5">What is owed</p>
