@@ -134,11 +134,15 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
           <Tag kind="mock" />
         </div>
 
-        <div className="border border-rule bg-paper-raised rounded-xl overflow-hidden card-lift">
-          <div className="px-5 py-6 sm:px-6 border-b border-rule">
+        <div className="gold-top corner-glow border border-rule bg-paper-raised rounded-xl overflow-hidden card-lift">
+          <div className="px-5 py-7 sm:px-6 border-b border-rule">
             <p className="eyebrow mb-2">Withdrawable provident fund</p>
-            <p className="figure text-4xl sm:text-5xl">
+            <p className="figure text-4xl sm:text-5xl mb-1">
               {rupees(corpus(member))}
+            </p>
+            <p className="text-sm text-ink-soft leading-relaxed">
+              Your share and your employer&rsquo;s, with every rupee of
+              interest credited on both.
             </p>
           </div>
 

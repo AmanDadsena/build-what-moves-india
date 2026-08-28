@@ -5,6 +5,7 @@ import { checkCompliance } from "@/lib/compliance";
 import { findOffice } from "@/lib/offices";
 import { PrintButton } from "@/components/PrintButton";
 import { Tag } from "@/components/Provenance";
+import { ShareLink } from "@/components/ShareLink";
 
 export const dynamicParams = false;
 
@@ -75,7 +76,13 @@ export default async function Summary({
           starts by assembling the same facts from six different screens. This
           is all of them on one sheet.
         </p>
-        <PrintButton label="Print this page" />
+        <div className="flex items-center gap-3 flex-wrap">
+          <PrintButton label="Print this page" />
+          <ShareLink
+            title={`Provident fund case summary — ${member.name}`}
+            text="Every fact somebody helping with this claim would need, on one page."
+          />
+        </div>
       </section>
 
       {/* The sheet itself */}

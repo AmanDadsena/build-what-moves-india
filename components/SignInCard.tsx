@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MEMBERS, MOCK_PASSWORD } from "@/lib/members";
 import { Emblem } from "@/components/Emblem";
+import Link from "next/link";
 
 /* The sign-in card, shared by the landing and the sign-in page.
 
@@ -64,9 +65,20 @@ export function SignInCard({ compact = false }: { compact?: boolean }) {
 
       <form onSubmit={signIn} className="p-5 sm:p-6 space-y-4">
         <div>
-          <label htmlFor="uan" className="eyebrow block mb-1.5">
-            UAN
-          </label>
+          {/* The one place a member discovers they are blocked before
+              they have begun. Every portal asks for this number and
+              none of them says what to do when you do not have it. */}
+          <div className="flex items-baseline justify-between gap-3 mb-1.5">
+            <label htmlFor="uan" className="eyebrow">
+              UAN
+            </label>
+            <Link
+              href="/find-your-uan/"
+              className="text-xs font-semibold text-noting underline underline-offset-4 decoration-rule-heavy hover:decoration-noting"
+            >
+              I don&rsquo;t know mine
+            </Link>
+          </div>
           <input
             id="uan"
             value={uan}

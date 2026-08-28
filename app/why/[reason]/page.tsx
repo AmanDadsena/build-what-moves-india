@@ -7,6 +7,7 @@ import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
 import { ReadAloud } from "@/components/ReadAloud";
+import { ShareLink } from "@/components/ShareLink";
 
 export const dynamicParams = false;
 
@@ -160,12 +161,17 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
             <p className="lede measure">{r.plain}</p>
             <p className="font-deva text-ink-faint measure mt-4">{r.plainHi}</p>
 
-            <ReadAloud
-              className="mt-6"
-              size="md"
-              en={`${r.title}. ${r.plain}`}
-              hi={`${r.titleHi}. ${r.plainHi}`}
-            />
+            <div className="flex items-center gap-3 flex-wrap mt-6">
+              <ReadAloud
+                size="md"
+                en={`${r.title}. ${r.plain}`}
+                hi={`${r.titleHi}. ${r.plainHi}`}
+              />
+              <ShareLink
+                title={r.title}
+                text={`What "${r.verbatim[0]}" actually means, and what to do about it.`}
+              />
+            </div>
           </section>
 
           <section>
