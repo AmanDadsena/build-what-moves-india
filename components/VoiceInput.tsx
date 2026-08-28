@@ -28,7 +28,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * doing nothing every time.
  */
 
-type Lang = "en-IN" | "hi-IN";
+import { LANGUAGES, languageFor, type LangCode } from "@/lib/i18n";
+
 const STORAGE = "rk-voice-lang";
 
 /* The API is prefixed everywhere except very recent Chromium, and it
@@ -76,15 +77,20 @@ export function VoiceInput({
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [lang, setLang] = useState<Lang>("en-IN");
+  const [lang, setLang] = useState<LangCode>("en");
   const recognition = useRef<Recognition | null>(null);
 
   useEffect(() => {
     if (!ctor()) return;
     setReady(true);
     try {
-      const saved = localStorage.getItem(STORAGE);
-      if (saved === "hi-IN" || saved === "en-IN") setLang(saved);
+      /* Prefer whatever the member chose for the site: somebody
+         reading in Kannada is going to speak Kannada. A separate
+         choice made here overrides it and is remembered. */
+      const saved = localStorage.getItem(STORAGE) as LangCode | null;
+      const site = localStorage.getItem("rk-lang") as LangCode | null;
+      const pick = saved ?? site;
+      if (pick && LANGUAGES.some((l) => l.code === pick)) setLang(pick);
     } catch {
       // Private mode. English is a reasonable default.
     }
@@ -98,7 +104,7 @@ export function VoiceInput({
     recognition.current?.abort();
     const r = new Ctor();
     recognition.current = r;
-    r.lang = lang;
+    r.lang = languageFor(lang).tag;
     r.continuous = false;
     r.interimResults = true;
     setError(null);
@@ -144,8 +150,12 @@ export function VoiceInput({
     setListening(false);
   }, []);
 
+  /* Cycles rather than toggles, now that there are eight. A select
+     would be tidier and worse: this sits inside a search field, and a
+     native dropdown there is a two-tap detour on a phone. */
   const switchLang = useCallback(() => {
-    const next: Lang = lang === "en-IN" ? "hi-IN" : "en-IN";
+    const i = LANGUAGES.findIndex((l) => l.code === lang);
+    const next = LANGUAGES[(i + 1) % LANGUAGES.length].code;
     setLang(next);
     try {
       localStorage.setItem(STORAGE, next);
@@ -178,12 +188,11 @@ export function VoiceInput({
         <button
           type="button"
           onClick={switchLang}
-          aria-label={`Speaking in ${lang === "hi-IN" ? "Hindi" : "English"}. Switch.`}
-          className={`press h-10 px-2.5 rounded-md border border-rule text-xs font-bold text-ink-soft hover:border-noting hover:text-noting ${
-            lang === "hi-IN" ? "font-deva" : ""
-          }`}
+          aria-label={`Speaking in ${languageFor(lang).native}. Change language.`}
+          lang={languageFor(lang).tag}
+          className="press h-10 px-2.5 rounded-md border border-rule text-xs font-bold text-ink-soft hover:border-noting hover:text-noting max-w-24 truncate"
         >
-          {lang === "hi-IN" ? "हिं" : "EN"}
+          {languageFor(lang).native}
         </button>
       </div>
 
@@ -193,11 +202,7 @@ export function VoiceInput({
           className={`text-xs leading-relaxed mt-2 ${error ? "text-stamp" : "text-ink-faint"}`}
         >
           {error ??
-            (interim
-              ? `“${interim}”`
-              : lang === "hi-IN"
-                ? "सुन रहे हैं… बोलिए"
-                : "Listening… speak now")}
+            (interim ? `“${interim}”` : `Listening in ${languageFor(lang).native}…`)}
         </p>
       )}
     </div>

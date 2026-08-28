@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { servicesByCategory } from "@/lib/services";
 import { ReaderControls } from "@/components/ReaderControls";
+import { LanguageSwitcher } from "@/components/Language";
 import { Emblem } from "@/components/Emblem";
 import { MainNav } from "@/components/MainNav";
 import { SearchBox } from "@/components/SearchBox";
@@ -25,7 +26,10 @@ export function UtilityBar() {
         <p className="text-[11px] sm:text-xs text-paper/65 leading-snug">
           An independent prototype. Not an official EPFO service.
         </p>
-        <ReaderControls onDark />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher onDark />
+          <ReaderControls onDark />
+        </div>
       </div>
     </div>
   );

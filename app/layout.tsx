@@ -10,6 +10,7 @@ import {
 import "./globals.css";
 import { Assistant } from "@/components/Assistant";
 import { OfflineReady } from "@/components/OfflineReady";
+import { LanguageProvider } from "@/components/Language";
 import { SITE_URL } from "@/lib/site";
 
 /* Type.
@@ -150,9 +151,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             treats navigations as React transitions, so this activates
             on its own; browsers without the View Transitions API just
             navigate as before. */}
-        <ViewTransition>{children}</ViewTransition>
-        <Assistant />
-        <OfflineReady />
+        <LanguageProvider>
+          <ViewTransition>{children}</ViewTransition>
+          <Assistant />
+          <OfflineReady />
+        </LanguageProvider>
       </body>
     </html>
   );

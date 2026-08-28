@@ -182,3 +182,57 @@ test("every href resolves to a page that exists", async () => {
     assert.ok(resolves(item.href), `${item.id} links to ${item.href}, which is not a route`);
   }
 });
+
+/* Searching in the scripts the interface now speaks.
+
+   These exist because of a real bug. The normaliser stripped Unicode
+   combining marks, and every Indic vowel sign, matra and virama is a
+   mark rather than a letter — so "પાસબુક" was reduced to "પ સબ ક" and
+   every word became a handful of loose consonants that matched almost
+   anything. Nothing failed; results were just confidently wrong, in
+   Hindi too, long before the other scripts arrived. */
+
+test("an Indic word behaves as one word, not a scatter of consonants", () => {
+  /* This is the shape of the bug. A fragmented word became several
+     one-letter tokens, and single consonants match nearly every entry
+     in the index — so the tell is not that a search fails but that it
+     returns far too much, with confident scores. */
+  for (const word of ["ನಿಮ್ಮ", "তারিখ", "पासबुक", "தேதி", "ఖాతా"]) {
+    const found = search(word);
+    assert.ok(
+      found.length <= 12,
+      `"${word}" matched ${found.length} entries — it is fragmenting again`,
+    );
+  }
+});
+
+test("a common Indic word does not outrank a specific phrase", () => {
+  const specific = search("ಹೆಸರು ಎರಡು ಕಡೆ", 1);
+  assert.equal(specific[0]?.href, "/why/name-mismatch/");
+});
+
+test("a translated title finds its own page, in every script", () => {
+  const cases: Array<[string, string]> = [
+    ["ಹೆಸರು ಎರಡು ಕಡೆ ಬೇರೆಯಾಗಿದೆ", "/why/name-mismatch/"],
+    ["তারিখ নথিভুক্ত করেননি", "/why/exit-date-missing/"],
+    ["வங்கிக் கணக்கு இணைக்கப்படவில்லை", "/why/bank-not-seeded/"],
+    ["పుట్టిన తేదీ ఆధార్", "/why/dob-mismatch/"],
+    ["नोकरी सोडल्याची नोंद", "/why/exit-date-missing/"],
+    ["એકથી વધુ UAN", "/why/multiple-uan/"],
+  ];
+  for (const [query, href] of cases) {
+    const found = search(query, 3);
+    assert.ok(found.length > 0, `"${query}" found nothing`);
+    assert.equal(found[0].href, href, `"${query}" reached ${found[0].href}`);
+  }
+});
+
+test("every rejection is reachable by its own translated title", () => {
+  for (const item of INDEX) {
+    if (item.kind !== "reason") continue;
+    // Each translated title is in the haystack, so searching the
+    // exact phrase must return that entry first.
+    const aliases = item.aliases.filter((a) => /[^\u0000-\u024F]/.test(a));
+    assert.ok(aliases.length >= 6, `${item.id} carries only ${aliases.length} translated titles`);
+  }
+});

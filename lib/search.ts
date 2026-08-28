@@ -4,6 +4,7 @@ import { SERVICES } from "./services";
 import { DOCUMENTS } from "./documents";
 import { OFFICES } from "./offices";
 import { KNOWLEDGE } from "./knowledge";
+import { titleAliases } from "./i18n";
 
 /* ============================================================
    One search box for the whole site.
@@ -272,10 +273,22 @@ const PAGES: Array<Omit<Indexed, "haystack">> = [
   },
 ];
 
+/* \p{M} — combining marks — has to be kept, and leaving it out was a
+   real bug rather than a nicety.
+ 
+   Every Indic vowel sign, matra and virama is a mark, not a letter.
+   Stripping them did not just lose accents: it shredded each word
+   into loose consonants, so "પાસબુક" became "પ સબ ક" and "ನಿಮ್ಮ"
+   became "ನ ಮ ಮ". Single consonants then matched almost everything,
+   which is why a generic query returned a confident and wrong page.
+ 
+   It had been quietly breaking the Hindi aliases since long before
+   the other scripts arrived; nothing failed, results were just
+   subtly wrong. */
 function normalise(text: string) {
   return text
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/[^\p{L}\p{N}\p{M}\s]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -290,7 +303,10 @@ function build(): Indexed[] {
       title: r.title,
       snippet: r.verbatim[0],
       href: `/why/${r.id}/`,
-      aliases: [...r.verbatim, r.titleHi],
+      /* Every translated title, so a query spoken in Bengali or
+         Kannada reaches the page even though the explanation on it
+         is in English. */
+      aliases: [...r.verbatim, r.titleHi, ...titleAliases(r.id)],
       haystack: "",
       weight: 1.4,
     });

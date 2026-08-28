@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavProgress } from "@/components/NavProgress";
+import { useLang } from "@/components/Language";
 
 /* The main navigation, with the current section marked.
 
@@ -12,19 +13,23 @@ import { NavProgress } from "@/components/NavProgress";
    survives colour-blindness and high contrast alike, and aria-current
    carries the same fact to a screen reader. */
 
+/* Labels come from the language table rather than being written here,
+   so the nav follows the switch. The keys are stable; only the text
+   changes. */
 const NAV = [
-  { href: "/why", label: "Why was it rejected?" },
-  { href: "/still-waiting", label: "Still waiting" },
-  { href: "/services", label: "All services A–Z" },
-  { href: "/help", label: "Help & contact" },
-  { href: "/glossary", label: "Plain language" },
-  { href: "/safety", label: "Staying safe" },
-  { href: "/downloads", label: "Forms & downloads" },
-  { href: "/how-real", label: "About this build" },
+  { href: "/why", key: "why" },
+  { href: "/still-waiting", key: "waiting" },
+  { href: "/services", key: "services" },
+  { href: "/help", key: "help" },
+  { href: "/glossary", key: "plain" },
+  { href: "/safety", key: "safety" },
+  { href: "/downloads", key: "forms" },
+  { href: "/how-real", key: "about" },
 ];
 
 export function MainNav() {
   const pathname = usePathname();
+  const { s } = useLang();
 
   return (
     <nav
@@ -48,7 +53,7 @@ export function MainNav() {
                   }`}
                   data-active={active ? "true" : "false"}
                 >
-                  {item.label}
+                  {s(item.key)}
                   <NavProgress />
                 </Link>
               </li>
