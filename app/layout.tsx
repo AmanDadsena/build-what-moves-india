@@ -11,6 +11,9 @@ import "./globals.css";
 import { Assistant } from "@/components/Assistant";
 import { OfflineReady } from "@/components/OfflineReady";
 import { LanguageProvider } from "@/components/Language";
+import { ReaderProvider } from "@/components/ReaderControls";
+import { CommandPalette } from "@/components/CommandPalette";
+import { CaseHandoff } from "@/components/CaseBackup";
 import { SITE_URL } from "@/lib/site";
 
 /* Type.
@@ -91,6 +94,10 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
+    /* Resolved against metadataBase. Without it a card scraped from a
+       preview host, or from a link someone forwarded with tracking
+       parameters stapled on, names that URL as the canonical one. */
+    url: "/",
     siteName: "EPF Member Portal — a redesign concept",
     title: "The rejection said eleven words. This says what to do about them.",
     description:
@@ -116,7 +123,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#e9ebe4",
+  /* The navy of the utility bar, which is the topmost band on every
+     page. Android Chrome paints its address bar this colour, so the
+     browser furniture and the page meet without a seam; installed to
+     a home screen, the status bar does the same. It has to be a
+     literal — this is read before any stylesheet, so a var() here
+     resolves to nothing and the bar falls back to white. Keep it in
+     step with --color-night. */
+  themeColor: "#001e40",
   width: "device-width",
   initialScale: 1,
 };
@@ -159,9 +173,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             on its own; browsers without the View Transitions API just
             navigate as before. */}
         <LanguageProvider>
-          <ViewTransition>{children}</ViewTransition>
-          <Assistant />
-          <OfflineReady />
+          <ReaderProvider>
+            {/* Above everything, because a case somebody handed over
+                is the reason this page was opened at all. Renders
+                nothing unless the address carries one. */}
+            <CaseHandoff />
+            <ViewTransition>{children}</ViewTransition>
+            {/* Outside the transition: a dialog that crossfaded with
+                the page under it would flicker on every navigation it
+                caused. */}
+            <CommandPalette />
+            <Assistant />
+            <OfflineReady />
+          </ReaderProvider>
         </LanguageProvider>
       </body>
     </html>

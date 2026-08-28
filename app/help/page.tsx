@@ -104,6 +104,45 @@ const FAQ = [
   },
 ];
 
+/* The reading and keyboard controls, written out.
+ *
+ * Every one of these already exists in the interface, and every one
+ * is behind an icon or a shortcut that a first-time visitor has no
+ * reason to try. The audience for this site skews towards people who
+ * do not explore software, so a control they have not been told about
+ * is a control they do not have. */
+const READING_HELP: Array<{ what: string; how: string; keys?: string[] }> = [
+  {
+    what: "Make everything bigger",
+    how: "A− and A+ at the top of every page. Four sizes, and it moves the tables and forms too, not only the paragraphs.",
+  },
+  {
+    what: "Black on white, or a typeface built for slow reading",
+    how: "“Reading options” at the top right — high contrast, Atkinson Hyperlegible, looser lines, wider letters, marked links.",
+  },
+  {
+    what: "Have a page read out to you",
+    how: "The listen button beside long explanations, or the command palette on any page. It reads in Hindi where the passage is in Hindi.",
+  },
+  {
+    what: "Read in your own language",
+    how: "The globe at the top. Eight languages; two carry everything and six carry the menus and the rejection names.",
+  },
+  {
+    what: "Speak instead of typing",
+    how: "The microphone inside the longer boxes — a grievance, an RTI. It writes what you say, and you can correct it before sending.",
+  },
+  {
+    what: "Search, or reach any setting, from the keyboard",
+    how: "Opens a box you can type into: a page, a rejection reason, an office, or a command like “high contrast” or “Tamil”.",
+    keys: ["Ctrl", "K"],
+  },
+  {
+    what: "Keep it working without signal",
+    how: "Add it to your home screen. Every page you have opened stays readable when the connection drops.",
+  },
+];
+
 export default function Help() {
   return (
     <>
@@ -249,6 +288,46 @@ export default function Help() {
             <Link href="/after-a-death/" className="btn btn-primary btn-sm">
               What a family is owed, and how to claim it
             </Link>
+          </section>
+
+          {/* Written down because an accessibility feature nobody can
+              find is not an accessibility feature. The controls
+              themselves live in the utility bar and in the palette;
+              this is the page somebody lands on when they are stuck,
+              so it is where the list belongs. */}
+          <section>
+            <p className="eyebrow mb-4">If reading this is hard</p>
+            <div className="border border-rule rounded-lg overflow-hidden">
+              <ul className="divide-y divide-rule">
+                {READING_HELP.map((item) => (
+                  <li
+                    key={item.what}
+                    className="bg-paper px-5 py-4 flex items-baseline gap-4 flex-wrap"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium">{item.what}</span>
+                      <span className="block text-sm text-ink-soft mt-0.5">
+                        {item.how}
+                      </span>
+                    </span>
+                    {item.keys && (
+                      <span className="shrink-0 text-xs text-ink-faint">
+                        {item.keys.map((k) => (
+                          <kbd key={k} className="kbd">
+                            {k}
+                          </kbd>
+                        ))}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <p className="px-5 py-4 text-sm text-ink-soft leading-relaxed border-t border-rule bg-paper-raised">
+                Every setting is kept on this device and applies to every page,
+                including the tables and the forms. Nothing here needs an
+                account, and none of it is sent anywhere.
+              </p>
+            </div>
           </section>
 
           <section className="border border-rule-heavy bg-paper-raised rounded-lg p-6">

@@ -32,7 +32,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = path.join(root, "assets-src");
 const SRC = existsSync(path.join(RAW, "clean")) ? path.join(RAW, "clean") : RAW;
 const IMG = path.join(root, "public", "img");
-const APP = path.join(root, "app");
 
 /* Each illustration is rendered inside a card no wider than about
    620 CSS pixels, so 1240 covers a 2× display and nothing more. Asking

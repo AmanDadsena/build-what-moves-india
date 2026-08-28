@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { openPalette } from "@/components/CommandPalette";
 
 /* The search box in the masthead.
  *
@@ -14,11 +15,31 @@ import { useState } from "react";
  * It is a form element and not a button pretending to be one, so
  * Enter works, browser autofill of past searches works, and a screen
  * reader announces it as the search landmark it is.
+ *
+ * The key cap on the right opens the command palette, which is the
+ * live-results surface this field deliberately is not. It sits here
+ * rather than replacing the field because the field needs no
+ * JavaScript to work and the palette needs all of it: on a connection
+ * where the bundle never arrives, this still searches the site.
  */
 
-export function SearchBox({ className = "" }: { className?: string }) {
+export function SearchBox({
+  className = "",
+  /** Show the Ctrl+K cap. Off where the row is already crowded. */
+  shortcut = false,
+}: {
+  className?: string;
+  shortcut?: boolean;
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [mac, setMac] = useState(false);
+
+  useEffect(() => {
+    if (shortcut) {
+      setMac(/mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent));
+    }
+  }, [shortcut]);
 
   return (
     <form
@@ -42,8 +63,23 @@ export function SearchBox({ className = "" }: { className?: string }) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search"
         enterKeyHint="search"
-        className="w-full border border-rule-heavy bg-paper rounded-md pl-9 pr-3 py-2 text-sm outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/70"
+        className={`w-full border border-rule-heavy bg-paper rounded-md pl-9 py-2 text-sm outline-none transition-colors focus:border-noting focus:ring-4 focus:ring-noting/12 placeholder:text-ink-faint/70 ${
+          shortcut ? "pr-[4.5rem]" : "pr-3"
+        }`}
       />
+
+      {shortcut && (
+        <button
+          type="button"
+          onClick={openPalette}
+          title="Search and commands"
+          aria-label="Open the search and command palette"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 leading-none opacity-70 hover:opacity-100 transition-opacity"
+        >
+          <kbd className="kbd">{mac ? "⌘" : "Ctrl"}</kbd>
+          <kbd className="kbd">K</kbd>
+        </button>
+      )}
       <span
         aria-hidden
         className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint"

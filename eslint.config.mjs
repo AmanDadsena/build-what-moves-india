@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import reactHooks from "eslint-plugin-react-hooks";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -12,9 +13,21 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    /* Vendored agent skills — third-party scripts and deliberately
+       broken React fixtures. They accounted for two and a half
+       thousand findings, which is enough noise to hide a real one in
+       the code this project actually ships. */
+    ".claude/**",
   ]),
 
   {
+    /* Flat config scopes plugin namespaces to the object they are
+       declared in. eslint-config-next registers react-hooks inside
+       its own "next" object, so naming one of its rules out here
+       fails to resolve unless the plugin is declared again — and it
+       has to be the same module instance, or ESLint refuses the
+       redefinition. */
+    plugins: { "react-hooks": reactHooks },
     rules: {
       /* Downgraded deliberately, and only this rule.
        *

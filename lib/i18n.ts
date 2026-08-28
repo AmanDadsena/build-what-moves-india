@@ -48,6 +48,9 @@ export interface Language {
   code: LangCode;
   /** The language's own name, in its own script. */
   native: string;
+  /** The English name, so somebody without an Indic keyboard can
+   *  still type "tamil" and find it. */
+  english: string;
   /** For the <html lang> attribute and the speech APIs. */
   tag: string;
   /** True where the long-form explanations exist in this language. */
@@ -55,14 +58,14 @@ export interface Language {
 }
 
 export const LANGUAGES: Language[] = [
-  { code: "en", native: "English", tag: "en-IN", full: true },
-  { code: "hi", native: "हिंदी", tag: "hi-IN", full: true },
-  { code: "bn", native: "বাংলা", tag: "bn-IN", full: false },
-  { code: "mr", native: "मराठी", tag: "mr-IN", full: false },
-  { code: "ta", native: "தமிழ்", tag: "ta-IN", full: false },
-  { code: "te", native: "తెలుగు", tag: "te-IN", full: false },
-  { code: "gu", native: "ગુજરાતી", tag: "gu-IN", full: false },
-  { code: "kn", native: "ಕನ್ನಡ", tag: "kn-IN", full: false },
+  { code: "en", native: "English", english: "English", tag: "en-IN", full: true },
+  { code: "hi", native: "हिंदी", english: "Hindi", tag: "hi-IN", full: true },
+  { code: "bn", native: "বাংলা", english: "Bengali", tag: "bn-IN", full: false },
+  { code: "mr", native: "मराठी", english: "Marathi", tag: "mr-IN", full: false },
+  { code: "ta", native: "தமிழ்", english: "Tamil", tag: "ta-IN", full: false },
+  { code: "te", native: "తెలుగు", english: "Telugu", tag: "te-IN", full: false },
+  { code: "gu", native: "ગુજરાતી", english: "Gujarati", tag: "gu-IN", full: false },
+  { code: "kn", native: "ಕನ್ನಡ", english: "Kannada", tag: "kn-IN", full: false },
 ];
 
 export const DEFAULT_LANG: LangCode = "en";

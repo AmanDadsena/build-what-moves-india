@@ -1,26 +1,39 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-/* The reader panel.
-
-   The original portal carries an accessibility widget bolted on from
-   a third party: it floats over the page, styles nothing it does not
-   own, and several of its settings visibly fight the site's own CSS.
-
-   This does the same job from inside the design system. Every setting
-   is a data attribute on <html> and every surface already reads its
-   values from tokens, so turning on larger text or the hyperlegible
-   face changes the tables, the tags and the note sheet too — not just
-   the paragraphs.
-
-   Preferences are read after mount, never during render: the server
-   cannot know them, and guessing produces a hydration mismatch. */
+/* The reader panel, and the preferences behind it.
+ *
+ * The original portal carries an accessibility widget bolted on from
+ * a third party: it floats over the page, styles nothing it does not
+ * own, and several of its settings visibly fight the site's own CSS.
+ *
+ * This does the same job from inside the design system. Every setting
+ * is a data attribute on <html> and every surface already reads its
+ * values from tokens, so turning on larger text or the hyperlegible
+ * face changes the tables, the tags and the note sheet too — not just
+ * the paragraphs.
+ *
+ * The state sits in a provider rather than in the panel, because the
+ * panel is no longer the only way to reach it: the command palette
+ * offers the same switches to somebody who never touches the mouse.
+ * Two copies of this state would drift the moment either was used,
+ * and the one that lost would keep showing the wrong tick.
+ *
+ * Preferences are read after mount, never during render: the server
+ * cannot know them, and guessing produces a hydration mismatch. */
 
 const SCALES = ["normal", "large", "larger", "largest"] as const;
-type Scale = (typeof SCALES)[number];
+export type Scale = (typeof SCALES)[number];
 
-interface Prefs {
+export interface Prefs {
   scale: Scale;
   contrast: boolean;
   leading: boolean;
@@ -29,6 +42,8 @@ interface Prefs {
   readable: boolean;
   plain: boolean;
 }
+
+export type ToggleKey = keyof Omit<Prefs, "scale">;
 
 const DEFAULTS: Prefs = {
   scale: "normal",
@@ -43,7 +58,7 @@ const DEFAULTS: Prefs = {
 const STORAGE = "rk-reader";
 
 /** Each toggle maps to one attribute on the document element. */
-const ATTR: Record<keyof Omit<Prefs, "scale">, [string, string]> = {
+const ATTR: Record<ToggleKey, [string, string]> = {
   contrast: ["data-contrast", "high"],
   leading: ["data-leading", "loose"],
   spacing: ["data-spacing", "wide"],
@@ -52,8 +67,8 @@ const ATTR: Record<keyof Omit<Prefs, "scale">, [string, string]> = {
   plain: ["data-plain", "on"],
 };
 
-const TOGGLES: Array<{
-  key: keyof Omit<Prefs, "scale">;
+export const TOGGLES: Array<{
+  key: ToggleKey;
   label: string;
   hint: string;
 }> = [
@@ -65,9 +80,37 @@ const TOGGLES: Array<{
   { key: "plain", label: "Plain backgrounds", hint: "No texture behind text" },
 ];
 
-export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
+export const SCALE_LABEL: Record<Scale, string> = {
+  normal: "Normal",
+  large: "Large",
+  larger: "Larger",
+  largest: "Largest",
+};
+
+interface ReaderCtx {
+  prefs: Prefs;
+  toggle: (key: ToggleKey) => void;
+  step: (direction: 1 | -1) => void;
+  reset: () => void;
+  changed: boolean;
+  canGrow: boolean;
+  canShrink: boolean;
+}
+
+const Context = createContext<ReaderCtx>({
+  prefs: DEFAULTS,
+  toggle: () => {},
+  step: () => {},
+  reset: () => {},
+  changed: false,
+  canGrow: true,
+  canShrink: false,
+});
+
+export const useReader = () => useContext(Context);
+
+export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const [prefs, setPrefs] = useState<Prefs>(DEFAULTS);
-  const [open, setOpen] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -87,13 +130,21 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
     if (prefs.scale === "normal") root.removeAttribute("data-scale");
     else root.setAttribute("data-scale", prefs.scale);
 
-    for (const key of Object.keys(ATTR) as Array<keyof typeof ATTR>) {
+    for (const key of Object.keys(ATTR) as ToggleKey[]) {
       const [attr, value] = ATTR[key];
       if (prefs[key]) root.setAttribute(attr, value);
       else root.removeAttribute(attr);
     }
 
-    localStorage.setItem(STORAGE, JSON.stringify(prefs));
+    try {
+      localStorage.setItem(STORAGE, JSON.stringify(prefs));
+    } catch {
+      /* Private browsing, or a full quota. The settings still apply
+         for this visit — which is the part the member asked for. An
+         exception thrown here would abort the effect and leave the
+         attributes half-written, so larger text would work and high
+         contrast would not. */
+    }
   }, [prefs, ready]);
 
   const step = useCallback((direction: 1 | -1) => {
@@ -106,9 +157,34 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
     });
   }, []);
 
-  const changed =
-    prefs.scale !== "normal" ||
-    (Object.keys(ATTR) as Array<keyof typeof ATTR>).some((k) => prefs[k]);
+  const toggle = useCallback((key: ToggleKey) => {
+    setPrefs((p) => ({ ...p, [key]: !p[key] }));
+  }, []);
+
+  const reset = useCallback(() => setPrefs(DEFAULTS), []);
+
+  const value = useMemo<ReaderCtx>(
+    () => ({
+      prefs,
+      toggle,
+      step,
+      reset,
+      changed:
+        prefs.scale !== "normal" ||
+        (Object.keys(ATTR) as ToggleKey[]).some((k) => prefs[k]),
+      canGrow: prefs.scale !== "largest",
+      canShrink: prefs.scale !== "normal",
+    }),
+    [prefs, toggle, step, reset],
+  );
+
+  return <Context.Provider value={value}>{children}</Context.Provider>;
+}
+
+export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
+  const { prefs, toggle, step, reset, changed, canGrow, canShrink } =
+    useReader();
+  const [open, setOpen] = useState(false);
 
   const chrome = onDark
     ? "text-paper/65 hover:text-paper border-night-rule hover:border-paper/40"
@@ -119,7 +195,7 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
       <div className="flex items-center gap-2" role="group" aria-label="Text size">
         <button
           onClick={() => step(-1)}
-          disabled={prefs.scale === "normal"}
+          disabled={!canShrink}
           aria-label="Decrease text size"
           className={`press border rounded-xs inline-flex items-center justify-center min-w-[30px] min-h-[28px] px-2 text-[13px] leading-none disabled:opacity-30 ${chrome}`}
         >
@@ -127,7 +203,7 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
         </button>
         <button
           onClick={() => step(1)}
-          disabled={prefs.scale === "largest"}
+          disabled={!canGrow}
           aria-label="Increase text size"
           className={`press border rounded-xs inline-flex items-center justify-center min-w-[30px] min-h-[28px] px-2 text-[15px] leading-none disabled:opacity-30 ${chrome}`}
         >
@@ -161,7 +237,7 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
             <div className="px-4 py-3 border-b border-rule flex items-center justify-between gap-3">
               <p className="eyebrow">Reading options</p>
               <button
-                onClick={() => setPrefs(DEFAULTS)}
+                onClick={reset}
                 disabled={!changed}
                 className="text-xs font-semibold text-ink-soft hover:text-ink disabled:opacity-40"
               >
@@ -176,9 +252,7 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
                     <input
                       type="checkbox"
                       checked={prefs[t.key]}
-                      onChange={(e) =>
-                        setPrefs((p) => ({ ...p, [t.key]: e.target.checked }))
-                      }
+                      onChange={() => toggle(t.key)}
                       className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-noting)]"
                     />
                     <span className="min-w-0">
@@ -194,7 +268,9 @@ export function ReaderControls({ onDark = false }: { onDark?: boolean }) {
 
             <p className="px-4 py-3 text-xs text-ink-faint leading-relaxed border-t border-rule">
               Saved on this device. Applies to every page, including tables and
-              forms.
+              forms. Press{" "}
+              <kbd className="kbd">Ctrl</kbd>
+              <kbd className="kbd">K</kbd> to reach these from the keyboard.
             </p>
           </div>
         </>

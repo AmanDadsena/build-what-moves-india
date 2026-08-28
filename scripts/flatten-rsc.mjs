@@ -1,5 +1,5 @@
-import { readdir, mkdir, copyFile, stat } from "node:fs/promises";
-import { join, dirname, basename } from "node:path";
+import { readdir, copyFile, stat } from "node:fs/promises";
+import { join, dirname } from "node:path";
 
 /* ------------------------------------------------------------------
    Flatten Next's RSC payload paths for bare static hosting.

@@ -31,12 +31,20 @@ type Mode = "unknown" | "share" | "copy" | "show";
 export function ShareLink({
   title,
   text,
+  url: given,
+  label,
   className = "",
 }: {
   /** Passed to the share sheet as the subject. */
   title: string;
   /** One line describing what is being shared. */
   text?: string;
+  /** What to send. Defaults to the page the button is on; passed in
+   *  where the link is built rather than visited — a case handed over
+   *  carries its payload in the fragment. */
+  url?: string;
+  /** Overrides the button text where "this page" is not what it is. */
+  label?: string;
   className?: string;
 }) {
   const [mode, setMode] = useState<Mode>("unknown");
@@ -44,7 +52,7 @@ export function ShareLink({
   const [url, setUrl] = useState("");
 
   useEffect(() => {
-    setUrl(window.location.href);
+    setUrl(given ?? window.location.href);
     /* `"share" in navigator` rather than a typeof check: the DOM types
        declare share as always present, so TypeScript narrows a typeof
        away as impossible — while desktop Firefox genuinely does not
@@ -52,10 +60,10 @@ export function ShareLink({
     if ("share" in navigator) setMode("share");
     else if ("clipboard" in navigator) setMode("copy");
     else setMode("show");
-  }, []);
+  }, [given]);
 
   const act = useCallback(async () => {
-    const href = window.location.href;
+    const href = given ?? window.location.href;
     if (mode === "share") {
       try {
         await navigator.share({ title, text, url: href });
@@ -72,14 +80,16 @@ export function ShareLink({
       setState("failed");
       setMode("show");
     }
-  }, [mode, title, text]);
+  }, [mode, title, text, given]);
 
   if (mode === "unknown") return null;
 
   if (mode === "show") {
     return (
       <div className={className}>
-        <p className="eyebrow mb-1.5">Send this page to whoever is helping</p>
+        <p className="eyebrow mb-1.5">
+          {label ?? "Send this page to whoever is helping"}
+        </p>
         <p className="machine text-xs break-all border border-rule bg-paper rounded-md px-3 py-2.5 select-all">
           {url}
         </p>
@@ -105,9 +115,7 @@ export function ShareLink({
       <Icon copied={state === "copied"} />
       {state === "copied"
         ? "Link copied"
-        : mode === "share"
-          ? "Send to someone"
-          : "Copy link to send"}
+        : (label ?? (mode === "share" ? "Send to someone" : "Copy link to send"))}
     </button>
   );
 }

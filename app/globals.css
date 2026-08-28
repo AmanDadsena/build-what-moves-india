@@ -314,6 +314,29 @@ html[data-contrast="high"] :focus-visible {
     color: var(--color-ink-soft);
   }
 
+  /* --- Key caps ------------------------------------------------------
+     A printed key, for telling somebody which one to press. Drawn as
+     a physical cap rather than as code, because a member reading
+     "press Ctrl K" in monospace reasonably reads it as something to
+     type into a box. */
+  .kbd {
+    display: inline-block;
+    min-width: 1.55em;
+    padding: 0.12em 0.42em;
+    margin: 0 0.12em;
+    border: 1px solid var(--color-rule-heavy);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--color-paper-raised);
+    font-family: var(--font-display);
+    font-size: 0.8em;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+
   /* --- Figures -------------------------------------------------------
      Numbers set in the body face were the weakest thing on the page:
      Public Sans draws a workmanlike digit, and a balance is the most
@@ -1309,4 +1332,55 @@ html[data-contrast="high"] :focus-visible {
 .print-head,
 .print-foot {
   display: none;
+}
+
+/* --- Command palette -------------------------------------------------
+   Opened by Ctrl+K, or by the key cap in the search field. It rises a
+   little rather than dropping in: the panel is anchored near the top
+   of the window, and something arriving from above the viewport has
+   nowhere to have come from.
+
+   The backdrop is a wash rather than a blur. A backdrop-filter over a
+   full-page composite is the single most expensive thing this site
+   could ask a two-thousand-rupee phone to do, and it buys nothing the
+   member can name. */
+
+@keyframes palette-wash {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Only the rise and the settle. The horizontal centring is Tailwind's
+   -translate-x-1/2, which in v4 compiles to the standalone `translate`
+   property rather than to `transform` — so putting a -50% in here too
+   applies it twice and parks the panel half a width to the left. */
+@keyframes palette-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+.palette-backdrop {
+  background: color-mix(in oklab, var(--color-night) 42%, transparent);
+  animation: palette-wash 140ms ease-out both;
+}
+
+.palette-panel {
+  animation: palette-rise 190ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  box-shadow:
+    0 1px 2px #1016251a,
+    0 12px 28px #10162526,
+    0 32px 64px #1016251f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palette-backdrop,
+  .palette-panel {
+    animation-duration: 1ms;
+  }
+}
+
+/* The row under the cursor or the arrow keys. Both are the same
+   thing here, so there is never a second, competing highlight. */
+.palette-panel [role="option"][data-active="true"] {
+  scroll-margin: 0.5rem;
 }

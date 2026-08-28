@@ -81,7 +81,7 @@ export function SiteHeader() {
           <Wordmark />
 
           <div className="flex items-center gap-4 sm:gap-5 shrink-0">
-            <SearchBox className="hidden md:block w-52 lg:w-64" />
+            <SearchBox shortcut className="hidden md:block w-56 lg:w-72" />
             <div className="hidden xl:block text-right">
               <p className="eyebrow mb-0.5">Helpline</p>
               <p className="num text-sm">{HELPLINE}</p>
