@@ -92,6 +92,18 @@ export const metadata: Metadata = {
      the production domain. */
   metadataBase: new URL(SITE_URL),
 
+  /* A canonical on every page, not the eight that remembered to
+     declare one. "./" is resolved per route against metadataBase, so
+     each page names itself; a page that sets its own still wins,
+     because child metadata overrides the layout's.
+
+     It earns its place on a site that is handed around: every share
+     link, every WhatsApp forward and every case handover arrives with
+     something appended — a tracking parameter, a fragment, a stray
+     slash — and without this each of those reads to a crawler as a
+     separate page with the same words on it. */
+  alternates: { canonical: "./" },
+
   openGraph: {
     type: "website",
     /* Resolved against metadataBase. Without it a card scraped from a
