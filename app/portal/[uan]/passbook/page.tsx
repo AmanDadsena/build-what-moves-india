@@ -43,7 +43,7 @@ export default async function Passbook({ params }: PageProps<"/portal/[uan]">) {
     <div className="space-y-8 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">Contributions</p>
+          <h2 className="eyebrow section-mark">Contributions</h2>
           <Tag kind="mock" />
         </div>
         <h2 className="display-2 measure mb-3">

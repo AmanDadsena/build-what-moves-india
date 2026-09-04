@@ -31,7 +31,7 @@ export default async function LifeCertificate({
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">Life certificate &middot; Jeevan Pramaan</p>
+          <h2 className="eyebrow section-mark">Life certificate &middot; Jeevan Pramaan</h2>
           <Tag kind="verified" />
         </div>
         <h2 className="display-2 measure mb-3">

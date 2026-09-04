@@ -67,7 +67,7 @@ export default async function Records({ params }: PageProps<"/portal/[uan]">) {
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">Cross-check</p>
+          <h2 className="eyebrow section-mark">Cross-check</h2>
           <Tag kind="mock" />
         </div>
         <h2 className="display-2 measure mb-3">

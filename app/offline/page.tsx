@@ -31,7 +31,7 @@ export default function Offline() {
 
       <main id="main" className="flex-1">
         <div className="shell-reading py-14 sm:py-20">
-          <p className="eyebrow section-mark mb-4">No connection</p>
+          <h2 className="eyebrow section-mark mb-4">No connection</h2>
           <h1 className="display-1 measure mb-4">
             You are offline, and this page was never loaded.
           </h1>

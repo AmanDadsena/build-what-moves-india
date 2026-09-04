@@ -38,7 +38,7 @@ export function Paycheck({ member }: { member: Member }) {
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-          <p className="eyebrow section-mark mb-0">Where the money went</p>
+          <h2 className="eyebrow section-mark mb-0">Where the money went</h2>
           <Tag kind="verified" />
         </div>
         <h2 className="display-2 measure mb-3">

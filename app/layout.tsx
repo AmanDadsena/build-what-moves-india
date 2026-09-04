@@ -13,6 +13,7 @@ import { OfflineReady } from "@/components/OfflineReady";
 import { LanguageProvider } from "@/components/Language";
 import { ReaderProvider } from "@/components/ReaderControls";
 import { CommandPalette } from "@/components/CommandPalette";
+import { PageReader } from "@/components/PageReader";
 import { CaseHandoff } from "@/components/CaseBackup";
 import { SITE_URL } from "@/lib/site";
 
@@ -195,6 +196,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 the page under it would flicker on every navigation it
                 caused. */}
             <CommandPalette />
+            {/* Also outside the transition, and for a second reason:
+                it holds the position the voice has reached, and a
+                crossfade that remounted it would restart the page
+                halfway through being read. */}
+            <PageReader />
             <Assistant />
             <OfflineReady />
           </ReaderProvider>

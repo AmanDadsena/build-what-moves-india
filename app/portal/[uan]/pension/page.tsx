@@ -38,7 +38,7 @@ export default async function Pension({
       <section className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
         <div>
           <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <p className="eyebrow section-mark">Pension &middot; EPS-95</p>
+            <h2 className="eyebrow section-mark">Pension &middot; EPS-95</h2>
             <Tag kind="verified" />
           </div>
           <h2 className="display-2 measure mb-3">

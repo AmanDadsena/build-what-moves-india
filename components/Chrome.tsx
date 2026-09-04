@@ -39,22 +39,27 @@ export function Wordmark({ small = false }: { small?: boolean }) {
   return (
     <Link
       href="/"
-      className="flex items-center gap-3 min-w-0 shrink-0 group"
+      className="flex items-center gap-2.5 sm:gap-3 min-w-0 group"
       aria-label="EPF Member Portal, home"
     >
       <Emblem
         size={small ? 34 : 42}
         className="text-noting shrink-0 transition-colors group-hover:text-ink"
       />
+      {/* min-w-0 and truncate on both lines, and no shrink-0 on the
+          link itself. Without all three the masthead refused to give
+          space back to the sign-in button and pushed the document
+          past the viewport on a 375px phone, so every page scrolled
+          sideways. The same three keep it whole at 400% zoom. */}
       <span className="min-w-0">
         <span
-          className={`block font-semibold tracking-[-0.02em] leading-tight ${
+          className={`block truncate font-semibold tracking-[-0.02em] leading-tight ${
             small ? "text-[15px]" : "text-[17px]"
           }`}
         >
           EPF Member Portal
         </span>
-        <span className="block font-deva text-[11px] sm:text-xs text-ink-faint leading-tight mt-0.5">
+        <span className="block truncate font-deva text-[11px] sm:text-xs text-ink-faint leading-tight mt-0.5">
           कर्मचारी भविष्य निधि — सदस्य पोर्टल
         </span>
       </span>
@@ -77,7 +82,7 @@ export function SiteHeader() {
       <UtilityBar />
 
       <header className="border-b border-rule bg-paper-raised">
-        <div className="shell py-3.5 flex items-center justify-between gap-6">
+        <div className="shell py-3.5 flex items-center justify-between gap-3 sm:gap-6">
           <Wordmark />
 
           <div className="flex items-center gap-4 sm:gap-5 shrink-0">

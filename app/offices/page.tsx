@@ -36,9 +36,9 @@ export default function Offices() {
         <div className="shell py-10 sm:py-14 space-y-12 stagger">
           {/* What a counter can and cannot do — the part that matters */}
           <section>
-            <p className="eyebrow section-mark mb-4">
+            <h2 className="eyebrow section-mark mb-4">
               What a counter can and cannot do
-            </p>
+            </h2>
             <div className="grid gap-4 lg:grid-cols-3">
               <Panel
                 tone="ok"
@@ -63,7 +63,7 @@ export default function Offices() {
 
           {/* The directory */}
           <section>
-            <p className="eyebrow section-mark mb-4">Find your office</p>
+            <h2 className="eyebrow section-mark mb-4">Find your office</h2>
 
             <div className="relative max-w-xl mb-6">
               <label htmlFor="office-q" className="sr-only">

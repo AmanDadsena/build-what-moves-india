@@ -11,6 +11,7 @@ import { ClocksPanel } from "@/components/panels/ClocksPanel";
 import { DocumentsPanel } from "@/components/panels/DocumentsPanel";
 import { ClaimTimeline } from "@/components/ClaimTimeline";
 import { CasePlan } from "@/components/CasePlan";
+import { CaseJournal } from "@/components/CaseJournal";
 
 /* The case file, opened from inside the portal.
 
@@ -26,6 +27,7 @@ const ALL_TABS = [
   { id: "notesheet", label: "The note sheet" },
   { id: "clocks", label: "The clocks" },
   { id: "plan", label: "Your plan" },
+  { id: "journal", label: "What you did" },
   { id: "documents", label: "Documents" },
 ] as const;
 
@@ -44,9 +46,18 @@ export function CaseWorkspace({
      document to send, so the timeline is the whole page. */
   rejection?: RejectionReason;
 }) {
+  /* A settled claim has no remark to decode and nothing left to
+     chase, so the timeline is the whole page. Anything not settled
+     keeps the log of what was done, including a claim still under
+     process — that member is the one doing the chasing, and until
+     now they had the fewest places to record it. */
   const TABS = rejection
     ? ALL_TABS
-    : ALL_TABS.filter((t) => t.id === "status");
+    : ALL_TABS.filter(
+        (t) =>
+          t.id === "status" ||
+          (t.id === "journal" && claim.status !== "settled"),
+      );
 
   const [tab, setTab] = useState<TabId>("status");
 
@@ -103,9 +114,12 @@ export function CaseWorkspace({
             <p className="eyebrow mb-2">
               {claim.form} &middot; {claim.type}
             </p>
-            <h1 className="text-lg sm:text-xl font-semibold tracking-[-0.015em]">
+            {/* The portal shell already carries this page's h1 — the
+                member whose account it is. A claim number is a section
+                inside that, not a second top-level heading. */}
+            <h2 className="text-lg sm:text-xl font-semibold tracking-[-0.015em]">
               {claim.id}
-            </h1>
+            </h2>
             <p className="num text-sm text-ink-soft mt-1">
               Filed {fmt(claim.filedOn)}
             </p>
@@ -224,6 +238,7 @@ export function CaseWorkspace({
         {tab === "plan" && rejection && (
           <CasePlan member={member} claim={claim} rejection={rejection} />
         )}
+        {tab === "journal" && <CaseJournal claim={claim} />}
         {tab === "documents" && rejection && (
           <DocumentsPanel member={member} claim={claim} rejection={rejection} />
         )}

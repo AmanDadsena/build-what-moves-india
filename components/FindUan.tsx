@@ -41,7 +41,7 @@ export function FindUan() {
       {/* The question that shortens the list */}
       <section className="border-b border-rule bg-paper-raised">
         <div className="shell-reading py-8">
-          <p className="eyebrow section-mark mb-2">One question first</p>
+          <h2 className="eyebrow section-mark mb-2">One question first</h2>
           <p className="title measure mb-1">
             Do you still have the mobile number that was registered when the
             account was opened?
@@ -98,9 +98,9 @@ export function FindUan() {
         </section>
 
         <section>
-          <p className="eyebrow section-mark mb-5">
+          <h2 className="eyebrow section-mark mb-5">
             {answer.routes.length} ways, in the order worth trying them
-          </p>
+          </h2>
 
           <ol className="space-y-4">
             {answer.routes.map((route, index) => (

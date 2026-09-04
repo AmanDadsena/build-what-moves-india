@@ -117,9 +117,9 @@ export default function Home() {
         {/* ================= SCALE ================= */}
         <section className="border-b border-rule bg-paper">
           <div className="shell py-10 sm:py-14">
-            <p className="eyebrow section-mark mb-5">
+            <h2 className="eyebrow section-mark mb-5">
               EPFO &middot; 2024&ndash;25
-            </p>
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard value="796 lakh" label="Claims filed" />
               <StatCard
@@ -146,7 +146,7 @@ export default function Home() {
           <div className="shell py-12 sm:py-16">
             <div className="grid lg:grid-cols-[1.4fr_1fr] 2xl:grid-cols-[2.2fr_1fr] gap-10 lg:gap-14 items-start">
               <div>
-                <p className="eyebrow section-mark mb-2">Common tasks</p>
+                <h2 className="eyebrow section-mark mb-2">Common tasks</h2>
                 <h2 className="display-2 measure mb-6">
                   The six things people actually come here to do.
                 </h2>
@@ -182,9 +182,9 @@ export default function Home() {
           <div className="shell py-12 sm:py-16">
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
               <div>
-                <p className="eyebrow section-mark mb-3">
+                <h2 className="eyebrow section-mark mb-3">
                   Reject Kyun? &middot; रिजेक्ट क्यों?
-                </p>
+                </h2>
                 <h2 className="display-2 measure-tight mb-4">
                   The portal gives you one sentence. We give you the reason.
                 </h2>
@@ -237,7 +237,7 @@ export default function Home() {
           <div className="shell py-12 sm:py-16">
             <div className="flex items-end justify-between gap-6 flex-wrap mb-8">
               <div>
-                <p className="eyebrow section-mark mb-2">Services</p>
+                <h2 className="eyebrow section-mark mb-2">Services</h2>
                 <h2 className="display-2 measure">
                   Everything a member needs, and what we changed about each.
                 </h2>
@@ -289,12 +289,19 @@ export default function Home() {
         {/* ================= NOTICES ================= */}
         <section className="border-b border-rule bg-paper-raised">
           <div className="shell py-12 sm:py-16">
-            <p className="eyebrow section-mark mb-2">Worth knowing</p>
+            <h2 className="eyebrow section-mark mb-2">Worth knowing</h2>
             <h2 className="display-2 measure mb-8">
               Things that affect your money which nobody tells you.
             </h2>
 
-            <ul className="grid gap-px bg-rule border border-rule rounded-lg overflow-hidden lg:grid-cols-3">
+            <ul className="grid gap-px bg-rule border border-rule rounded-lg overflow-hidden lg:grid-cols-2">
+              <Notice
+                tag="The commonest dead end"
+                title="There is no employer left to ask"
+                body="Nine of the fifteen documented rejection reasons contain a step only the establishment can perform. What they would attest, they already filed with EPFO every month — and several of the routes round it need nobody's agreement at all."
+                href="/employer-gone/"
+                cta="What is still open to you"
+              />
               <Notice
                 tag="A right you may not know"
                 title="You can record your own exit date"
@@ -308,6 +315,13 @@ export default function Home() {
                 body="Pension needs ten years of qualifying service. Split across two account numbers neither may reach it — and a settlement paid on one cannot be reopened to count the other."
                 href={`/portal/${DEMO_UAN}/transfer`}
                 cta="Search for old accounts"
+              />
+              <Notice
+                tag="Priced in the wrong currency"
+                title="A day off work costs more than every fee here"
+                body="Every route you are offered is measured in days, because days are what it costs the office. Counted in wages, the advice given most freely — go to the office — is the dearest thing on the list, and the one instrument with a deadline behind it costs ten rupees."
+                href="/what-it-costs/"
+                cta="Price them against your own wage"
               />
               <Notice
                 tag="The only real deadline"

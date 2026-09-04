@@ -64,7 +64,7 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
           only thing on the screen the member can act on. */}
       {blocked.length > 0 && (
         <section>
-          <p className="eyebrow section-mark mb-4">Needs your attention</p>
+          <h2 className="eyebrow section-mark mb-4">Needs your attention</h2>
 
           {blocked.map((claim) => {
             const rejection = claim.rejectionId
@@ -130,7 +130,7 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
       {/* ---- Balance ---- */}
       <section>
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-          <p className="eyebrow section-mark mb-0">Your balance</p>
+          <h2 className="eyebrow section-mark mb-0">Your balance</h2>
           <Tag kind="mock" />
         </div>
 
@@ -166,7 +166,7 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
 
       {/* ---- Quick links, matching the landing's task grid ---- */}
       <section>
-        <p className="eyebrow section-mark mb-4">Go straight to</p>
+        <h2 className="eyebrow section-mark mb-4">Go straight to</h2>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {shortcuts.map(({ href, label, hi, Icon }) => (
             <li key={href} className="contents">
@@ -183,7 +183,7 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
 
       {/* ---- Service ---- */}
       <section>
-        <p className="eyebrow section-mark mb-4">Your service</p>
+        <h2 className="eyebrow section-mark mb-4">Your service</h2>
         <dl className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-rule border border-rule rounded-lg overflow-hidden">
           <Cell label="Joined" value={fmt(member.dateOfJoining)} />
           <Cell
@@ -228,7 +228,7 @@ export default async function Overview({ params }: PageProps<"/portal/[uan]">) {
 
       {/* ---- Verification ---- */}
       <section>
-        <p className="eyebrow section-mark mb-4">Verification status</p>
+        <h2 className="eyebrow section-mark mb-4">Verification status</h2>
         {unverified.length === 0 ? (
           <div className="border-2 border-verify/30 bg-verify-wash rounded-lg px-5 py-4 flex items-center gap-3">
             <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-paper-raised text-verify shrink-0">

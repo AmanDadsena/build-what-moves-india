@@ -42,7 +42,7 @@ export default async function MarkExit({
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">Mark your exit</p>
+          <h2 className="eyebrow section-mark">Mark your exit</h2>
           <Tag kind="verified" />
         </div>
         <h2 className="display-2 measure mb-3">

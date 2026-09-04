@@ -104,7 +104,7 @@ export async function canSpeak(lang: Lang): Promise<boolean> {
 /* Sentences, in both scripts. The danda — । — ends a sentence in
    Devanagari and is invisible to a splitter that only knows full
    stops, which would hand the synthesiser one enormous run-on. */
-function sentences(text: string): string[] {
+export function sentences(text: string): string[] {
   const parts = text
     .replace(/\s+/g, " ")
     .split(/(?<=[.!?।])\s+/)
@@ -182,3 +182,167 @@ export async function speak(id: string, passages: Passage[]) {
     window.speechSynthesis.speak(utterance);
   }
 }
+
+/* ============================================================
+   Reading a whole page, one block at a time.
+
+   The function above queues everything at once and watches only the
+   last utterance, which is right for a single passage and wrong for a
+   page. Two reasons.
+
+   A page reader has to know which block is being spoken *now*, so the
+   sentence on screen can be marked as the voice reaches it. That is
+   the entire point of the feature: somebody who reads slowly follows
+   the highlight, and somebody who cannot read at all at least knows
+   where the voice has got to.
+
+   And a hundred and forty queued utterances is where Chromium starts
+   dropping them. Speaking one block, waiting for its end, then
+   starting the next keeps the queue at one, makes skip and pause
+   behave, and makes stopping instant.
+   ============================================================ */
+
+export interface Block {
+  /** Text to speak. */
+  text: string;
+  lang: Lang;
+}
+
+export interface Reader {
+  /** Stop, and release the voice. Safe to call more than once. */
+  cancel(): void;
+  /** Jump. Out-of-range indices are clamped rather than throwing. */
+  goTo(index: number): void;
+  /** Relative moves, which the reader owns rather than the caller.
+   *
+   *  The caller cannot compute these. A component that passes
+   *  `position + 1` reads the position from React state, and state
+   *  does not update between two clicks in the same tick — so
+   *  somebody tapping Next four times quickly advances one block and
+   *  concludes the button is broken. The authoritative index lives
+   *  here, so the relative move does too. */
+  next(): void;
+  previous(): void;
+  pause(): void;
+  resume(): void;
+}
+
+export interface ReaderHandlers {
+  /** Fires as each block begins, with its index. */
+  onBlock(index: number): void;
+  /** Fires once, when the last block ends or something goes wrong. */
+  onDone(): void;
+}
+
+/** Reads blocks in order from `startAt`, returning a handle.
+ *
+ *  Cancellation is checked at every await and every event, because
+ *  the user pressing stop during the voice-list wait is not an edge
+ *  case — it is what happens on a cold first press. */
+export async function readAlong(
+  blocks: Block[],
+  startAt: number,
+  handlers: ReaderHandlers,
+): Promise<Reader> {
+  let index = Math.max(0, Math.min(startAt, blocks.length - 1));
+  let live = true;
+
+  const control: Reader = {
+    cancel() {
+      if (!live) return;
+      live = false;
+      if (supported()) window.speechSynthesis.cancel();
+      announce(null);
+      handlers.onDone();
+    },
+    goTo(to: number) {
+      if (!live) return;
+      index = Math.max(0, Math.min(to, blocks.length - 1));
+      // Cancelling fires no end event we act on, because `live` is
+      // still true and the next step is started explicitly below.
+      if (supported()) window.speechSynthesis.cancel();
+      void step();
+    },
+    next() {
+      control.goTo(index + 1);
+    },
+    previous() {
+      control.goTo(index - 1);
+    },
+    pause() {
+      if (live && supported()) window.speechSynthesis.pause();
+    },
+    resume() {
+      if (live && supported()) window.speechSynthesis.resume();
+    },
+  };
+
+  if (!supported() || blocks.length === 0) {
+    handlers.onDone();
+    return control;
+  }
+
+  window.speechSynthesis.cancel();
+  announce(PAGE_READER_ID);
+
+  const all = await voices();
+  if (!live) return control;
+
+  /* One block, split into sentences only because a single very long
+     utterance is the other thing Chromium truncates. The highlight
+     stays at block granularity: marking individual sentences inside a
+     paragraph makes the page flicker without helping anybody. */
+  function step(): void {
+    if (!live) return;
+    if (index >= blocks.length) {
+      control.cancel();
+      return;
+    }
+
+    const block = blocks[index];
+    handlers.onBlock(index);
+
+    const voice = pick(all, block.lang);
+    const chunks = sentences(block.text);
+    if (chunks.length === 0) {
+      index += 1;
+      step();
+      return;
+    }
+
+    let spoken = 0;
+    const startedAt = index;
+
+    for (const chunk of chunks) {
+      const utterance = new SpeechSynthesisUtterance(chunk);
+      if (voice) utterance.voice = voice;
+      utterance.lang =
+        voice?.lang ?? (block.lang === "hi" ? "hi-IN" : "en-IN");
+      utterance.rate = 0.92;
+      utterance.pitch = 1;
+
+      const advance = () => {
+        // A skip changes `index` under us; the stale block's events
+        // must not then advance the new one.
+        if (!live || index !== startedAt) return;
+        spoken += 1;
+        if (spoken === chunks.length) {
+          index += 1;
+          step();
+        }
+      };
+
+      utterance.addEventListener("end", advance);
+      utterance.addEventListener("error", advance);
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  step();
+  return control;
+}
+
+/** The id the page reader announces under, so the per-passage Listen
+ *  buttons stand down while it is running rather than talking over
+ *  it. */
+export const PAGE_READER_ID = "page-reader";

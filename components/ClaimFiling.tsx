@@ -112,7 +112,7 @@ export function ClaimFiling({ member }: { member: Member }) {
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">File a claim</p>
+          <h2 className="eyebrow section-mark">File a claim</h2>
           <Tag kind="mock" />
         </div>
         <h2 className="display-2 measure mb-3">

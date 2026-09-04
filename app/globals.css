@@ -1384,3 +1384,82 @@ html[data-contrast="high"] :focus-visible {
 .palette-panel [role="option"][data-active="true"] {
   scroll-margin: 0.5rem;
 }
+
+/* ============================================================
+   The block the page reader has reached.
+
+   This is the part of read-aloud that actually helps somebody who
+   reads slowly. Synthetic speech is everywhere and a phone will read
+   a page without anybody's help; what a phone will not do is show
+   which sentence is being spoken, and following along is how a slow
+   reader reads at all. It is the finger under the line in a child's
+   reading book.
+
+   Three requirements it has to meet at once.
+
+   It must be visible without colour, because the same member is
+   quite likely to have high contrast on, or to be colour-blind, or
+   to be reading in sunlight. So the mark is a heavy left rule and a
+   weight change as well as a wash.
+
+   It must not move the text. Anything that changes the line height
+   or the letter spacing makes every line below jump as the voice
+   advances, which is the opposite of following along. The rule is
+   drawn in the padding and the box does not reflow.
+
+   And it must survive every reading mode this site offers, so it is
+   built from the same tokens as everything else rather than from
+   fixed colours.
+   ============================================================ */
+
+[data-reading="true"] {
+  position: relative;
+  background-color: var(--color-noting-wash);
+  box-shadow:
+    inset 4px 0 0 0 var(--color-noting),
+    0 0 0 6px var(--color-noting-wash);
+  border-radius: 2px;
+  scroll-margin-block: 6rem;
+}
+
+/* High contrast turns the wash into a border, because a pale fill is
+   the first thing to disappear when somebody has turned contrast up
+   precisely because pale things are disappearing. */
+[data-contrast="high"] [data-reading="true"] {
+  background-color: transparent;
+  outline: 3px solid var(--color-noting);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* Plain backgrounds mean no fills anywhere, so the rule carries it
+   alone. */
+[data-plain="on"] [data-reading="true"] {
+  background-color: transparent;
+  box-shadow: inset 4px 0 0 0 var(--color-noting);
+}
+
+@media print {
+  [data-reading="true"] {
+    background: none;
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+/* Room to scroll the highlight clear of the player.
+
+   The panel is fixed to the foot of the viewport, so without this the
+   last few blocks on a page can never be brought above it: the
+   document has no more scroll left. The padding is only present while
+   the reader is open, so it costs nothing on a page nobody is
+   listening to. */
+:root[data-reader-open="true"] body {
+  padding-bottom: 12rem;
+}
+
+@media (min-width: 640px) {
+  :root[data-reader-open="true"] body {
+    padding-bottom: 9rem;
+  }
+}

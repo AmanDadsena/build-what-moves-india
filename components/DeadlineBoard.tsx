@@ -87,7 +87,7 @@ export function DeadlineBoard({
 
   return (
     <section>
-      <p className="eyebrow section-mark mb-4">Every deadline, as a date</p>
+      <h2 className="eyebrow section-mark mb-4">Every deadline, as a date</h2>
 
       <div className="border border-rule bg-paper-raised rounded-xl overflow-hidden card-lift">
         <div className="px-5 py-4 border-b border-rule bg-paper">

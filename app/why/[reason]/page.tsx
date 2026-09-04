@@ -6,6 +6,7 @@ import { DESK_LABEL, type Actor } from "@/lib/types";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { Tag } from "@/components/Provenance";
 import { Disclose } from "@/components/Motion";
+import { EmployerGoneNote } from "@/components/EmployerGoneNote";
 import { ReadAloud } from "@/components/ReadAloud";
 import { ShareLink } from "@/components/ShareLink";
 import { PrintButton } from "@/components/PrintButton";
@@ -155,9 +156,9 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
 
           <section>
             <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-              <p className="eyebrow section-mark mb-0">
+              <h2 className="eyebrow section-mark mb-0">
                 {PREVALENCE[r.prevalence]}
-              </p>
+              </h2>
               <Tag kind="verified" />
             </div>
 
@@ -250,6 +251,12 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
             />
           </section>
 
+          {/* Rendered only where a step above belongs to the
+              establishment. For those nine reasons the instructions
+              are unfollowable without a working employer, and this is
+              the moment a member finds that out. */}
+          <EmployerGoneNote reason={r} />
+
           <section>
             <p className="eyebrow mb-3">
               Why the message could not tell you any of this
@@ -323,9 +330,9 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
 
           {r.id === "nomination-missing-death-claim" && (
             <section className="border-2 border-noting/40 bg-paper-raised rounded-xl p-6">
-              <p className="eyebrow section-mark mb-3">
+              <h2 className="eyebrow section-mark mb-3">
                 If you are claiming for somebody who has died
-              </p>
+              </h2>
               <p className="text-ink-soft leading-relaxed measure mb-5">
                 Three separate things are owed — the fund balance, a monthly
                 pension and an insurance payment — and most families claim only

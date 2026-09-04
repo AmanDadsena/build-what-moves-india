@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { openPalette } from "@/components/CommandPalette";
 
 /* The search box in the masthead.
@@ -32,6 +32,13 @@ export function SearchBox({
   shortcut?: boolean;
 }) {
   const router = useRouter();
+  /* This box is rendered twice on every page — once in the masthead
+     for wide screens, once in the row below it for narrow ones. A
+     hard-coded id put the same value on both inputs, which meant both
+     <label for> attributes resolved to the first one: on a phone the
+     visible field had no accessible name at all, and tapping its
+     label focused an input that was not on screen. */
+  const fieldId = useId();
   const [query, setQuery] = useState("");
   const [mac, setMac] = useState(false);
 
@@ -52,11 +59,11 @@ export function SearchBox({
       }}
       className={`relative ${className}`}
     >
-      <label htmlFor="site-search" className="sr-only">
+      <label htmlFor={fieldId} className="sr-only">
         Search this site
       </label>
       <input
-        id="site-search"
+        id={fieldId}
         name="q"
         type="search"
         value={query}

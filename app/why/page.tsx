@@ -81,10 +81,10 @@ export default function WhyIndex() {
             return (
               <section key={key}>
                 <div className="mb-5">
-                  <p className="eyebrow section-mark mb-2">
+                  <h2 className="eyebrow section-mark mb-2">
                     {label} &middot;{" "}
                     <span className="num">{items.length}</span>
-                  </p>
+                  </h2>
                   <p className="text-ink-soft leading-relaxed measure">
                     {note}
                   </p>

@@ -64,7 +64,7 @@ export default async function Summary({
     <div className="space-y-8 stagger">
       <section className="no-print">
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-          <p className="eyebrow section-mark mb-0">Case summary</p>
+          <h2 className="eyebrow section-mark mb-0">Case summary</h2>
           <Tag kind="mock" />
         </div>
         <h2 className="display-2 measure mb-4">

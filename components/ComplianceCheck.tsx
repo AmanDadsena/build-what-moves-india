@@ -33,7 +33,7 @@ export function ComplianceCheck({ member }: { member: Member }) {
     return (
       <section>
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-          <p className="eyebrow section-mark mb-0">Employer deposits</p>
+          <h2 className="eyebrow section-mark mb-0">Employer deposits</h2>
           <Tag kind="mock" />
         </div>
         <div className="border-2 border-verify/30 bg-verify-wash rounded-lg px-5 py-4">
@@ -50,7 +50,7 @@ export function ComplianceCheck({ member }: { member: Member }) {
   return (
     <section>
       <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-        <p className="eyebrow section-mark mb-0">Employer deposits</p>
+        <h2 className="eyebrow section-mark mb-0">Employer deposits</h2>
         <Tag kind="mock" />
       </div>
 

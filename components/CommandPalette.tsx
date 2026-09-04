@@ -15,6 +15,7 @@ import { LANGUAGES, type LangCode } from "@/lib/i18n";
 import { useLang } from "@/components/Language";
 import { useReader, TOGGLES, SCALE_LABEL } from "@/components/ReaderControls";
 import * as speech from "@/lib/speech";
+import { openPageReader } from "@/components/PageReader";
 
 /* ============================================================
    The command palette.
@@ -91,23 +92,6 @@ function isTypingTarget(el: EventTarget | null): boolean {
 
 function isApple(): boolean {
   return /mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent);
-}
-
-/* The visible prose of the page, for reading aloud. Headings, list
-   items and paragraphs only: innerText on <main> would also read the
-   navigation, every table cell and the footer, which is a great many
-   minutes of speech nobody asked for. */
-function pageProse(): string {
-  const main = document.getElementById("main") ?? document.querySelector("main");
-  if (!main) return "";
-  const parts: string[] = [];
-  for (const node of main.querySelectorAll("h1, h2, h3, p, li")) {
-    if (node.closest("nav, footer, [aria-hidden='true']")) continue;
-    const text = node.textContent?.replace(/\s+/g, " ").trim();
-    if (text && text.length > 1) parts.push(text);
-    if (parts.length > 400) break;
-  }
-  return parts.join(". ");
 }
 
 export function CommandPalette() {
@@ -210,21 +194,26 @@ export function CommandPalette() {
     if (canSpeak) {
       out.push({
         id: "read",
-        label: speaking ? "Stop reading" : "Read this page aloud",
+        label: speaking ? "Stop reading" : "Listen to this page",
         hint: speaking
           ? "Silence the synthesiser"
-          : "Headings and paragraphs, in order, at a slower rate",
+          : "Opens the player: reads the page in order and marks each part as it goes",
         group: "On this page",
-        keywords: "listen speech voice audio hear speak read aloud",
+        keywords:
+          "listen speech voice audio hear speak read aloud player follow along",
         run: () => {
           if (speaking) {
             speech.stop();
             close();
             return;
           }
-          const text = pageProse();
+          /* Hands off to the page reader rather than speaking its own
+             copy of the text. Two readers on one page is two voices
+             at once, and the palette's version had no highlight —
+             which is the half of the feature that helps somebody who
+             reads slowly. */
           close();
-          if (text) speech.speak("palette-page", [{ text, lang: "en" }]);
+          openPageReader();
         },
       });
     }

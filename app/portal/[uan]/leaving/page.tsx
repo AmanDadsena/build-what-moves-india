@@ -101,7 +101,7 @@ export default async function Leaving({
     <div className="space-y-10 stagger">
       <section>
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-          <p className="eyebrow section-mark mb-0">Leaving a job</p>
+          <h2 className="eyebrow section-mark mb-0">Leaving a job</h2>
           <Tag kind="verified" />
         </div>
         <h2 className="display-2 measure mb-4">

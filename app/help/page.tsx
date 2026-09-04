@@ -88,7 +88,11 @@ const FAQ = [
   },
   {
     q: "My employer has shut down. What now?",
-    a: "You are not stuck. Where an establishment no longer exists, EPFO can process a claim on the basis of your own records and Aadhaar verification. Raise it as a grievance naming the establishment code, and say the employer is non-operational.",
+    a: "You are not stuck, and this is a bigger question than one answer here can hold — nine of the fifteen documented rejection reasons contain a step only the establishment can perform. The short version: what an employer attests, they already filed with EPFO every month, so the office is holding the proof. Several routes round it need nobody's agreement at all.",
+    link: {
+      href: "/employer-gone/",
+      label: "When there is no employer left to ask",
+    },
   },
   {
     q: "Can I withdraw while still employed?",
@@ -265,6 +269,14 @@ export default function Help() {
                     <p className="text-ink-soft leading-relaxed measure">
                       {item.a}
                     </p>
+                    {"link" in item && item.link && (
+                      <Link
+                        href={item.link.href}
+                        className="btn btn-secondary btn-sm mt-3.5"
+                      >
+                        {item.link.label}
+                      </Link>
+                    )}
                   </Disclose>
                 </li>
               ))}
@@ -273,9 +285,9 @@ export default function Help() {
 
           {/* The people least likely to find this on their own */}
           <section className="border-2 border-noting/40 bg-paper-raised rounded-lg p-6">
-            <p className="eyebrow section-mark mb-3">
+            <h2 className="eyebrow section-mark mb-3">
               If you are calling on behalf of somebody who has died
-            </p>
+            </h2>
             <h2 className="display-3 measure mb-3">
               Three things are owed, and most families claim one.
             </h2>

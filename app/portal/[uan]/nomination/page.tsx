@@ -24,7 +24,7 @@ export default async function Nomination({
     <div className="space-y-9 stagger">
       <section>
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <p className="eyebrow section-mark">Nomination &middot; Form 2</p>
+          <h2 className="eyebrow section-mark">Nomination &middot; Form 2</h2>
           <Tag kind="verified" />
         </div>
         <h2 className="display-2 measure mb-3">
@@ -161,10 +161,15 @@ function Field({
   label: string;
   children: React.ReactNode;
 }) {
+  /* The label wraps the control rather than sitting beside it. As a
+     sibling with no htmlFor it named nothing: a screen reader read
+     all four of these as "edit, blank", and tapping the words moved
+     no focus. Wrapping associates them implicitly, which needs no id
+     and cannot fall out of sync. */
   return (
-    <div>
-      <label className="eyebrow block mb-1.5">{label}</label>
+    <label className="block">
+      <span className="eyebrow block mb-1.5">{label}</span>
       {children}
-    </div>
+    </label>
   );
 }

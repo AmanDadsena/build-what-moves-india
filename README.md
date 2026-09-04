@@ -47,6 +47,32 @@ blocked their money. Those pages exist to be found.
 through, so a member can see where the twenty-day settlement count was restarted
 — and drafts the RTI application that compels disclosure of their real one.
 
+**Answers the question the instructions assume away.** Nine of the fifteen
+rejection reasons contain a step only the establishment can perform — approve
+the KYC, mark the exit date, countersign the declaration. When the employer has
+closed, refuses, or cannot be found, every one of those is a wall, and the
+member is usually told the matter ends there. It does not. What an employer
+attests, they already filed with EPFO every month in the electronic return, so
+the office is holding the proof; and of the routes round it, three need nobody's
+agreement at all. `/employer-gone` sets them out, and the question is raised
+inline on every rejection page that needs it rather than being left to be found.
+
+**Keeps the evidence.** Every escalation eventually asks a member to establish
+that they asked first, and nothing in the real portal records that — no notes
+field, no call log, nowhere to put the reference number a helpline reads out
+once. So a case now carries a dated record of what was actually done, which
+exports as a chronology to paste under a grievance or an RTI. It travels in the
+handover link with everything else, because losing it means losing the strongest
+part of a case.
+
+**Prices the routes in the currency that matters.** Every option in this domain
+is measured in days, because days are what it costs the office. What it costs
+the member is a day's wages — and once that is counted, the advice given most
+freely turns out to be the most expensive thing on the list, while the one
+instrument with an enforceable deadline costs ten rupees and needs no travel.
+`/what-it-costs` reorders them against a wage the member enters, which stays on
+their device.
+
 **Separates the clocks that bind from the ones that do not.** The twenty-day
 settlement commitment restarts every time a desk returns a file, so it can be
 exceeded indefinitely without ever being formally breached. An RTI reply is due
@@ -63,10 +89,12 @@ statutory rules — including the ₹15,000 ceiling that quietly freezes the pen
 share of an employer's contribution while the salary keeps rising. Most members
 discover that at fifty-eight.
 
-**Serves the people the portal forgets.** Read-aloud in English and Hindi, a
-one-page printable case summary written to be handed to whoever is helping, a
-fraud checker for the calls a stuck member inevitably receives, and a page for
-families after a death — where three separate entitlements are owed and most
+**Serves the people the portal forgets.** A player that reads a whole page in
+order and marks the block it has reached, so somebody who reads slowly can
+follow along — which is the half of read-aloud a phone's own text-to-speech
+cannot do. A one-page printable case summary written to be handed to whoever is
+helping, a fraud checker for the calls a stuck member inevitably receives, and a
+page for families after a death — where three separate entitlements are owed and most
 families claim one.
 
 ## Running it
@@ -81,7 +109,7 @@ that page. There is no real authentication: the form is decorative and nothing
 you type is transmitted or stored.
 
 ```bash
-npm test          # 80 tests, no framework — node --test on type-stripped TS
+npm test          # 181 tests, no framework — node --test on type-stripped TS
 npm run build     # static export to out/
 npm run audit     # resolve every link and asset in out/ against what was built
 ```

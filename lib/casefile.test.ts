@@ -135,10 +135,42 @@ test("what is in a payload can be described before it is loaded", () => {
   const d = describe({
     "rk-plan-A": "{}",
     "rk-plan-B": "{}",
+    "rk-journal-A": "[]",
     "rk-survivor-checklist": "{}",
     "rk-lang": "hi",
   });
-  assert.deepEqual(d, { plans: 2, checklists: 1, settings: 1 });
+  assert.deepEqual(d, { plans: 2, journals: 1, checklists: 1, settings: 1 });
+});
+
+test("a journal travels with the case, and is not mistaken for a plan", () => {
+  // The dated record of what a member did is the evidence half of a
+  // case. A key that neither the fixed list nor a prefix matched
+  // would be dropped from every backup and every handover link
+  // without anything reporting it.
+  const store = fakeStorage({
+    "rk-plan-CLM-1": "{}",
+    "rk-journal-CLM-1": '[{"id":"a","on":"2026-06-12","channel":"call","with":"epfo","what":"x"}]',
+  });
+  const collected = collect(store);
+
+  assert.deepEqual(Object.keys(collected).sort(), [
+    "rk-journal-CLM-1",
+    "rk-plan-CLM-1",
+  ]);
+  assert.deepEqual(describe(collected), {
+    plans: 1,
+    journals: 1,
+    checklists: 0,
+    settings: 0,
+  });
+
+  const into = fakeStorage({});
+  assert.equal(restore(into, collected), 2, "both are written back");
+  assert.equal(
+    into.getItem("rk-journal-CLM-1"),
+    collected["rk-journal-CLM-1"],
+    "and the entries survive the round trip intact",
+  );
 });
 
 test("counts are never described as “1 items”", () => {

@@ -57,7 +57,7 @@ export function GrowthProjection({ member }: { member: Member }) {
       <section className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
         <div>
           <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-            <p className="eyebrow section-mark mb-0">If you leave it alone</p>
+            <h2 className="eyebrow section-mark mb-0">If you leave it alone</h2>
             <Tag kind="mock" />
           </div>
           <h2 className="display-2 measure mb-3">
@@ -290,7 +290,7 @@ function GrowthChart({
   return (
     <section>
       <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-        <p className="eyebrow section-mark mb-0">The trajectory</p>
+        <h2 className="eyebrow section-mark mb-0">The trajectory</h2>
         <Tag kind="mock" />
       </div>
 

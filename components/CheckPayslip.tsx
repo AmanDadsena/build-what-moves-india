@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import {
   split,
   checkPayslip,
+  contributionBase,
   EPS_WAGE_CEILING,
   type Verdict,
 } from "@/lib/paycheck";
@@ -66,7 +67,20 @@ export function CheckPayslip() {
     () => (ready ? checkPayslip(w, d) : null),
     [ready, w, d],
   );
-  const s = useMemo(() => (w > 0 ? split(w) : null), [w]);
+
+  /* The employer's half has to be worked out on the base the verdict
+     established, not on the salary. Splitting the salary here while
+     the paragraph above said contributions were restricted to
+     ₹15,000 put two numbers on one screen that could not both be
+     true — and the wrong one was nine times the right one. Where the
+     deduction matches neither rule there is no base to infer, so
+     nothing is shown rather than something invented. */
+  const base = useMemo(
+    () => (result ? contributionBase(result) : null),
+    [result],
+  );
+  const s = useMemo(() => (base ? split(base) : null), [base]);
+  const restricted = result?.verdict === "restricted-to-ceiling";
 
   return (
     <>
@@ -136,7 +150,7 @@ export function CheckPayslip() {
           </section>
         )}
 
-        {result && s && (
+        {result && (
           <>
             <section
               role="status"
@@ -223,33 +237,73 @@ export function CheckPayslip() {
             </section>
 
             {/* Where the rest of it goes — the part no payslip shows */}
-            <section>
-              <p className="eyebrow section-mark mb-4">
-                What your employer puts in alongside it
-              </p>
-              <div className="grid gap-px bg-rule border border-rule rounded-xl overflow-hidden sm:grid-cols-3">
-                <Figure
-                  label="Into your provident fund"
-                  value={rupees(s.toFund)}
-                  note="Their twelve per cent, less the pension diversion"
-                />
-                <Figure
-                  label="Diverted to your pension"
-                  value={rupees(s.toPension)}
-                  note={
-                    s.ceilingApplied
-                      ? `8.33% of ${rupees(EPS_WAGE_CEILING)}, not of your wage`
-                      : "8.33% of your wage, still under the ceiling"
-                  }
-                  tone="pending"
-                />
-                <Figure
-                  label="Cost to your employer"
-                  value={rupees(s.employerOutlay)}
-                  note="Including EDLI and administration, which no payslip shows"
-                />
-              </div>
-            </section>
+            {s && base !== null && (
+              <section>
+                <h2 className="eyebrow section-mark mb-4">
+                  What your employer puts in alongside it
+                </h2>
+                <p className="text-sm text-ink-soft leading-relaxed measure mb-4">
+                  {restricted
+                    ? `Worked out on ${rupees(base)}, because that is the base your employer has restricted contributions to. It applies to their share as much as to yours.`
+                    : `Worked out on your ${rupees(base)}, the same wage your own deduction was taken from.`}
+                </p>
+                <div className="grid gap-px bg-rule border border-rule rounded-xl overflow-hidden sm:grid-cols-3">
+                  <Figure
+                    label="Into your provident fund"
+                    value={rupees(s.toFund)}
+                    note={
+                      restricted
+                        ? `Twelve per cent of ${rupees(base)}, less the pension diversion`
+                        : "Their twelve per cent, less the pension diversion"
+                    }
+                    tone={restricted ? "pending" : undefined}
+                  />
+                  <Figure
+                    label="Diverted to your pension"
+                    value={rupees(s.toPension)}
+                    note={
+                      restricted || s.ceilingApplied
+                        ? `8.33% of ${rupees(EPS_WAGE_CEILING)}, not of your wage`
+                        : "8.33% of your wage, still under the ceiling"
+                    }
+                    tone="pending"
+                  />
+                  <Figure
+                    label="Cost to your employer"
+                    value={rupees(s.employerOutlay)}
+                    note="Including EDLI and administration, which no payslip shows"
+                  />
+                </div>
+
+                {restricted && (
+                  <p className="text-sm text-ink-soft leading-relaxed measure mt-4">
+                    Had the same contribution been computed on your{" "}
+                    {rupees(result.wages)}, {rupees(split(result.wages).toFund)}{" "}
+                    of your employer&rsquo;s money would reach the fund each
+                    month instead of {rupees(s.toFund)}. Both arrangements are
+                    lawful. Only one of them was explained to you.
+                  </p>
+                )}
+              </section>
+            )}
+
+            {/* The honest empty state. A base cannot be inferred from a
+                deduction that matches neither rule, and guessing one to
+                fill the panel would be inventing the employer's
+                arithmetic. */}
+            {base === null && (
+              <section className="border border-rule bg-paper-inset/40 rounded-xl px-6 py-6">
+                <p className="eyebrow mb-2">What your employer puts in</p>
+                <p className="leading-relaxed measure text-ink-soft">
+                  This page cannot say. The employer&rsquo;s share, the pension
+                  diversion and the EDLI premium are all worked out on the same
+                  base as your own deduction — and your deduction matches
+                  neither of the two lawful bases, so there is nothing here to
+                  compute from. Establishing which figure your employer used is
+                  precisely what the written question above is for.
+                </p>
+              </section>
+            )}
           </>
         )}
 

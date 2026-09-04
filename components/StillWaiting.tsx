@@ -172,12 +172,29 @@ export function StillWaiting() {
 
             {/* The routes */}
             <section>
-              <p className="eyebrow section-mark mb-2">What is open to you</p>
-              <p className="text-ink-soft leading-relaxed measure mb-6">
+              <h2 className="eyebrow section-mark mb-2">What is open to you</h2>
+              <p className="text-ink-soft leading-relaxed measure mb-4">
                 All four can be used today. Three of them carry no period that
                 anybody has to keep. The order below is by what is
                 proportionate now, not by what any guidance document
                 recommends.
+              </p>
+              {/* The other axis nobody offers. These are ordered by
+                  what is proportionate; they are not ordered by what
+                  they cost the person taking them, and for a member
+                  on a daily wage that is the ordering that decides
+                  which one actually gets used. */}
+              <p className="text-ink-soft leading-relaxed measure mb-6">
+                They are not ordered by what they cost you, which is a
+                different list &mdash;{" "}
+                <Link
+                  href="/what-it-costs/"
+                  className="underline underline-offset-4 decoration-noting hover:text-noting"
+                >
+                  a day off work costs more than every fee in this process put
+                  together
+                </Link>
+                .
               </p>
 
               <ol className="space-y-4">
@@ -271,7 +288,7 @@ export function StillWaiting() {
             </section>
 
             <section className="border-2 border-noting/40 bg-paper-raised rounded-xl p-6 sm:p-8">
-              <p className="eyebrow section-mark mb-3">The thing to notice</p>
+              <h2 className="eyebrow section-mark mb-3">The thing to notice</h2>
               <h2 className="display-2 measure mb-4">
                 The only route with a deadline anybody must keep is the one
                 placed last.

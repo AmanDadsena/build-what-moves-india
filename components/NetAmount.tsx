@@ -35,7 +35,7 @@ export function NetAmount({
   return (
     <section>
       <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-        <p className="eyebrow section-mark mb-0">What you would receive</p>
+        <h2 className="eyebrow section-mark mb-0">What you would receive</h2>
         <Tag kind="verified" />
       </div>
 

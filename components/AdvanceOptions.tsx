@@ -24,7 +24,7 @@ export function AdvanceOptions({ member }: { member: Member }) {
   return (
     <section>
       <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-        <p className="eyebrow section-mark mb-0">What you can take, and why</p>
+        <h2 className="eyebrow section-mark mb-0">What you can take, and why</h2>
         <Tag kind="verified" />
       </div>
 

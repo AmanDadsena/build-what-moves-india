@@ -83,7 +83,7 @@ export function AfterADeath() {
         <div className="shell py-10 sm:py-14 space-y-14">
           {/* The three */}
           <section>
-            <p className="eyebrow section-mark mb-5">What is owed</p>
+            <h2 className="eyebrow section-mark mb-5">What is owed</h2>
             <ul className="grid gap-5 lg:grid-cols-3">
               {ENTITLEMENTS.map((e) => {
                 const tone = TONE[e.tone];
@@ -141,7 +141,7 @@ export function AfterADeath() {
           {/* What to gather */}
           <section className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
             <div>
-              <p className="eyebrow section-mark mb-2">What to have ready</p>
+              <h2 className="eyebrow section-mark mb-2">What to have ready</h2>
               <p className="text-ink-soft leading-relaxed measure mb-5">
                 In the order that matters, not the order that is easy. The four
                 marked as stopping everything are the ones to chase first — a
@@ -232,7 +232,7 @@ export function AfterADeath() {
 
           {/* Where it stalls */}
           <section>
-            <p className="eyebrow section-mark mb-2">Where it usually stalls</p>
+            <h2 className="eyebrow section-mark mb-2">Where it usually stalls</h2>
             <p className="text-ink-soft leading-relaxed measure mb-5">
               Four things account for most of the delay, and three of them have
               a route around that families are rarely told about.
@@ -261,9 +261,9 @@ export function AfterADeath() {
 
           {/* The thing that prevents all of it */}
           <section className="border-2 border-noting/40 bg-paper-raised rounded-xl p-6 sm:p-8 card-lift">
-            <p className="eyebrow section-mark mb-3">
+            <h2 className="eyebrow section-mark mb-3">
               If you are reading this and nobody has died
-            </p>
+            </h2>
             <h2 className="display-2 measure mb-4">
               A nomination takes ten minutes and removes almost all of this.
             </h2>

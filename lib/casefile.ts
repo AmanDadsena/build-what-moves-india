@@ -51,6 +51,14 @@ export const KEYS = [
 /** One entry per claim being worked. */
 export const PLAN_PREFIX = "rk-plan-";
 
+/** The dated record of what a member actually did about a claim —
+ *  again one per claim. Swept in by prefix for the same reason the
+ *  plan is: the number of claims is not known here, and a key that
+ *  neither the fixed list nor a prefix matched would be silently
+ *  dropped from every backup and every handover link, which for this
+ *  one would mean losing the evidence rather than the progress. */
+export const JOURNAL_PREFIX = "rk-journal-";
+
 export const FORMAT = "reject-kyun/case-backup";
 export const VERSION = 1;
 
@@ -68,7 +76,11 @@ export interface Backup {
 }
 
 function known(key: string): boolean {
-  return (KEYS as readonly string[]).includes(key) || key.startsWith(PLAN_PREFIX);
+  return (
+    (KEYS as readonly string[]).includes(key) ||
+    key.startsWith(PLAN_PREFIX) ||
+    key.startsWith(JOURNAL_PREFIX)
+  );
 }
 
 /** Everything this build has stored, from whatever storage exists. */
@@ -81,7 +93,10 @@ export function collect(storage: Storage): Record<string, string> {
     }
     for (let i = 0; i < storage.length; i++) {
       const key = storage.key(i);
-      if (key?.startsWith(PLAN_PREFIX)) out[key] = storage.getItem(key) ?? "";
+      if (!key) continue;
+      if (key.startsWith(PLAN_PREFIX) || key.startsWith(JOURNAL_PREFIX)) {
+        out[key] = storage.getItem(key) ?? "";
+      }
     }
   } catch {
     // Private mode. Nothing to collect, and nothing to report.
@@ -177,18 +192,21 @@ export function decode(token: string): Record<string, string> | null {
  *  the thing in the interface before anybody agrees to load it. */
 export function describe(data: Record<string, string>): {
   plans: number;
+  journals: number;
   checklists: number;
   settings: number;
 } {
   let plans = 0;
+  let journals = 0;
   let checklists = 0;
   let settings = 0;
   for (const key of Object.keys(data)) {
     if (key.startsWith(PLAN_PREFIX)) plans += 1;
+    else if (key.startsWith(JOURNAL_PREFIX)) journals += 1;
     else if (key === "rk-survivor-checklist") checklists += 1;
     else settings += 1;
   }
-  return { plans, checklists, settings };
+  return { plans, journals, checklists, settings };
 }
 
 /** The word for the count, so the interface never says "1 items". */

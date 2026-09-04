@@ -261,3 +261,33 @@ export function checkPayslip(wages: number, deducted: number): PayslipCheck {
     offBy,
   };
 }
+
+/* The wage the whole establishment's contribution is worked out on.
+
+   This is the part that is easy to get wrong, and getting it wrong
+   makes a page contradict itself. The ₹15,000 restriction is not a
+   cap on the member's deduction alone — it is the base the employer's
+   matching twelve per cent, the EDLI premium and the administration
+   charge are all computed on. So a member on ₹50,000 whose employer
+   has restricted contributions does not have ₹4,750 of employer money
+   arriving in their fund each month. They have ₹550: twelve per cent
+   of ₹15,000, less the ₹1,250 the pension scheme takes first.
+
+   That is the number worth showing them, and it is roughly a ninth of
+   the one you get by splitting their actual salary.
+
+   Where the deduction matches neither rule there is no base to infer.
+   Picking one anyway would be inventing the employer's arithmetic in
+   order to have something to display, which is the failure mode this
+   product exists to argue against — so it returns null and the
+   interface says it cannot tell. */
+export function contributionBase(check: PayslipCheck): number | null {
+  switch (check.verdict) {
+    case "matches-wages":
+      return check.wages;
+    case "restricted-to-ceiling":
+      return Math.min(check.wages, EPS_WAGE_CEILING);
+    case "neither":
+      return null;
+  }
+}

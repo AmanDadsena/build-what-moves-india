@@ -1,4 +1,4 @@
-import { REJECTIONS } from "./rejections";
+import { blockedReasons } from "./employer-gone";
 
 /* ============================================================
    The page a member sends to their employer.
@@ -138,7 +138,5 @@ export function dutyFor(rejectionId: string): EmployerDuty | undefined {
  *  page's point. What decides whether a member is stuck is whether
  *  any step in the sequence belongs to the establishment. */
 export function employerBlockedCount(): number {
-  return REJECTIONS.filter((r) =>
-    r.fixSteps.some((step) => step.actor === "employer"),
-  ).length;
+  return blockedReasons().length;
 }

@@ -6,6 +6,7 @@ import {
   checkMonth,
   checkPayslip,
   ceilingStory,
+  contributionBase,
   EPS_WAGE_CEILING,
 } from "./paycheck.ts";
 import { MEMBERS } from "./members.ts";
@@ -208,4 +209,58 @@ test("the diagnosis agrees with the split it is derived from", () => {
     assert.equal(checkPayslip(wage, s.employee).verdict, "matches-wages");
     assert.equal(checkPayslip(wage, s.employee).onFullWages, s.employee);
   }
+});
+
+/* The employer half of a restricted arrangement.
+
+   The page that reports the verdict also shows what the employer puts
+   in alongside the deduction. Splitting the member's actual salary
+   there produced figures that contradicted the sentence above them —
+   it told a member their employer had restricted contributions to
+   ₹15,000 and then showed ₹4,750 of employer money entering the fund,
+   which cannot both be true. These pin the base to the verdict. */
+
+test("a restricted arrangement is worked out on the ceiling, not the salary", () => {
+  const check = checkPayslip(50_000, 1_800);
+  assert.equal(check.verdict, "restricted-to-ceiling");
+
+  const base = contributionBase(check);
+  assert.equal(base, EPS_WAGE_CEILING);
+
+  const s = split(base!);
+  assert.equal(s.employerTotal, 1_800);
+  assert.equal(s.toPension, 1_250);
+  assert.equal(s.toFund, 550, "what actually reaches the fund");
+  assert.equal(s.employerOutlay, 1_950);
+});
+
+test("the restricted figure is nothing like the one from the salary", () => {
+  const onSalary = split(50_000);
+  const onCeiling = split(contributionBase(checkPayslip(50_000, 1_800))!);
+
+  // The bug shipped the first of these on a page asserting the second.
+  assert.equal(onSalary.toFund, 4_750);
+  assert.equal(onCeiling.toFund, 550);
+  assert.ok(onSalary.toFund > onCeiling.toFund * 8);
+});
+
+test("an unrestricted arrangement is worked out on the salary", () => {
+  const check = checkPayslip(50_000, 6_000);
+  assert.equal(check.verdict, "matches-wages");
+  assert.equal(contributionBase(check), 50_000);
+});
+
+test("below the ceiling both readings give the same base", () => {
+  const check = checkPayslip(12_000, 1_440);
+  assert.equal(contributionBase(check), 12_000);
+});
+
+test("a deduction matching neither rule yields no base to display", () => {
+  const check = checkPayslip(50_000, 3_000);
+  assert.equal(check.verdict, "neither");
+  assert.equal(
+    contributionBase(check),
+    null,
+    "inventing a base to have something to show is the failure being avoided",
+  );
 });
