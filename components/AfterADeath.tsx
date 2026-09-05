@@ -75,6 +75,7 @@ export function AfterADeath() {
           actions={
             <ReadAloud
               size="md"
+              onDark
               en="Three things are owed, and most families claim one. The provident fund balance, a monthly pension, and an insurance payment are three separate entitlements with three separate forms. Being paid the first one looks, from outside, exactly like the matter being finished."
             />
           }

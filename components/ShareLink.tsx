@@ -34,6 +34,7 @@ export function ShareLink({
   url: given,
   label,
   className = "",
+  onDark = false,
 }: {
   /** Passed to the share sheet as the subject. */
   title: string;
@@ -46,6 +47,11 @@ export function ShareLink({
   /** Overrides the button text where "this page" is not what it is. */
   label?: string;
   className?: string;
+  /** True where this sits on one of the navy bands — a page hero,
+   *  most often. The default palette is for light backgrounds and
+   *  lands at 1.59:1 on navy, which is an invisible button rather
+   *  than a hard-to-read one. */
+  onDark?: boolean;
 }) {
   const [mode, setMode] = useState<Mode>("unknown");
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
@@ -108,8 +114,12 @@ export function ShareLink({
       aria-live="polite"
       className={`press inline-flex items-center gap-2 border rounded-md px-3.5 py-2 text-sm font-semibold transition-colors ${
         state === "copied"
-          ? "border-verify bg-verify-wash text-verify"
-          : "border-rule text-ink-soft hover:border-noting hover:text-noting"
+          ? onDark
+            ? "border-ochre bg-ochre text-night"
+            : "border-verify bg-verify-wash text-verify"
+          : onDark
+            ? "border-paper/40 text-paper hover:border-ochre hover:text-ochre"
+            : "border-rule text-ink-soft hover:border-noting hover:text-noting"
       } ${className}`}
     >
       <Icon copied={state === "copied"} />

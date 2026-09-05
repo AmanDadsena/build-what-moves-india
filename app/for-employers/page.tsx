@@ -44,6 +44,7 @@ export default function ForEmployers() {
           actions={
             <>
               <ShareLink
+                onDark
                 title="For employers — what only you can do"
                 text="Why a provident fund member cannot approve their own KYC, exit date or correction."
               />

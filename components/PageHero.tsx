@@ -31,7 +31,9 @@ export function PageHero({
   titleHi?: string;
   lede?: string;
   provenance?: Provenance;
-  /** Buttons. Rendered under the lede. */
+  /** Buttons. Rendered under the lede — which, in the default tone,
+   *  is a navy band. Anything passed here needs its dark variant, or
+   *  it inherits the light-background palette and disappears. */
   actions?: React.ReactNode;
   /** Optional panel to the right, on wide screens only. */
   aside?: React.ReactNode;

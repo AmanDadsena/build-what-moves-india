@@ -36,6 +36,7 @@ export function ReadAloud({
   hi,
   className = "",
   size = "sm",
+  onDark = false,
 }: {
   /** The English passage. */
   en: string;
@@ -43,6 +44,17 @@ export function ReadAloud({
   hi?: string;
   className?: string;
   size?: "sm" | "md";
+  /** True where this sits on one of the navy bands.
+   *
+   *  Without it the button inherits the light-background palette —
+   *  ink-soft on a rule-coloured border — and lands on the hero at
+   *  1.59:1, which is not a contrast problem so much as an invisible
+   *  button. That it was the *read-aloud* control which disappeared,
+   *  on the page for families after a death, is the part worth
+   *  remembering: the accessibility affordance is exactly the one
+   *  nobody notices is missing, because the people it fails are the
+   *  least able to report it. */
+  onDark?: boolean;
 }) {
   const id = useId();
   const [mounted, setMounted] = useState(false);
@@ -102,8 +114,12 @@ export function ReadAloud({
             aria-pressed={active}
             className={`press inline-flex items-center gap-1.5 border rounded-md font-semibold transition-colors ${pad} ${
               active
-                ? "border-noting bg-noting text-paper"
-                : "border-rule text-ink-soft hover:border-noting hover:text-noting"
+                ? onDark
+                  ? "border-ochre bg-ochre text-night"
+                  : "border-noting bg-noting text-paper"
+                : onDark
+                  ? "border-paper/40 text-paper hover:border-ochre hover:text-ochre"
+                  : "border-rule text-ink-soft hover:border-noting hover:text-noting"
             } ${option.lang === "hi" ? "font-deva" : ""}`}
           >
             <Icon speaking={active} />
