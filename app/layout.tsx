@@ -70,10 +70,30 @@ const plexMono = IBM_Plex_Mono({
    to a reader rather than merely present. It also sits at a stroke
    weight that matches Public Sans, which the previous pairing did
    not — bilingual lines were visibly lighter on the Hindi side. */
+/* One weight, one script, deliberately.
+ *
+ * A Devanagari face is the single heaviest asset on this site — the
+ * script has a large glyph set and its 400 weight alone is 118 KB, on
+ * a site whose entire argument is that it is built for people on slow
+ * connections. So it carries only what is rendered.
+ *
+ * The latin subset came out because --font-deva already falls back to
+ * the body face for anything outside Devanagari, and Public Sans is
+ * loaded on every page regardless. Keeping it meant an extra font
+ * file downloaded on most pages so that an em dash and a few digits
+ * inside a Hindi line could be set in a second Latin face nobody
+ * would notice — while the fallback renders them in the face the rest
+ * of the page already uses, which is more consistent, not less.
+ *
+ * The 500 and 600 weights came out because nothing renders in them:
+ * .font-deva appears on bilingual subtitle lines only, never inside a
+ * heading and never beside a weight class. Verified before removing,
+ * because a Hindi line silently losing its weight is the kind of
+ * regression nobody who cannot read Hindi would catch. */
 const deva = Noto_Sans_Devanagari({
   variable: "--font-deva-face",
-  subsets: ["devanagari", "latin"],
-  weight: ["400", "500", "600"],
+  subsets: ["devanagari"],
+  weight: ["400"],
   display: "swap",
 });
 
