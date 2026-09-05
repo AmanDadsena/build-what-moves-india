@@ -292,9 +292,11 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
                   : `There are ${drafts.length} letters for this`}
               </p>
               <p className="text-ink-soft leading-relaxed mb-5">
-                Each one is drafted with your details filled in and the correct
-                statutory wording, ready to send yourself. Nothing is filed on
-                your behalf.
+                Each one is drafted with your own details and the correct
+                statutory wording, ready to send yourself. No account, no
+                sign-in, and nothing sent anywhere &mdash; they are assembled
+                in your browser from eight things on the message that rejected
+                you. Nothing is filed on your behalf.
               </p>
               <ul className="space-y-2 mb-6">
                 {drafts.map((d) => (
@@ -311,9 +313,23 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
                   </li>
                 ))}
               </ul>
-              <Link href="/login/" className="btn btn-primary">
-                Open the case tools
-              </Link>
+              {/* This used to point at /login, which offers three
+                  fictional members — so a member arriving here with a
+                  real rejection could be told the RTI existed and then
+                  had to sign in as somebody else to get it. The reason
+                  travels in the address so the right letters are
+                  offered without choosing from fifteen again. */}
+              <div className="flex gap-2 flex-wrap">
+                <Link
+                  href={`/draft/?reason=${r.id}`}
+                  className="btn btn-primary"
+                >
+                  Draft these for your own claim
+                </Link>
+                <Link href="/login/" className="btn btn-secondary">
+                  Or see them inside a worked example
+                </Link>
+              </div>
             </section>
           )}
 

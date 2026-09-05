@@ -44,6 +44,7 @@ export const KEYS = [
   "rk-lang", // chosen language
   "rk-voice-lang", // dictation language
   "rk-survivor-checklist", // documents gathered after a death
+  "rk-draft", // the eight fields a member's own letters are built from
   "rk-install-dismissed",
   "epf.install.dismissed",
 ] as const;

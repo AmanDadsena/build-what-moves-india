@@ -87,6 +87,23 @@ const PAGES: Array<Omit<Indexed, "haystack">> = [
     weight: 1.2,
   },
   {
+    id: "page-draft",
+    kind: "page",
+    title: "Draft your RTI, grievance or employer letter",
+    snippet:
+      "Six letters with your own claim in them. No sign-in, and nothing sent anywhere.",
+    href: "/draft/",
+    aliases: [
+      "draft", "drafts", "letter", "letters", "write", "writing", "written",
+      "application", "apply", "rti", "grievance", "complaint", "shikayat",
+      "epfigms", "cpgrams", "appeal", "notice", "format", "sample", "template",
+      "wording", "how", "send", "post", "email", "compose", "prepare",
+      "patra", "arji", "aavedan", "form", "paper", "papers", "document",
+      "documents", "free", "myself", "own",
+    ],
+    weight: 1.3,
+  },
+  {
     id: "page-what-it-costs",
     kind: "page",
     title: "What chasing this actually costs you",

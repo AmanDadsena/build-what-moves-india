@@ -163,7 +163,25 @@ export default function Downloads() {
         />
 
         <div className="shell py-10 sm:py-14 space-y-10 stagger">
-
+          {/* The forms below are EPFO's own, which a member fills in
+              and files. The letters are ours, and this is where
+              somebody looking for paperwork will look for them. */}
+          <section className="border-2 border-noting bg-noting-wash/40 rounded-xl px-6 py-6">
+            <h2 className="eyebrow mb-2">And six letters this site writes</h2>
+            <p className="display-3 measure mb-3">
+              The forms below are EPFO&rsquo;s. These are the ones you send
+              when a form has already failed.
+            </p>
+            <p className="leading-relaxed measure mb-4">
+              The letter to your employer, the grievance, the escalation, the
+              Joint Declaration, and the RTI application that must be answered
+              in thirty days &mdash; each drafted with your own claim in it.
+              No account, and nothing sent anywhere.
+            </p>
+            <Link href="/draft/" className="btn btn-primary btn-sm">
+              Draft them for your own claim
+            </Link>
+          </section>
 
           <section>
             <ul className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">

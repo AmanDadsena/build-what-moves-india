@@ -1,4 +1,4 @@
-import type { Claim, Member, RejectionReason } from "./types";
+import type { RejectionReason } from "./types";
 
 /* ============================================================
    The document pack.
@@ -16,6 +16,36 @@ import type { Claim, Member, RejectionReason } from "./types";
    one-line remark the member was given.
    ============================================================ */
 
+/* What a draft actually needs to know about a person.
+ *
+ * These used to be typed as the full Member and Claim, which is what
+ * the demo portal holds — a balance, a passbook, a records array, a
+ * list of claims. None of that appears in any letter. Between them
+ * the six templates read eight fields, and typing them as eight
+ * fields is what lets somebody who is not one of the three
+ * demonstration members draft their own.
+ *
+ * Member and Claim still satisfy these structurally, so the portal
+ * passes them unchanged and nothing there had to be rewritten.
+ */
+export interface DocumentSubject {
+  name: string;
+  uan: string;
+  employer: string;
+}
+
+export interface DocumentClaim {
+  /** "Form 19", "Form 31", "Form 10C". */
+  form: string;
+  /** Plain description: "Final settlement". */
+  type: string;
+  /** ISO date. */
+  filedOn: string;
+  amount: number;
+  /** The verbatim remark, where one was given. */
+  remark?: string;
+}
+
 export interface DocumentTemplate {
   id: string;
   title: string;
@@ -27,15 +57,32 @@ export interface DocumentTemplate {
   /** What it costs and what it legally obliges, if anything. */
   standing: string;
   format: "letter" | "email" | "form" | "application";
-  build: (m: Member, claim: Claim, r: RejectionReason) => string;
+  build: (
+    m: DocumentSubject,
+    claim: DocumentClaim,
+    r: RejectionReason,
+  ) => string;
 }
 
-const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-IN", {
+/* A date the member may not have given.
+ *
+ * These templates were written when the only caller was the demo
+ * portal, where every claim has a filing date. They are now filled
+ * from a form a real member types, and a blank date reached
+ * toLocaleDateString and came out as the words "Invalid Date" —
+ * inside an application to a Public Information Officer under a
+ * statute. A bracketed prompt is what the rest of the letter already
+ * does for an address or a phone number, so a gap reads as something
+ * to fill rather than as a fault. */
+const fmtDate = (iso: string) => {
+  const d = new Date(iso);
+  if (!iso || Number.isNaN(d.getTime())) return "[the date you filed]";
+  return d.toLocaleDateString("en-IN", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
+};
 
 const today = () =>
   new Date().toLocaleDateString("en-IN", {
@@ -44,7 +91,12 @@ const today = () =>
     year: "numeric",
   });
 
-const rupees = (n: number) => "₹" + n.toLocaleString("en-IN");
+/* Likewise an amount. Zero is never a real claim, and "₹0" in a
+   letter demanding a settlement is worse than an obvious blank. */
+const rupees = (n: number) =>
+  Number.isFinite(n) && n > 0
+    ? "₹" + n.toLocaleString("en-IN")
+    : "[the amount you claimed]";
 
 export const DOCUMENTS: DocumentTemplate[] = [
   {
