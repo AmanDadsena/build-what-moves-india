@@ -10,6 +10,7 @@ import {
   type Reader,
 } from "@/lib/speech";
 import { clock, estimateSeconds, harvest, type PageBlock } from "@/lib/readpage";
+import { PAGE_READER_EVENT } from "@/lib/overlays";
 
 /* Listen to the whole page.
  *
@@ -45,15 +46,10 @@ import { clock, estimateSeconds, harvest, type PageBlock } from "@/lib/readpage"
  * the person least able to work out what happened.
  */
 
-/* Opened from elsewhere by an event, for the same reason the command
-   palette is: the callers are the palette and the masthead, both of
-   which are far from this component in the tree, and standing up a
-   context for one boolean is not worth it. */
-const OPEN_EVENT = "rk-page-reader";
-
-export function openPageReader() {
-  window.dispatchEvent(new Event(OPEN_EVENT));
-}
+/* openPageReader lives in lib/overlays.ts, with the palette's. The
+   palette offers "Listen to this page" as a command, and importing
+   the opener from here would have made the palette depend on this
+   whole component to dispatch one event. */
 
 export function PageReader() {
   const [ready, setReady] = useState(false);
@@ -119,8 +115,8 @@ export function PageReader() {
   // reaches everything else on this site.
   useEffect(() => {
     const onOpen = () => setOpen(true);
-    window.addEventListener(OPEN_EVENT, onOpen);
-    return () => window.removeEventListener(OPEN_EVENT, onOpen);
+    window.addEventListener(PAGE_READER_EVENT, onOpen);
+    return () => window.removeEventListener(PAGE_READER_EVENT, onOpen);
   }, []);
 
   const mark = useCallback(

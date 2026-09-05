@@ -15,7 +15,12 @@ import { LANGUAGES, type LangCode } from "@/lib/i18n";
 import { useLang } from "@/components/Language";
 import { useReader, TOGGLES, SCALE_LABEL } from "@/components/ReaderControls";
 import * as speech from "@/lib/speech";
-import { openPageReader } from "@/components/PageReader";
+import {
+  PALETTE_EVENT,
+  openPageReader,
+  openPalette,
+  opensPalette,
+} from "@/lib/overlays";
 
 /* ============================================================
    The command palette.
@@ -54,11 +59,9 @@ import { openPageReader } from "@/components/PageReader";
    the trigger and the dialog from having to share a parent — the
    masthead is server-rendered furniture and the palette hangs off the
    layout root — without standing up a context for one boolean. */
-const OPEN_EVENT = "rk-palette";
-
-export function openPalette() {
-  window.dispatchEvent(new Event(OPEN_EVENT));
-}
+/* openPalette and the event name moved to lib/overlays.ts. The
+   masthead search box needed the opener and nothing else, and
+   importing it from here handed every page the entire search index. */
 
 interface Command {
   id: string;
@@ -83,24 +86,24 @@ type Row =
   | { type: "result"; key: string; result: Result }
   | { type: "command"; key: string; command: Command };
 
-function isTypingTarget(el: EventTarget | null): boolean {
-  if (!(el instanceof HTMLElement)) return false;
-  if (el.isContentEditable) return true;
-  const tag = el.tagName;
-  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
-}
-
 function isApple(): boolean {
   return /mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent);
 }
 
-export function CommandPalette() {
+export function CommandPalette({
+  /* True when this was loaded *because* somebody asked for it. The
+     palette is fetched on demand now, so the keystroke that called
+     for it happened before this component existed and there is no
+     event left to catch — the mount that caught it says so here
+     instead. */
+  autoOpen = false,
+}: { autoOpen?: boolean } = {}) {
   const router = useRouter();
   const { lang, setLang } = useLang();
   const { prefs, toggle, step, reset, changed, canGrow, canShrink } =
     useReader();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(autoOpen);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [speaking, setSpeaking] = useState(false);
@@ -150,19 +153,16 @@ export function CommandPalette() {
      somebody typing a date — and the button in the masthead. */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const combo = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k";
-      const slash =
-        e.key === "/" && !e.ctrlKey && !e.metaKey && !isTypingTarget(e.target);
-      if (!combo && !slash) return;
+      if (!opensPalette(e)) return;
       e.preventDefault();
       if (openRef.current) close();
       else show();
     };
     window.addEventListener("keydown", onKey);
-    window.addEventListener(OPEN_EVENT, show);
+    window.addEventListener(PALETTE_EVENT, show);
     return () => {
       window.removeEventListener("keydown", onKey);
-      window.removeEventListener(OPEN_EVENT, show);
+      window.removeEventListener(PALETTE_EVENT, show);
     };
   }, [close, show]);
 

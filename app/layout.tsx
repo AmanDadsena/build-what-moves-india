@@ -8,11 +8,11 @@ import {
   Noto_Sans_Devanagari,
 } from "next/font/google";
 import "./globals.css";
-import { Assistant } from "@/components/Assistant";
+import { AssistantMount } from "@/components/AssistantMount";
 import { OfflineReady } from "@/components/OfflineReady";
 import { LanguageProvider } from "@/components/Language";
 import { ReaderProvider } from "@/components/ReaderControls";
-import { CommandPalette } from "@/components/CommandPalette";
+import { PaletteMount } from "@/components/PaletteMount";
 import { PageReader } from "@/components/PageReader";
 import { CaseHandoff } from "@/components/CaseBackup";
 import { SITE_URL } from "@/lib/site";
@@ -45,21 +45,34 @@ const body = Public_Sans({
    by the Braille Institute specifically to raise legibility for low
    vision — its letterforms are differentiated where ordinary
    grotesques collapse, so b/d, p/q and I/l/1 stop trading places.
-   A member reading a pension screen should be able to ask for it. */
+   A member reading a pension screen should be able to ask for it.
+   
+   preload: false because "for the reader panel only" was the
+   intention and not what happened. Both weights were being preloaded
+   on every page — 22 KB, on every visit, for a face that renders only
+   once somebody turns the option on. The @font-face rules stay, so
+   the moment data-readable="on" lands on <html> the browser fetches
+   them; it simply stops fetching them for the overwhelming majority
+   who never ask. */
 const hyperlegible = Atkinson_Hyperlegible({
   variable: "--font-hyperlegible",
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",
+  preload: false,
 });
 
 /* Monospace stays: it is semantic here, marking text the government's
    own system emitted verbatim. Devanagari stays because Inter carries
    no Hindi. */
+/* Two weights, because two are rendered. .machine sets the family and
+   no weight, so it takes the body's 400; .stamp is the only rule that
+   asks for a heavier one and it asks for 600. Nothing anywhere
+   renders 500, and it was a third of what this face cost. */
 const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "600"],
   display: "swap",
 });
 
@@ -215,13 +228,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {/* Outside the transition: a dialog that crossfaded with
                 the page under it would flicker on every navigation it
                 caused. */}
-            <CommandPalette />
+            {/* A listener, not the palette. It fetches the real
+                thing on the first Ctrl+K of a visit — see the note in
+                PaletteMount for why every page was carrying the whole
+                search corpus before this. */}
+            <PaletteMount />
             {/* Also outside the transition, and for a second reason:
                 it holds the position the voice has reached, and a
                 crossfade that remounted it would restart the page
                 halfway through being read. */}
             <PageReader />
-            <Assistant />
+            {/* The launcher only. The written answers behind it are
+                fetched when somebody presses it — see AssistantMount. */}
+            <AssistantMount />
             <OfflineReady />
           </ReaderProvider>
         </LanguageProvider>

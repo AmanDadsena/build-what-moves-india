@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { openPalette } from "@/components/CommandPalette";
+import { openPalette } from "@/lib/overlays";
 
 /* The search box in the masthead.
  *

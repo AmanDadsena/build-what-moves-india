@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Triage } from "@/components/Triage";
 import { ask, SUGGESTED } from "@/lib/knowledge";
 import { Tag } from "@/components/Provenance";
+import { AssistantLauncher } from "@/components/AssistantLauncher";
 
 /* The assistant, available on every page.
 
@@ -21,8 +22,14 @@ import { Tag } from "@/components/Provenance";
 
 const DEFAULT_UAN = "990012345678";
 
-export function Assistant({ uan = DEFAULT_UAN }: { uan?: string }) {
-  const [open, setOpen] = useState(false);
+export function Assistant({
+  uan = DEFAULT_UAN,
+  /* True when this was fetched because somebody pressed the launcher.
+     The panel is loaded on demand now, so the click that asked for it
+     happened before this component existed. */
+  autoOpen = false,
+}: { uan?: string; autoOpen?: boolean }) {
+  const [open, setOpen] = useState(autoOpen);
   const [mode, setMode] = useState<"guided" | "search">("guided");
   const [query, setQuery] = useState("");
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -51,29 +58,11 @@ export function Assistant({ uan = DEFAULT_UAN }: { uan?: string }) {
 
   return (
     <>
-      {/* Launcher */}
-      <button
+      <AssistantLauncher
         ref={triggerRef}
+        open={open}
         onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-label={open ? "Close help" : "Open help"}
-        className="assistant-launcher press fixed bottom-5 right-5 z-50 inline-flex items-center gap-2.5 rounded-full bg-noting text-paper pl-4 pr-5 py-3.5 font-semibold text-sm"
-      >
-        <span aria-hidden>
-          {open ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 15.5a2.5 2.5 0 0 1-2.5 2.5H8l-4 3V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5Z" />
-              <path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.5.2-.7.6-.7 1.1" />
-              <path d="M12 15.5h.01" />
-            </svg>
-          )}
-        </span>
-        <span className="hidden sm:inline">{open ? "Close" : "Need help?"}</span>
-      </button>
+      />
 
       {/* Panel */}
       {open && (
