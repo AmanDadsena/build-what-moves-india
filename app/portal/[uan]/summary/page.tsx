@@ -6,6 +6,7 @@ import { findOffice } from "@/lib/offices";
 import { PrintButton } from "@/components/PrintButton";
 import { Tag } from "@/components/Provenance";
 import { ShareLink } from "@/components/ShareLink";
+import { JournalSummary } from "@/components/JournalSummary";
 
 export const dynamicParams = false;
 
@@ -209,6 +210,13 @@ export default async function Summary({
               </ol>
             </Block>
           )}
+
+          {/* Whatever the member has logged about calls, visits and
+              reference numbers. Renders nothing when the log is empty,
+              so the sheet is unchanged for anybody who has not used
+              it — and carries the hardest half of the case for
+              anybody who has. */}
+          <JournalSummary claimIds={member.claims.map((c) => c.id)} />
 
           <Block title="If nothing moves">
             <p className="text-sm leading-relaxed">

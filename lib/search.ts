@@ -5,6 +5,7 @@ import { DOCUMENTS } from "./documents";
 import { OFFICES } from "./offices";
 import { KNOWLEDGE } from "./knowledge";
 import { titleAliases } from "./i18n";
+import { read, type Reading } from "./phrasebook";
 
 /* ============================================================
    One search box for the whole site.
@@ -533,52 +534,121 @@ const WEAK = new Set([
   "provident", "fund", "claim", "member", "portal", "money",
 ]);
 
-export function search(query: string, limit = 12): Result[] {
+/** Scores one item against a list of tokens. Extracted so the words
+ *  somebody typed and the words the phrasebook read them as can be
+ *  scored on the same rules but weighted differently.
+ *
+ *  Returns the raw sum; the caller decides how to normalise it, which
+ *  differs between a typed query and an inferred one. */
+function scoreAgainst(item: Indexed, tokens: string[]): number {
+  if (tokens.length === 0) return 0;
+
+  const haystackTokens = item.haystack.split(" ");
+  const bag = new Set(haystackTokens);
+  const title = normalise(item.title);
+
+  let score = 0;
+  for (const token of tokens) {
+    if (bag.has(token)) {
+      score += title.includes(token) ? 3 : 2;
+      continue;
+    }
+    // Half-typed word: "deficien" should reach "deficiency".
+    if (token.length >= 4 && haystackTokens.some((h) => h.startsWith(token))) {
+      score += title.startsWith(token) ? 2 : 1.2;
+      continue;
+    }
+    // Over-typed: "nominations" should reach "nomination".
+    if (haystackTokens.some((h) => h.length >= 4 && token.startsWith(h))) {
+      score += 0.8;
+    }
+  }
+  return score;
+}
+
+/* What an inferred word is worth against one the member actually
+   typed. Below one on purpose: a genuine English match should still
+   outrank a reading, so somebody searching "name" gets the name pages
+   ahead of everything the phrasebook thinks "naam" implies. */
+const INFERRED_WEIGHT = 0.75;
+
+/* The typed query is a conjunction — every word is something the
+   member chose, so the score is averaged over all of them and a word
+   that matches nothing costs you.
+
+   The expansion is not. It is a disjunction: a list of ways the same
+   symptom is described in the index's vocabulary, and a page matching
+   four of thirteen is a good match rather than a poor one. Averaging
+   over the whole list punished the richest and most useful readings —
+   "paisa nahi aaya" expands to eight phrases and returned one result
+   because of it. So the expansion is summed, damped and capped
+   instead: coverage is rewarded, breadth is not penalised, and no
+   amount of expansion can outweigh a real typed match. */
+function inferredScore(raw: number): number {
+  return Math.min(raw / 4, 3) * INFERRED_WEIGHT;
+}
+
+export interface Interpretation {
+  results: Result[];
+  /** How the query was read, where the phrasebook recognised it. */
+  reading: Reading;
+}
+
+/** Search, plus what the phrasebook made of the query.
+ *
+ *  Split from search() rather than changing its return type, because
+ *  most callers want a list of results and only the results page
+ *  needs to tell somebody their question was ambiguous. */
+export function interpret(query: string, limit = 12): Interpretation {
   const phrase = normalise(query);
-  if (phrase.length < 2) return [];
+  const reading = read(query);
+
+  if (phrase.length < 2) return { results: [], reading };
 
   const tokens = phrase.split(" ").filter(Boolean);
   const strong = tokens.filter((t) => !WEAK.has(t));
   // A query made only of weak words still deserves an attempt.
   const scoring = strong.length > 0 ? strong : tokens;
 
+  /* The vocabulary the phrasebook translated the query into, reduced
+     to tokens and stripped of anything already typed or too common to
+     earn anything. Empty for an ordinary English query, which is why
+     this changes nothing for one. */
+  const typed = new Set(scoring);
+  const inferred = [
+    ...new Set(
+      reading.expansion
+        .flatMap((m) => normalise(m).split(" "))
+        .filter((t) => t.length > 1 && !WEAK.has(t) && !typed.has(t)),
+    ),
+  ];
+
   const results: Result[] = [];
 
   for (const item of INDEX) {
-    const haystackTokens = item.haystack.split(" ");
-    const bag = new Set(haystackTokens);
-    const title = normalise(item.title);
-
-    let score = 0;
-
-    for (const token of scoring) {
-      if (bag.has(token)) {
-        score += title.includes(token) ? 3 : 2;
-        continue;
-      }
-      // Half-typed word: "deficien" should reach "deficiency".
-      if (token.length >= 4 && haystackTokens.some((h) => h.startsWith(token))) {
-        score += title.startsWith(token) ? 2 : 1.2;
-        continue;
-      }
-      // Over-typed: "nominations" should reach "nomination".
-      if (haystackTokens.some((h) => h.length >= 4 && token.startsWith(h))) {
-        score += 0.8;
-      }
-    }
+    const base = scoreAgainst(item, scoring) / scoring.length;
+    const extra = inferredScore(scoreAgainst(item, inferred));
+    let score = base + extra;
 
     if (score === 0) continue;
 
     // The whole query appearing verbatim is close to conclusive.
     if (phrase.length >= 6 && item.haystack.includes(phrase)) score += 4;
 
-    results.push({ ...item, score: (score / scoring.length) * item.weight });
+    results.push({ ...item, score: score * item.weight });
   }
 
-  return results
-    .filter((r) => r.score >= 0.8)
-    .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
-    .slice(0, limit);
+  return {
+    reading,
+    results: results
+      .filter((r) => r.score >= 0.8)
+      .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+      .slice(0, limit),
+  };
+}
+
+export function search(query: string, limit = 12): Result[] {
+  return interpret(query, limit).results;
 }
 
 /** What to offer before anybody has typed. Chosen as the things

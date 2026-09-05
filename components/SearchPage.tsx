@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { search, COMMON, KIND_LABEL, type ResultKind } from "@/lib/search";
+import { interpret, COMMON, KIND_LABEL, type ResultKind } from "@/lib/search";
 import { PageHero } from "@/components/PageHero";
 import { VoiceInput } from "@/components/VoiceInput";
 
@@ -54,7 +54,7 @@ export function SearchPage() {
     if (q) setQuery(q);
   }, []);
 
-  const results = useMemo(() => search(query), [query]);
+  const { results, reading } = useMemo(() => interpret(query), [query]);
 
   /* Keep the address bar in step so a result can be sent to somebody
      else. history.replaceState rather than the router: this is the
@@ -159,6 +159,27 @@ export function SearchPage() {
                 Reach a person
               </Link>
             </div>
+          </div>
+        )}
+
+        {/* Where somebody described a symptom rather than named a
+            cause, say so before the list. "My money has not come" has
+            six or seven different causes needing different fixes, and
+            presenting the best-scoring one as though it were the
+            answer would be this site doing the exact thing it was
+            built to argue against. */}
+        {reading.ambiguity && results.length > 0 && (
+          <div
+            role="status"
+            className="border-l-4 border-pending bg-pending-wash/50 rounded-r-lg px-5 py-4 mb-5"
+          >
+            <p className="eyebrow mb-1.5">That could be several things</p>
+            <p className="text-sm leading-relaxed measure mb-3">
+              {reading.ambiguity}
+            </p>
+            <Link href="/why/" className="btn btn-secondary btn-sm">
+              Work through the questions instead
+            </Link>
           </div>
         )}
 

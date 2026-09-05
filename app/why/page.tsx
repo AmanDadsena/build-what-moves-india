@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { REJECTIONS } from "@/lib/rejections";
+import { employerBlockedCount } from "@/lib/employers";
 import type { Actor, RejectionReason } from "@/lib/types";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { PageHero } from "@/components/PageHero";
@@ -51,6 +52,8 @@ const ACTOR_TAG: Record<Actor, { label: string; tag: string }> = {
 };
 
 export default function WhyIndex() {
+  const employerBlocked = employerBlockedCount();
+
   return (
     <>
       <SiteHeader />
@@ -147,6 +150,31 @@ export default function WhyIndex() {
               </section>
             );
           })}
+
+          {/* The question every one of the cards above raises for a
+              large share of the people reading them. Nine of these
+              reasons contain a step only the establishment can
+              perform, and this page listed all fifteen without ever
+              saying what happens when there is no establishment. */}
+          <section className="border-2 border-noting bg-noting-wash/40 rounded-xl px-6 py-6">
+            <h2 className="eyebrow mb-2">
+              If the answer is &ldquo;ask your employer&rdquo;
+            </h2>
+            <p className="display-3 measure mb-3">
+              {employerBlocked} of these {REJECTIONS.length} need somebody at
+              your old company to act.
+            </p>
+            <p className="leading-relaxed measure mb-4">
+              If it has closed, will not reply, or cannot be found, those
+              instructions cannot be followed as written &mdash; and that is
+              where most people are told the matter ends. It does not. What an
+              employer attests, they already filed with EPFO every month, so
+              the office is holding the proof.
+            </p>
+            <Link href="/employer-gone/" className="btn btn-primary btn-sm">
+              What is still open to you
+            </Link>
+          </section>
 
           <section className="border-l-4 border-stamp bg-stamp-wash/40 rounded-lg px-5 py-4">
             <p className="eyebrow mb-2">Before you pay anybody</p>

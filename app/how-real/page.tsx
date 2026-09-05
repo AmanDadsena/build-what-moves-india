@@ -72,7 +72,7 @@ export default function HowReal() {
               the generator&rsquo;s invisible provenance watermark, which
               survives resizing, so they remain identifiable as generated.
             </p>
-            <p className="text-ink-soft leading-relaxed">
+            <p className="text-ink-soft leading-relaxed mb-4">
               No language model runs when you use this. The assistant and the
               search retrieve passages that were written in advance and name
               their source; they cannot compose a new answer, which is why they
@@ -80,6 +80,27 @@ export default function HowReal() {
               plausible about a statutory deadline. The whole site is static
               files, so there is no server to be slow and nothing to cold-start
               on a poor connection.
+            </p>
+            <p className="text-ink-soft leading-relaxed mb-4">
+              That is a line rather than an abstention, and it is worth saying
+              where it falls. A model wrote most of the code here, generated
+              the illustrations, and assembled the phrase book that lets this
+              site understand &ldquo;paisa nahi aaya&rdquo; &mdash; the sentence
+              a great many members would actually type, which until recently
+              returned nothing at all. Every one of those happened before the
+              build, and every one produced something a person can read: a
+              file, an image, a table of words. The phrase book is checked by
+              its own tests, and if an entry is wrong the worst it can do is
+              fail to find a page.
+            </p>
+            <p className="text-ink-soft leading-relaxed">
+              What is not delegated is the answer. Understanding the question
+              is a retrieval problem and a model is very good at it; deciding
+              what a statutory period is, or what an officer must do, is not,
+              and on a page about somebody&rsquo;s blocked money a fluent
+              invention is worse than an empty result. So the model is used up
+              to the point where this site starts making claims, and not past
+              it.
             </p>
           </section>
 
