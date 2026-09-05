@@ -47,6 +47,20 @@ blocked their money. Those pages exist to be found.
 through, so a member can see where the twenty-day settlement count was restarted
 — and drafts the RTI application that compels disclosure of their real one.
 
+**Understands the sentence people actually type.** This site's own headline
+says the question members arrive with is *why has my money not come*. Typing
+exactly that, in the words most of the country would use, returned nothing:
+`paisa nahi aaya`, `claim reject ho gaya`, `मेरा पैसा नहीं आया` — all empty.
+Which is this product committing the failure it exists to argue against, one
+layer down: EPFO writes in the register of the office, and the index was
+written in the register of the index. `lib/phrasebook.ts` closes it with an
+explicit, testable table — 202 spelling variants, because romanised Hindi has
+no orthography and "nahi", "nahin", "nhi" and "nai" are one word typed by four
+people — and 23 phrases mapping a symptom onto the vocabulary the index uses
+for its causes. What it refuses to do is diagnose: money not arriving has
+several causes, so the results page says so before the list and offers the
+triage rather than presenting the best-scoring guess as an answer.
+
 **Answers the question the instructions assume away.** Nine of the fifteen
 rejection reasons contain a step only the establishment can perform — approve
 the KYC, mark the exit date, countersign the declaration. When the employer has
@@ -109,7 +123,7 @@ that page. There is no real authentication: the form is decorative and nothing
 you type is transmitted or stored.
 
 ```bash
-npm test          # 181 tests, no framework — node --test on type-stripped TS
+npm test          # 202 tests, no framework — node --test on type-stripped TS
 npm run build     # static export to out/
 npm run audit     # resolve every link and asset in out/ against what was built
 ```
