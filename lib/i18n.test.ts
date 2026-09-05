@@ -94,3 +94,46 @@ test("exactly the two languages with full prose are marked full", () => {
   const full = LANGUAGES.filter((l) => l.full).map((l) => l.code);
   assert.deepEqual(full, ["en", "hi"], "coverage claim must match reality");
 });
+
+/* The eight-language claim, checked against what is displayed rather
+   than against what exists.
+
+   The translated titles sat in this file for weeks feeding only the
+   search index, so switching the site to Tamil produced a Tamil
+   navigation above fifteen English cards — which looks like the
+   switch worked right up to the point where it matters. These pin
+   the coverage the interface now depends on. */
+
+test("every rejection has a title in every language the site offers", () => {
+  const optional = new Set(["en", "hi"]); // carried on the rejection itself
+  for (const r of REJECTIONS) {
+    const entry = REJECTION_TITLES[r.id];
+    assert.ok(entry, `${r.id} has no translated titles at all`);
+    for (const l of LANGUAGES) {
+      if (optional.has(l.code)) continue;
+      assert.ok(
+        entry[l.code] && entry[l.code]!.trim().length > 0,
+        `${r.id} has no ${l.english} title, so a member reading in ${l.english} sees English`,
+      );
+    }
+  }
+});
+
+test("a translated title is not just the English one copied across", () => {
+  for (const r of REJECTIONS) {
+    const entry = REJECTION_TITLES[r.id] ?? {};
+    for (const [code, text] of Object.entries(entry)) {
+      assert.notEqual(
+        text,
+        r.title,
+        `${r.id}/${code} is the English title wearing a language code`,
+      );
+    }
+  }
+});
+
+test("no rejection is missing the Hindi pairing the cards rely on", () => {
+  for (const r of REJECTIONS) {
+    assert.ok(r.titleHi && r.titleHi.trim().length > 0, `${r.id} has no titleHi`);
+  }
+});

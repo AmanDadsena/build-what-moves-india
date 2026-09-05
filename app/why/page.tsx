@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { REJECTIONS } from "@/lib/rejections";
 import { employerBlockedCount } from "@/lib/employers";
+import { RejectionTitle } from "@/components/RejectionTitle";
 import type { Actor, RejectionReason } from "@/lib/types";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { PageHero } from "@/components/PageHero";
@@ -111,9 +112,15 @@ export default function WhyIndex() {
                           </span>
                         </div>
 
-                        <p className="font-deva text-sm text-ink-faint mb-4">
-                          {r.titleHi}
-                        </p>
+                        {/* The second line follows the language switch.
+                            Hindi by default, because the bilingual
+                            pairing is the design; the chosen language
+                            where one of the other six is picked. */}
+                        <RejectionTitle
+                          id={r.id}
+                          hi={r.titleHi}
+                          className="mb-4"
+                        />
 
                         <div className="border-l-2 border-rule-heavy pl-3.5 mb-4 space-y-1">
                           {r.verbatim.slice(0, 2).map((v) => (

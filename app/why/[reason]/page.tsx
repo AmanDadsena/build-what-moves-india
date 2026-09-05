@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { REJECTIONS, getRejection } from "@/lib/rejections";
+import { TranslatedTitle } from "@/components/RejectionTitle";
 import { DOCUMENTS } from "@/lib/documents";
 import { DESK_LABEL, type Actor } from "@/lib/types";
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
@@ -174,7 +175,15 @@ export default async function Why({ params }: PageProps<"/why/[reason]">) {
               ))}
             </ul>
 
-            <h1 className="display-1 measure mb-5">{r.title}</h1>
+            <h1 className="display-1 measure mb-3">{r.title}</h1>
+
+            {/* Renders only where one of the six languages without a
+                full translation is chosen — so the member at least
+                recognises the problem as theirs before meeting an
+                explanation this build only holds in English and
+                Hindi. */}
+            <TranslatedTitle id={r.id} />
+
             <p className="lede measure">{r.plain}</p>
             <p className="font-deva text-ink-faint measure mt-4">{r.plainHi}</p>
 
