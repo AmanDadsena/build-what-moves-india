@@ -40,8 +40,10 @@ import { Disclose } from "@/components/Motion";
  */
 
 export function DraftDocuments() {
+  /* Starts EMPTY on the server and on the client alike, which is what
+     keeps hydration quiet — and it is also the right thing to render
+     for somebody arriving with nothing saved. */
   const [input, setInput] = useState<DraftInput>({ ...EMPTY });
-  const [ready, setReady] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
 
@@ -62,7 +64,6 @@ export function DraftDocuments() {
     // A reason in the address is the one the member was just reading,
     // so it wins over whatever they chose on a previous visit.
     setInput(asked ? { ...saved, reasonId: asked } : saved);
-    setReady(true);
   }, []);
 
   const set = useCallback((patch: Partial<DraftInput>) => {
@@ -100,13 +101,21 @@ export function DraftDocuments() {
     URL.revokeObjectURL(url);
   };
 
-  if (!ready) {
-    return (
-      <div className="shell py-14 text-sm text-ink-faint">
-        Reading what is saved on this device&hellip;
-      </div>
-    );
-  }
+  /* There is deliberately no loading state here.
+   *
+   * Gating the page on the localStorage read meant the exported HTML
+   * for /draft was one sentence — "reading what is saved on this
+   * device" — with no heading, no form and no letters in it. Which
+   * costs three separate things: a screen reader arrives at a page
+   * with no h1, anybody without JavaScript gets nothing at all, and a
+   * search engine indexes an empty page. That last one matters most
+   * for this page in particular, because somebody searching "how to
+   * write an RTI for PF claim" is exactly who it is for.
+   *
+   * The empty form is the correct first render anyway, and the saved
+   * values arrive a moment later. The static HTML now carries a
+   * complete RTI application with bracketed prompts in it, which is
+   * the best possible thing for a crawler to find. */
 
   return (
     <>

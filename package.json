@@ -12,7 +12,8 @@
     "postbuild": "node scripts/flatten-rsc.mjs",
     "audit": "node scripts/audit-links.mjs",
     "weigh": "node scripts/page-weight.mjs",
-    "contrast": "node scripts/contrast.mjs"
+    "contrast": "node scripts/contrast.mjs",
+    "a11y": "node scripts/a11y.mjs"
   },
   "dependencies": {
     "next": "16.3.2",
