@@ -68,15 +68,32 @@ test("what reaches the fund is the member's share plus the employer's remainder"
   assert.equal(s.employee + s.employerTotal - s.intoFund, s.toPension);
 });
 
-test("EDLI and administration sit on top and are charged on the ceiling", () => {
+test("EDLI is charged on the ceiling and administration is not", () => {
+  /* These were computed on the same base until the rates were checked
+     against EPFO's own published table. EDLI (account 21) is 0.5% of
+     the ceiling wage, so it stops at ₹75. Administration (account 2)
+     is 0.5% of the EPF wages actually contributed on, so on a member
+     paid ₹90,000 whose employer contributes on the whole of it, it is
+     ₹450 rather than ₹75 — and the employer's real cost was being
+     understated by the difference. */
   const s = split(90_000);
-  assert.equal(s.edli, Math.round(EPS_WAGE_CEILING * 0.005));
-  assert.equal(s.admin, Math.round(EPS_WAGE_CEILING * 0.005));
+  assert.equal(s.edli, Math.round(EPS_WAGE_CEILING * 0.005), "capped");
+  assert.equal(s.admin, Math.round(90_000 * 0.005), "not capped");
+  assert.notEqual(s.admin, s.edli, "the two do not share a base");
+
   assert.equal(s.employerOutlay, s.employerTotal + s.edli + s.admin);
   assert.ok(
     s.employerOutlay > s.employerTotal,
     "the cost an employer quotes is higher than the payslip shows",
   );
+});
+
+test("at or below the ceiling the two charges do coincide", () => {
+  // Which is why the error was invisible: every worked example in the
+  // demo data sits at or near the ceiling.
+  const s = split(EPS_WAGE_CEILING);
+  assert.equal(s.edli, s.admin);
+  assert.equal(s.admin, 75);
 });
 
 test("a passbook row that follows the rules is reported as agreeing", () => {

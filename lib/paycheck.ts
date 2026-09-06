@@ -37,8 +37,25 @@ export const EPS_RATE = 0.0833;
  *  ceiling wage, and the reason a member's family is covered for a
  *  lump sum they have usually never heard of. */
 export const EDLI_RATE = 0.005;
-/** Administration charge, employer-borne. */
+/** Administration charge (account 2), employer-borne.
+ *
+ *  Unlike EDLI this is *not* restricted to the pension ceiling: it is
+ *  0.5% of the EPF wages actually contributed on. The two were being
+ *  computed the same way here, which understated the employer's cost
+ *  for every member paid above ₹15,000 whose employer contributes on
+ *  their real wage — ₹75 where the true figure is 0.5% of the whole.
+ *
+ *  There is also a floor of ₹500 a month, but it applies to the
+ *  establishment rather than to the member, so it cannot be
+ *  apportioned to one payslip and is not modelled. The interface says
+ *  so rather than quietly showing a number that is too small for a
+ *  very small employer. */
 export const ADMIN_RATE = 0.005;
+
+/** The monthly minimum an establishment pays in administration
+ *  charges however few members it has. Stated for the interface; not
+ *  divisible into a single member's row. */
+export const ADMIN_MONTHLY_MINIMUM = 500;
 
 export interface Split {
   wages: number;
@@ -75,8 +92,10 @@ export function split(wages: number): Split {
   const toFund = employerTotal - toPension;
 
   const pensionUncapped = Math.round(wages * EPS_RATE);
+  // EDLI is charged on the ceiling wage; administration is charged on
+  // what was actually contributed on. They are not the same base.
   const edli = Math.round(pensionable * EDLI_RATE);
-  const admin = Math.round(pensionable * ADMIN_RATE);
+  const admin = Math.round(wages * ADMIN_RATE);
 
   return {
     wages,

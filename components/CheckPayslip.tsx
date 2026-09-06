@@ -313,6 +313,15 @@ export function CheckPayslip() {
         >
           <div className="text-sm text-ink-soft leading-relaxed measure space-y-3">
             <p>
+              The two charges the employer carries on top sit on different
+              bases, which is easy to get wrong. The EDLI premium is half a per
+              cent of the ceiling wage, so it stops at ₹75. The administration
+              charge is half a per cent of the wages actually contributed on,
+              so it does not stop &mdash; and it carries a floor of ₹500 a
+              month for the establishment as a whole, which cannot be divided
+              into one person&rsquo;s row and is not shown here.
+            </p>
+            <p>
               Twelve per cent from the member, twelve from the employer, of
               which 8.33% of the pensionable wage goes to the pension scheme,
               are the ordinary statutory rates. Some categories of establishment
