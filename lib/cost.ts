@@ -76,6 +76,14 @@ export interface RouteCost {
    figures below are the ones this page shows and can be argued with
    in one place. */
 const FARE_PER_TRIP = 120;
+
+/* Rule 4 of the RTI Rules 2012 charges ₹2 a page for a copy on A4 or
+   smaller, on top of the ₹10 application fee under rule 3. A note
+   sheet with its deficiency memos and order sheet runs to more pages
+   than people expect, so it is worth naming — and worth naming
+   alongside section 7(6), which waives it entirely when the reply is
+   late. */
+const RTI_PER_PAGE = 2;
 const PHOTOCOPY = 30;
 const REGISTERED_POST = 45;
 
@@ -156,14 +164,15 @@ export const ROUTE_COSTS: RouteCost[] = [
     id: "rti",
     label: "Apply under the Right to Information Act",
     fee: 10,
-    feeNote: "₹10, and nothing at all if you hold a below-poverty-line card",
+    feeNote:
+      "₹10 to apply, nothing at all if you hold a below-poverty-line card — and no charge for the pages if they answer late",
     trips: 0,
     daysOff: 0,
     incidentals: REGISTERED_POST,
     elapsedDays: 30,
     binding: "hard",
     effort: "none",
-    note: "The cheapest instrument here and the only one with a deadline behind it. Thirty days, then a deemed refusal, and a penalty of ₹250 a day on the officer personally. It can be filed online without leaving the house.",
+    note: "The cheapest instrument here and the only one with a deadline behind it. Thirty days, then a deemed refusal, and a penalty of ₹250 a day on the officer personally. It can be filed online without leaving the house — and section 7(6) says that where they miss the thirty days, the information itself must be supplied free of charge, so the per-page copying fee falls away too.",
   },
   {
     id: "rti-appeal",
@@ -179,6 +188,21 @@ export const ROUTE_COSTS: RouteCost[] = [
     note: "Free, and the step most people never take because nobody tells them silence is itself an appealable refusal. It does not need a lawyer and it does not need a hearing.",
   },
 ];
+
+/** What a copy costs per page under rule 4, and what section 7(6)
+ *  does to that when the authority is late.
+ *
+ *  This is the only place in the whole process where the office's
+ *  delay costs the office rather than the member. Everywhere else a
+ *  late reply means another trip, another day off, another fare. Here
+ *  it means the pages arrive free and a penalty starts running
+ *  against the officer personally. Worth stating on a page whose
+ *  argument is that delay is always paid for by the person waiting. */
+export const RTI_COPY = {
+  perPage: RTI_PER_PAGE,
+  applicationFee: 10,
+  waivedWhenLate: true,
+} as const;
 
 export function routeCost(id: string): RouteCost | undefined {
   return ROUTE_COSTS.find((r) => r.id === id);

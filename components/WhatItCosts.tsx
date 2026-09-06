@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   EFFORT_LABEL,
+  RTI_COPY,
   byCost,
   compare,
   ladderStep,
@@ -264,6 +265,39 @@ export function WhatItCosts() {
                 })}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* ---- The one place delay is charged to the office ---- */}
+        <section className="shell-reading">
+          <div className="border-2 border-stamp bg-stamp-wash/40 rounded-xl px-6 py-6">
+            <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+              <Tag kind="statutory" />
+              <h2 className="eyebrow mb-0">The one that gets cheaper</h2>
+            </div>
+            <p className="display-3 measure mb-3">
+              Everywhere else on this list, their delay is billed to you.
+              Once, it is billed to them.
+            </p>
+            <p className="leading-relaxed measure mb-3">
+              A late reply from an office normally costs the member: another
+              trip, another day off, another fare. The Right to Information Act
+              inverts that exactly once. Section 7(6) says that where the
+              authority misses the thirty days, the information must be
+              supplied <strong className="font-semibold">free of charge</strong>{" "}
+              &mdash; so the {rupees(RTI_COPY.perPage)} a page that rule 4
+              would otherwise charge for a copy falls away, and a note sheet
+              running to twenty pages with its deficiency memos arrives at no
+              cost at all.
+            </p>
+            <p className="leading-relaxed measure">
+              And section 7(2) has already turned that silence into a deemed
+              refusal, which opens the appeal, which is free. Miss the deadline
+              and the office owes you the pages, the appeal and, under section
+              20(1), ₹250 a day out of the officer&rsquo;s own pocket. It is
+              the only lever in this entire process where waiting costs the
+              institution rather than the person waiting.
+            </p>
           </div>
         </section>
 

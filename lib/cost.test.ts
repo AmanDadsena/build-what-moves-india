@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   ROUTE_COSTS,
   EFFORT_LABEL,
+  RTI_COPY,
   byCost,
   compare,
   ladderStep,
@@ -173,4 +174,30 @@ test("the dearest route is not always the office visit, so prose must not assume
     visit.total < notEarning.dearest.total,
     "so the two figures are genuinely different and cannot be used interchangeably",
   );
+});
+
+test("the RTI is the only route whose price falls when they are late", () => {
+  /* Section 7(6): where the authority misses the thirty days in 7(1),
+     the information must be supplied free of charge. Every other
+     route on this list bills a delay to the member — another trip,
+     another day off. This one bills it to the office, and that
+     inversion is the point of saying it at all. */
+  assert.equal(RTI_COPY.waivedWhenLate, true);
+  assert.equal(RTI_COPY.applicationFee, 10);
+  assert.equal(RTI_COPY.perPage, 2, "rule 4, A4 or smaller");
+
+  const rti = routeCost("rti")!;
+  assert.equal(rti.fee, RTI_COPY.applicationFee, "the two must not drift apart");
+  assert.match(rti.note, /7\(6\)/, "the section is cited where the claim is made");
+  assert.match(rti.feeNote!, /late/i);
+});
+
+test("no other route claims a fee that is waived for lateness", () => {
+  for (const r of ROUTE_COSTS) {
+    if (r.id === "rti") continue;
+    assert.ok(
+      !/free of charge|7\(6\)/.test(r.note),
+      `${r.id} borrows an argument that belongs to the RTI alone`,
+    );
+  }
 });
